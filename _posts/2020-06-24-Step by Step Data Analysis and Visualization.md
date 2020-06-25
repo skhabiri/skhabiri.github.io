@@ -33,4 +33,4 @@ data_set.head()
 ```python
 data_set.dtypes
 ```
-
+![img1](/assets/img/post1_dtype.png)
