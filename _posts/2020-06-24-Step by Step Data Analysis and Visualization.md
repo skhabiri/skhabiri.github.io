@@ -1,14 +1,15 @@
 ---
 layout: post
 title: Step by Step Data Analysis and Visualization
-subtitle: Oxford Parkinson's Disease Detection Dataset
+#subtitle: Oxford Parkinson's Disease Detection Dataset
 gh-repo: https://github.com/skhabiri/DS-Unit-1-Build
 gh-badge: [star, fork, follow]
 tags: [Data Analysis]
 comments: true
 ---
 
-# ***Data Wrangling And Visualization***
+This post shows a step by step process to explore and select significant features in Oxford Parkinson's Disease Detection Dataset.
+
 * **Dataset:** https://archive.ics.uci.edu/ml/datasets/Parkinsons
 
 * **Dataset information:**
