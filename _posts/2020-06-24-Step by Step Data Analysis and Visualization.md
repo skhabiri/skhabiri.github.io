@@ -19,10 +19,12 @@ This dataset is composed of a range of biomedical voice measurements from people
 ## *Loading dataset*
 
 
-```import pandas as pd
+```python
+import pandas as pd
 import numpy as np
 
 url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/parkinsons/parkinsons.data'
-data_set = pd.read_csv(url)```
+data_set = pd.read_csv(url)
+```
 
 
