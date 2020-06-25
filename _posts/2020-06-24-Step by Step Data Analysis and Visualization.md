@@ -31,3 +31,4 @@ data_set = pd.read_csv(url)
 ```python
 data_set.dtypes
 ```
+updated
