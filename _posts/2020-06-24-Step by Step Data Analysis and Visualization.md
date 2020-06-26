@@ -118,3 +118,17 @@ plt.xticks(rotation=90)
 
 <img src= "/assets/img/post1_boxplot.png">
 
+From the above box plot we observe that MDVP features have similar range of values and distribution. Provided they are corrolated we can drop the redundant features.
+
+### *swarmplot*
+swarmplot shows all the observations in the same context as violin or boxplot. 
+We observe spread1 and PPE seem to be good features to separate the dataset based on the class label. On the contrary, class labels are spread across DFA, and it does not seem to be a good candidate to separate the data based on the class label.
+
+```python
+plt.figure(figsize=(20,10))
+sns.swarmplot(x="features", y="value", hue="status", data=data)
+plt.xticks(rotation=90)
+```
+
+<img src= "/assets/img/post1_swarmplot.png">
+
