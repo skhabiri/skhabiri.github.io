@@ -230,4 +230,23 @@ X = df[df.columns[:-1]]
 y = df[df.columns[-1]]
 ```
 
+## PCA Dimension Reduction
+Now let's attempt to reduce the dimension of the cleaned up data by Principal Component Analysis technique.
+
+Before fitting our data into PCA, it's standardized by StandardScalar utility class.
+
+```pyhton
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans 
+
+scaler = StandardScaler()
+z_fit = scaler.fit_transform(X.values)
+Z = pd.DataFrame(z_fit, index=X.index, columns=X.columns)
+
+pca = PCA()
+pca_features = pca.fit_transform(Z.values)
+```
+
+After fitting data into PCA model, we create the Scree plot. Looking at the cumulative sum of explained variance we need to keep only 5 component to retain 90% collective variance of our data.
 
