@@ -394,4 +394,32 @@ def scatter_comp(xdata, ydata, y, cluster_label):
   ax1.set_title("Cluster Label")
 
   return plt.show()
-  ```
+  
+scatter_comp(X["DFA"], X["MDVP:Fo(Hz)"], y, cluster_label)
+```
+
+<img src= "/assets/img/post1_scatter plot_kmeans1.png">
+
+The above plot shows k-means clustering cannot effectively separate observations based on original data features. Next step, we will repeat the sam process on pca features.
+
+```python
+kmeans = KMeans(2)
+kmeans.fit(pca_features)
+```
+
+scatter_comp(df_pca[0], df_pca[1], y, pca_label)
+scatter_comp(df_pca[0], df_pca[2], y, pca_label)
+scatter_comp(df_pca[0], df_pca[3], y, pca_label)
+
+<img src= "/assets/img/post1_scatter_pca1.png">
+<img src= "/assets/img/post1_scatter_pca2.png">
+<img src= "/assets/img/post1_scatter_pca3.png">
+
+k-means clustering over pca features shows noticable classification improvement over original features.
+
+## Conclusion
+The process of inspecting, visualizing, cleaning, transforming, and modeling of the data with the objective of extracting useful information and drawing conclusion is data analysis. 
+We took a numerical dataset related to Parkinson's disease from UCI Machine Learning Repository. We went through every steps of the above, to analyze this dataset.
+
+
+
