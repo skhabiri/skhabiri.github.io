@@ -210,4 +210,7 @@ t = fig.suptitle('Most corrolated features', fontsize=14)
 plt.show()
 ```
 
+<img src= "/assets/img/post1_pairplot.png">
+
+
 
