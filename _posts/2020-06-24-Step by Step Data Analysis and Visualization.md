@@ -132,3 +132,16 @@ plt.xticks(rotation=90)
 
 <img src= "/assets/img/post1_swarmplot.png">
 
+### *joinplot*
+Moving to statistical analysis we are going to verify some of the observations that we made earlier. Below we see a correlation factor of 0.99 between two of the MDVP features, confirming a strong linear correlation. This is a redundancy in the dataset that can be removed.
+
+```python
+def plot_join_plot(df, feature, target):
+  j = sns.jointplot(feature, target, data = df, kind ='reg')
+  j.annotate(stats.pearsonr)
+  return
+  
+plot_join_plot(X, 'MDVP:Shimmer', 'MDVP:Shimmer(dB)')
+plt.show()
+```
+<img src= "/assets/img/post1_joinplot.png">
