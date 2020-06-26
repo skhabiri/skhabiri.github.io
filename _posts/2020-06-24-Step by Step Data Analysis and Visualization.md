@@ -25,6 +25,10 @@ import numpy as np
 
 url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/parkinsons/parkinsons.data'
 data_set = pd.read_csv(url)
+
+## *Exploring and Cleaning*
+Initial data exploration gives us some insight about the size of dataset, data types and class labels. Looking at our data reveals that all the features are numeric with a binary class label named "status". We remove the "name" column as it doesn't contain useful information for the purpose of our analysis.
+
 data_set.head()
 ```
 (195, 24)
