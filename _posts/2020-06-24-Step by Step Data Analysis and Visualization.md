@@ -5,7 +5,7 @@ title: Step by Step Data Analysis and Visualization
 gh-repo: https://github.com/skhabiri/DS-Unit-1-Build
 gh-badge: [star, fork, follow]
 tags: [Data Analysis]
-image: /assets/img/post1_scatter_pca1.png
+image: /assets/img/post1_cover.png
 comments: true
 ---
 
