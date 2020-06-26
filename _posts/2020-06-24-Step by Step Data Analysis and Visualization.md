@@ -76,4 +76,15 @@ X.isna().sum(axis=0).sum(axis=0)
 ```
 0
 
+## *Visualization*
+
+```python
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import axes3d 
+import seaborn as sns
+import numpy.linalg as LA
+from scipy import stats
+```
+### *Violin Plot*
+We look at each feature to see its distribution and relationship in respect to the class label. Before plotting we normalize our data to be able to visualize all features in one plot and compare them together.
 
