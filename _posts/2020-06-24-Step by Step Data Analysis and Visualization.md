@@ -212,5 +212,22 @@ plt.show()
 
 <img src= "/assets/img/post1_pairplot.png">
 
+After dropping the redundant columns, The number of columns are reduced to 13.
+
+```python
+col_drop = ['MDVP:Jitter(%)', 'MDVP:RAP', 'Jitter:DDP', 'MDVP:Shimmer', 'MDVP:Shimmer(dB)', 'Shimmer:APQ3', 'Shimmer:APQ5', 'Shimmer:DDA', 'spread1']
+X = X.drop(col_drop, axis=1)
+X.shape
+```
+(195, 13)
+
+## Merge cleaned up data
+* In case some rows from X were removed in the process, we would need to align rows od X and y again. We use inner merge between X and y to achieve it.
+
+```python
+df = pd.merge(X, y, left_index=True, right_index=True)
+X = df[df.columns[:-1]]
+y = df[df.columns[-1]]
+```
 
 
