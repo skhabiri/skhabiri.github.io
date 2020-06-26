@@ -145,3 +145,25 @@ plot_join_plot(X, 'MDVP:Shimmer', 'MDVP:Shimmer(dB)')
 plt.show()
 ```
 <img src= "/assets/img/post1_joinplot.png">
+
+### *pairplot*
+To evaluate the correlation of multiple variable at the same time we use PaiGrid from seaborn library.
+
+```python
+sns.set(style="white")
+df1 = X.loc[:,['MDVP:Shimmer','MDVP:Shimmer(dB)','Shimmer:APQ3','Shimmer:APQ5']]
+pp = sns.PairGrid(df1, diag_sharey=False)
+# pp = sns.PairGrid(df1)
+
+# fig = pp.fig 
+# fig.subplots_adjust(top=0.93, wspace=0.3)
+# t = fig.suptitle('corrolated features', fontsize=14)
+# plt.show()
+pp.map_upper(sns.kdeplot, cmap="cividis")
+pp.map_lower(plt.scatter)
+pp.map_diag(sns.kdeplot, lw=3)
+```
+
+<img src= "/assets/img/post1_pairgrid.png">
+
+
