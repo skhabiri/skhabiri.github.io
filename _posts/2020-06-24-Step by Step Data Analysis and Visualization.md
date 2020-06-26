@@ -250,3 +250,35 @@ pca_features = pca.fit_transform(Z.values)
 
 After fitting data into PCA model, we create the Scree plot. Looking at the cumulative sum of explained variance we need to keep only 5 component to retain 90% collective variance of our data.
 
+```python
+X_var_ratio = X.var()/(X.var().sum())
+
+fig1, (ax1, ax2) = plt.subplots(1,2, figsize=(18,5))
+ax1.plot(range(len(X.var())), X_var_ratio.cumsum(), label="dataset features")
+ax1.plot(range(len(X.var())), np.cumsum(pca.explained_variance_ratio_), label="PCA features")
+
+ax1.set_title("Cumulative Sum of Explained Variance Ratio")
+ax1.set_xlabel('PCA features')
+ax1.set_ylabel('Total Explained Variance Ratio')
+ax1.axis('tight')
+ax1.legend(loc='lower right')
+
+ax2.bar(x=range(len(X.columns)), height=pca.explained_variance_ratio_)
+
+ax2.set_title('Scree Plot')
+ax2.set_xlabel('PCA features')
+ax2.set_ylabel('Explained Variance Ratio')
+
+plt.show()
+```
+
+<img src= "/assets/img/post1_pca.png">
+
+```python
+pca_num = (np.where(np.cumsum(pca.explained_variance_ratio_) > 0.9))[0][0]
+pca = PCA(pca_num)
+pca_features = pca.fit_transform(Z.values)
+print(pca_features.shape, type(pca_features))
+```
+(195, 5) <class 'numpy.ndarray'>
+
