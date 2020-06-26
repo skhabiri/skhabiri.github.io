@@ -282,3 +282,22 @@ print(pca_features.shape, type(pca_features))
 ```
 (195, 5) <class 'numpy.ndarray'>
 
+```python
+df_pca = pd.DataFrame(pca_features)
+df_pca.head(2)
+```
+<img src= "/assets/img/post1_pcatab.png">
+
+By looking at the swarmplot, we notice that principal components P0 and P3 are most related to our class label.
+
+```python
+pca_data = pd.melt(pd.concat([df_pca,y], axis=1),id_vars="status", var_name="PCA_features", value_name='value')
+plt.figure(figsize=(10,8))
+sns.swarmplot(x="PCA_features", y="value", hue="status", data=pca_data)
+plt.xticks(rotation=90)
+```
+
+<img src= "/assets/img/post1_swarm2.png">
+
+
+
