@@ -417,11 +417,17 @@ scatter_comp(df_pca[0], df_pca[3], y, pca_label)
 <img src= "/assets/img/post1_scatter_pca2.png">
 <img src= "/assets/img/post1_scatter_pca3.png">
 
-k-means clustering over pca features shows noticable classification improvement over original features.
+
+```python
+(y==pca_label).sum()/len(y)
+```
+0.6051282051282051
+
+A larger training dataset and test dataset would give a better view of our classification performance. Nevertheless k-means clustering over pca features shows noticable classification improvement over original features.
 
 ## Conclusion
 The process of inspecting, visualizing, cleaning, transforming, and modeling of the data with the objective of extracting useful information and drawing conclusion is data analysis. 
-We took a numerical dataset related to Parkinson's disease from UCI Machine Learning Repository. We went through every steps of the above, to analyze this dataset.
+We took a numerical dataset related to Parkinson's disease provided by University of Oxford. We went through every steps of the above, to analyze this dataset, and show how we could extract features that could be used for classification.
 
 
 
