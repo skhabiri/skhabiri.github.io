@@ -324,3 +324,74 @@ plt.show()
 ## K-means Clustering
 Finally we utilize PCA features to cluster our data for classification. Since our class label is binary, we partition our data into two clusters.
 
+```python
+y.value_counts()
+```
+1    147
+0     48
+Name: status, dtype: int64
+
+```python
+sqr_err = []
+for i in range(1,10):
+  kmeans = KMeans(i)
+  # kmeans.fit(df_pca.values)
+  kmeans.fit(X)
+
+  sqr_err.append(kmeans.inertia_)
+  
+plt.figure(figsize=(8,5))
+plt.plot(range(1,10), sqr_err)
+plt.xlabel("Number of clusters")
+plt.ylabel("sum of square errors")
+plt.title("# of Clusters for\nUnsupervised Learning")
+plt.show()
+```
+
+<img src= "/assets/img/post1_kmeans1.png">
+
+```python
+kmeans=KMeans(2)
+kmeans.fit(X)
+```
+
+To show the benefit of PCA, first we run the k-means cluster on original features and then the pca features. Then we compare their class separation by creating scatter plot.
+
+```python
+def scatter_comp(xdata, ydata, y, cluster_label):
+  x_data = xdata
+  y_data = ydata
+  plt.figure(figsize=(16,10))
+  
+  ax0 = plt.subplot(2,2,1)
+  sns.scatterplot(
+    x= x_data, y= y_data,
+    hue = y,
+    cmap='viridis',
+    legend="full",
+    alpha=1,
+    ax=ax0
+    )
+  ax0.set_xlim(x_data.min(),x_data.max())
+  ax0.set_ylim(y_data.min(),y_data.max())
+  ax0.set_xlabel(x_data.name)
+  ax0.set_ylabel(y_data.name)
+  ax0.set_title("Class label")
+
+  ax1 = plt.subplot(2,2,2)
+  sns.scatterplot(
+    x= x_data, y= y_data,
+    hue= cluster_label,
+    cmap='viridis',
+    legend="full",
+    alpha=1,
+    ax=ax1
+    )
+  ax1.set_xlim(x_data.min(),x_data.max())
+  ax1.set_ylim(y_data.min(),y_data.max())
+  ax1.set_xlabel(x_data.name)
+  ax1.set_ylabel(y_data.name)
+  ax1.set_title("Cluster Label")
+
+  return plt.show()
+  ```
