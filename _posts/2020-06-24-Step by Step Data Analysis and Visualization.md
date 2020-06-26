@@ -166,4 +166,20 @@ pp.map_diag(sns.kdeplot, lw=3)
 
 <img src= "/assets/img/post1_pairgrid.png">
 
+### *Heatmap*
+We use heatmap to see the correlation map of the entire features.
+Below are the features that are linearly correlated.
+* MDVP:Jitter(%), MDVP:RAP, MDVP:PPQ, Jitter:DDP (we keep MDVP:PPQ)
+* MDVP:Shimmer, MDVP:Shimmer(dB), 'Shimmer:APQ3', 'Shimmer:APQ5','MDVP:APQ', 'Shimmer:DDA' (we keep 'MDVP:APQ')
+* spread1, PPE (we keep PPE)
+
+We can look at the previous plots to decide which one of them we want to keep, and drop the rest.
+
+```python
+fig,ax = plt.subplots(figsize=(20, 20))
+sns.heatmap(X.corr(), annot=True, linewidths=.5, fmt= '.1f', ax=ax)
+```
+
+<img src= "/assets/img/post1_heatmap1.png">
+
 
