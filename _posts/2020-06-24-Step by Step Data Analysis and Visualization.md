@@ -5,6 +5,7 @@ title: Step by Step Data Analysis and Visualization
 gh-repo: https://github.com/skhabiri/DS-Unit-1-Build
 gh-badge: [star, fork, follow]
 tags: [Data Analysis]
+image: /assets/img/post1_scatter_pca1.png
 comments: true
 ---
 
@@ -41,7 +42,8 @@ data_set.head()
 ```python
 data_set.dtypes
 ```
-![img1](/assets/img/post1_dtype.png)
+<img src= "/assets/img/post1_dtype.png">
+
 
 We split our dataset into data X and label y.
 
