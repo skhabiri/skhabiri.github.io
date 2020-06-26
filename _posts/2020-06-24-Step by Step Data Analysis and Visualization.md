@@ -299,5 +299,28 @@ plt.xticks(rotation=90)
 
 <img src= "/assets/img/post1_swarm2.png">
 
+A scatter plot shows class label separation between P0 and P3.
 
+```python
+x_data = df_pca.iloc[:,0]
+y_data = df_pca.iloc[:,3]
+plt.figure(figsize=(10,8))
+sns.scatterplot(
+    x= x_data, y= y_data,
+    hue=y,
+    legend="full",
+    alpha=0.8
+)
+plt.xlim(x_data.min(),0.8*x_data.max())
+plt.ylim(y_data.min(),0.8*y_data.max())
+plt.xlabel("P0")
+plt.ylabel("P3")
+
+plt.show()
+```
+
+<img src= "/assets/img/post1_pca_scatter_plot.png">
+
+## K-means Clustering
+Finally we utilize PCA features to cluster our data for classification. Since our class label is binary, we partition our data into two clusters.
 
