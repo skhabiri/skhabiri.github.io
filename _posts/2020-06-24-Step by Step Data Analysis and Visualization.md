@@ -182,4 +182,32 @@ sns.heatmap(X.corr(), annot=True, linewidths=.5, fmt= '.1f', ax=ax)
 
 <img src= "/assets/img/post1_heatmap1.png">
 
+## *Drop linearly correlated columns*
+Instead of visual inspection we could have directly extract the correlation coefficients from the correlation matrix.
+
+```python
+corr_pct = 0.98
+col_corr = set()
+for i in range(len(X.corr().columns)):
+    for j in range(i):
+        if abs(X.corr().iloc[i, j]) > corr_pct:
+          print(f'{X.corr().columns[i]} and {X.corr().columns[j]} correlated by {X.corr().iloc[i, j]}')
+          col = X.corr().columns[i]
+          col_corr.add(col)
+print(col_corr, len(col_corr), type(col_corr))
+```
+<img src= "/assets/img/post1_corr_columns.png">
+
+```python
+# Scatter Plot with Hue for visualizing data in 3-D
+X_join = pd.concat([X[col_corr],y], axis=1)
+
+pp = sns.pairplot(X_join, hue="status", size=1.8, aspect=1.8, 
+                  plot_kws=dict(edgecolor="black", linewidth=0.5))
+fig = pp.fig 
+fig.subplots_adjust(top=0.93, wspace=0.3)
+t = fig.suptitle('Most corrolated features', fontsize=14)
+plt.show()
+```
+
 
