@@ -66,7 +66,7 @@ Number of patients without PD: 48
 ```python
 X.describe()
 ```
-
+<img src= "/assets/img/post1_describe.png">
 
 ## *Handling Missing Data*
 A quick check shows our dataset does not have any missing value to either drop or fill. 
@@ -103,3 +103,18 @@ plt.figure(figsize=(26,10))
 sns.violinplot(x="features", y="value", hue="status", data=data,split=True, inner="quart")
 plt.xticks(rotation=90)
 ```
+<img src= "/assets/img/post1_violin.png">
+
+For example PRDE, spread1 and PPE show a separation of their median value based on the class label. Therefore those variables are deemed important for "status" classification. On the other hand, NHR shows the same median for both classes. So it doesn't seem to be direcetly related to the class label.
+
+### *Box plot*
+Alternatively we can create box plot to get quartiles information for each feature.
+
+```python
+plt.figure(figsize=(26,10))
+sns.boxplot(x="features", y="value", hue="status", data=data)
+plt.xticks(rotation=90)
+```
+
+<img src= "/assets/img/post1_boxplot.png">
+
