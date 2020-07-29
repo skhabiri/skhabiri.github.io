@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Evaluation of Multi-class Classification Techniques on The Forest Cover Type Dataset
-#subtitle: Oxford Parkinson's Disease Detection Dataset
-gh-repo: https://github.com/skhabiri/DS-Unit-1-Build
+#subtitle: Forest Cover Type
+gh-repo: https://github.com/skhabiri/DS17-Unit-2-Build
 gh-badge: [star, fork, follow]
 tags: [Predictive Modeling]
 image: /assets/img/post2_pairplot2.png
@@ -25,7 +25,7 @@ The dataset was obtained from the University of California, Irvine, School of In
 import pandas as pd
 import numpy as np
 
-data = pd.read_csv('https://github.com/skhabiri/Forest_cover_type_data/raw/master/train.csv')
+data = pd.read_csv('https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/data/train.csv')
 print(data.shape)
 data.head()
 ```
