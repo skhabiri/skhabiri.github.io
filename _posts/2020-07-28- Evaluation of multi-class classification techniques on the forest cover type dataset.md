@@ -688,7 +688,7 @@ data1.describe()
 
 Next we plot the  Heatmap of correlation matrix. It shows Elevation and Soil_Type are highly correlated, and Hillshade_3pm is reversely correlated with Hillshade_9am. 
 
-<img src= "skhabiri/DS17-Unit-2-Build/figures/post2_heatmap.png">
+<img src= "https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2_heatmap.png">
 
 Looking at scatter plot of different features, it seems "Elevation" is an important parameter in separating different classes of target label.
 
@@ -698,7 +698,7 @@ Looking at scatter plot of different features, it seems "Elevation" is an import
       <img src="/assets/img/post2_pairplot2.png" width="450" /> 
 </p>
 
-We make the following observations from the Count plots below. 
+We make the following observations from the Count plots below.
 * Soil_Type10 shows a significant class distinction for Cover_Type=6.
 * Similarly Wilderness_Area4 and Cover_Type=4 are strongly associated.
 
