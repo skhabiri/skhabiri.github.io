@@ -688,7 +688,7 @@ data1.describe()
 
 Next we plot the  Heatmap of correlation matrix. It shows Elevation and Soil_Type are highly correlated, and Hillshade_3pm is reversely correlated with Hillshade_9am. 
 
-<img src= "../../../../DS17-Unit-2-Build/blob/master/figures/post2_heatmap.png">
+<img src= "../../DS17-Unit-2-Build/blob/master/figures/post2_heatmap.png">
 
 Looking at scatter plot of different features, it seems "Elevation" is an important parameter in separating different classes of target label.
 
