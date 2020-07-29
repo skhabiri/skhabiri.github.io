@@ -794,9 +794,70 @@ XGBoost trains upto 0.999 and yields 0.85 validation accuracy. The following gra
 
 <img src="/assets/img/post2-earlystop.png">
 
+### Cross Validation Curve
 
+The training set is split into kfolds and the model is cross validated based on a classifier parameter.
 
+```python
+kfold=4
+for k, estimator in enumerate(tree_list):
+  print(f"********** {est_dict[estimator][0].__class__.__name__} **********")
+  classifier_name = clf_name(estimator, est_dict)  
+  # estimator.set_params(functiontransformer__kw_args = kwargs_dict)
+  # print(est_dict[estimator][1])
+  
+  param_distributions = {classifier_name.lower()+'__'+ est_dict[estimator][1][j]: est_dict[estimator][2][j] for j in range(len(est_dict[estimator][1]))}
+  
+  for i in range(len(est_dict[estimator][1])):
+    param_name=classifier_name.lower()+'__'+ est_dict[estimator][1][i]
+    param_range = est_dict[estimator][2][i]
+    estimator.set_params(functiontransformer__kw_args = kwargs_dict)
 
+    train_scores, val_scores = validation_curve(estimator, X_train, y_train,
+    # param_name='functiontransformer__kw_args',
+    param_name=param_name, 
+    param_range=param_range, 
+    scoring='accuracy', cv=kfold, n_jobs=-1, verbose=0
+    )
+
+    print(f'**** {param_name} ****\n')
+    print("val scores mean:\n", np.mean(val_scores, axis=1))
+
+    # Averaging CV scores
+    fig, ax = plt.subplots(figsize=(12,8))
+
+    ax.plot(param_range, np.mean(train_scores, axis=1), color='blue', label='mean training accuracy')
+    ax.plot(param_range, np.mean(val_scores, axis=1), color='red', label='mean validation accuracy')
+    ax.set_title(f'Cross Validation with {kfold:d} folds', fontsize=20)
+    ax.set_xlabel(param_name, fontsize=18)
+    ax.set_ylabel('model score: Accuracy', fontsize=18)
+    ax.legend(fontsize=12)
+    ax.tick_params(axis='both', labelsize=16)
+    ax.grid(which='both')
+```
+
+<p float="left">
+  <img src="/assets/img/post2-rfc_maxdepth.png" width="300" />
+  <img src="/assets/img/post2-gbc_maxdepth.png" width="300" /> 
+  <img src="/assets/img/post2-xgbc_maxdepth.png" width="300" /> 
+</p>
+
+Gradient Boost classifier family quickly overfit at max_depth>6. So it's important to keep the tree depth shallow.
+
+<p float="left">
+  <img src="/assets/img/post2-rfc_sampleaf.png" width="300" />
+  <img src="/assets/img/post2-rfc_maxfeat.png" width="300" />
+  <img src="/assets/img/post2-gbc_maxfeat.png" width="300" /> 
+</p>
+
+max_feat parameter shows validation score saturates at numbers above 20, and starts to overfit. Lowering min_samples_leaf improves validation score. Hence we consider small numbers.
+
+<p float="left">
+  <img src="/assets/img/post2-xgb_learningrate.png" width="300" />
+  <img src="/assets/img/post2-xgb_childweight.png" width="300" />
+</p>
+
+For XGBoost we can slow down the overfitting issue with min_child_weight and learningrate parameters.
 
 
 
