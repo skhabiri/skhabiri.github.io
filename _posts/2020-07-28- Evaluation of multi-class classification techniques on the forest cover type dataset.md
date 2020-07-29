@@ -929,4 +929,3 @@ In this work, GradientBoostingClassifier with 87% accuracy on the test data show
 The process of inspecting, visualizing, cleaning, transforming, and modeling of the data with the objective of extracting useful information and drawing conclusion is data analysis. 
 We took a numerical dataset related to Parkinson's disease provided by University of Oxford. We went through every steps of the above, to analyze this dataset, and show how we could extract features that could be used for classification.
 
-
