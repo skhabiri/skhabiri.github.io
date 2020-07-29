@@ -5,7 +5,7 @@ title: Evaluation of Multi-class Classification Techniques on The Forest Cover T
 gh-repo: https://github.com/skhabiri/DS-Unit-1-Build
 gh-badge: [star, fork, follow]
 tags: [Predictive Modeling]
-image: /assets/img/post1_cover3.png
+image: /assets/img/post2_pairplot2.png
 comments: true
 ---
 
