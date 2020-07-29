@@ -859,9 +859,47 @@ max_feat parameter shows validation score saturates at numbers above 20, and sta
 
 For XGBoost we can slow down the overfitting issue with min_child_weight and learningrate parameters.
 
+### Hyper Parameter Tunning
+The parameters of all five estimators are optimized by RandomizedSearchCV.
+```python
+kfold=4
+n_iter = 10
+best_ests = [np.NaN]*len(est)
+best_scores = [np.NaN]*len(est)
+best_params = [np.NaN]*len(est)
 
+for i, estimator in enumerate(est):
+  print(f"\n********** {est_dict[estimator][0].__class__.__name__} **********")
+  estimator.set_params(functiontransformer__kw_args = kwargs_dict)
 
+  classifier_name = clf_name(estimator=estimator, est_dict=est_dict)
+  print(est_dict[estimator][1])
+  
+  param_distributions = {classifier_name.lower()+'__'+ est_dict[estimator][1][j]: 
+                         est_dict[estimator][2][j] for j in range(len(est_dict[estimator][1]))}
 
+  rscv = RandomizedSearchCV(estimator, param_distributions=param_distributions, 
+    n_iter=n_iter, cv=kfold, scoring='accuracy', verbose=1, return_train_score=True, 
+    n_jobs=-1)
+  
+  rscv.fit(X_train, y_train)
+  best_ests[i] = rscv.best_estimator_
+  best_scores[i] = rscv.best_score_
+  best_params[i] = rscv.best_params_
+
+best_ypreds = [best_est.predict(X_val) for best_est in best_ests]
+best_testscores = [accuracy_score(y_val, best_ypred) for best_ypred in best_ypreds]
+print('Test accuracy\n', best_testscores)
+print('best cross validation accuracy\n', best_scores)
+```
+Test accuracy
+ [0.6911375661375662, 0.6326058201058201, 0.7754629629629629, 0.8700396825396826, 0.8498677248677249]
+best cross validation accuracy
+ [0.7080026455026454, 0.6332671957671958, 0.7709986772486773, 0.8645833333333334, 0.8445767195767195]
+
+The accuracy scores above corresponds to 
+LogisticRegression, RidgeClassifier RandomForestClassifier, GradientBoostingClassifier, XGBClassifier accordingly.
+In this work, GradientBoostingClassifier with 87% accuracy on the test data shows the best performance among the five. 
 
 
 
