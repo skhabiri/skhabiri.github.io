@@ -694,19 +694,19 @@ Looking at scatter plot of different features, it seems "Elevation" is an import
 
 
 <p float="left">
-  <img src="/assets/img/post2_pairplot1.png" width="450" />
-      <img src="/assets/img/post2_pairplot2.png" width="450" /> 
+  <img src="https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2_pairplot1.png" width="450" />
+      <img src="https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2_pairplot2.png" width="450" /> 
 </p>
 
 We make the following observations from the Count plots below.
 * Soil_Type10 shows a significant class distinction for Cover_Type=6.
 * Similarly Wilderness_Area4 and Cover_Type=4 are strongly associated.
 
-<img src= "/assets/img/post2_countplot1.png">
+<img src= "https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2_countplot1.png">
 
 List of unique values in the feature shows Soil_Type15 and Soil_Type7 are constant. Additionally, Id column is a unique identifier for each observation. We'll drop those three columns as they do not carry any information to identify the target label.
 There are also skewness in some features. "Horizontal_Distance_To_Hydrology" is an example of that.
-<img src="/assets/img/post2_skew.png">
+<img src="https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2_skew.png">
 
 ### Train-Test Split
 After removing "Id" and constant columns, data is split into train and validation set.
@@ -749,9 +749,9 @@ We are going to look at five different classifiers to compare their performance.
 
 The following plots show the feature_importances and permutation importances of the tree-base classifiers. "Elevation" is given a higher importance weight compared to other features, as we saw earlier. Without the help of permutation, XGBClassifier does not seem to detect the importance of "Elevation" feature.
 
-<img src="/assets/img/post2_feature1.png">
-<img src="/assets/img/post2_feature2.png">
-<img src="/assets/img/post2_feature3.png">
+<img src="https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2_feature1.png">
+<img src="https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2_feature2.png">
+<img src="https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2_feature3.png">
 
 ### XGBClassifier ovrerfitting
 XGBClassifier tends to overfit and its growth parameter needs to be controlled. To see that effect, an early stop fitting with 50 rounds is run.
@@ -792,7 +792,7 @@ Validation Accuracy: 0.8528439153439153
 
 XGBoost trains upto 0.999 and yields 0.85 validation accuracy. The following graph shows how validation error remains constant while training error reduces.
 
-<img src="/assets/img/post2-earlystop.png">
+<img src="https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2-earlystop.png">
 
 ### Cross Validation Curve
 
@@ -837,24 +837,24 @@ for k, estimator in enumerate(tree_list):
 ```
 
 <p float="left">
-  <img src="/assets/img/post2-rfc_maxdepth.png" width="300" />
-  <img src="/assets/img/post2-gbc_maxdepth.png" width="300" /> 
-  <img src="/assets/img/post2-xgbc_maxdepth.png" width="300" /> 
+  <img src="https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2-rfc_maxdepth.png" width="300" />
+  <img src="https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2-gbc_maxdepth.png" width="300" /> 
+  <img src="https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2-xgbc_maxdepth.png" width="300" /> 
 </p>
 
 Gradient Boost classifier family quickly overfit at max_depth>6. So it's important to keep the tree depth shallow.
 
 <p float="left">
-  <img src="/assets/img/post2-rfc_sampleaf.png" width="300" />
-  <img src="/assets/img/post2-rfc_maxfeat.png" width="300" />
-  <img src="/assets/img/post2-gbc_maxfeat.png" width="300" /> 
+  <img src="https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2-rfc_sampleaf.png" width="300" />
+  <img src="https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2-rfc_maxfeat.png" width="300" />
+  <img src="https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2-gbc_maxfeat.png" width="300" /> 
 </p>
 
 max_feat parameter shows validation score saturates at numbers above 20, and starts to overfit. Lowering min_samples_leaf improves validation score. Hence we consider small numbers.
 
 <p float="left">
-  <img src="/assets/img/post2-xgb_learningrate.png" width="300" />
-  <img src="/assets/img/post2-xgb_childweight.png" width="300" />
+  <img src="https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2-xgb_learningrate.png" width="300" />
+  <img src="https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/figures/post2-xgb_childweight.png" width="300" />
 </p>
 
 For XGBoost we can slow down the overfitting issue with min_child_weight and learningrate parameters.
