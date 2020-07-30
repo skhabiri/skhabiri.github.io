@@ -837,24 +837,24 @@ for k, estimator in enumerate(tree_list):
 ```
 
 <p float="left">
-  <img src="../assets/img/post2/post2-rfc_maxdepth.png" width="250" />
-  <img src="../assets/img/post2/post2-gbc_maxdepth.png" width="250" /> 
-  <img src="../assets/img/post2/post2-xgbc_maxdepth.png" width="250" /> 
+  <img src="../assets/img/post2/post2-rfc_maxdepth.png" width="350" />
+  <img src="../assets/img/post2/post2-gbc_maxdepth.png" width="350" /> 
+  <img src="../assets/img/post2/post2-xgbc_maxdepth.png" width="350" /> 
 </p>
 
 Gradient Boost classifier family quickly overfit at max_depth>6. So it's important to keep the tree depth shallow.
 
 <p float="left">
-  <img src="../assets/img/post2/post2-rfc_sampleaf.png" width="250" />
-  <img src="../assets/img/post2/post2-rfc_maxfeat.png" width="250" />
-  <img src="../assets/img/post2/post2-gbc_maxfeat.png" width="250" /> 
+  <img src="../assets/img/post2/post2-rfc_sampleaf.png" width="350" />
+  <img src="../assets/img/post2/post2-rfc_maxfeat.png" width="350" />
+  <img src="../assets/img/post2/post2-gbc_maxfeat.png" width="350" /> 
 </p>
 
 max_feat parameter shows validation score saturates at numbers above 20, and starts to overfit. Lowering min_samples_leaf improves validation score. Hence we consider small numbers.
 
 <p float="left">
-  <img src="../assets/img/post2/post2-xgb_learningrate.png" width="300" />
-  <img src="../assets/img/post2/post2-xgb_childweight.png" width="300" />
+  <img src="../assets/img/post2/post2-xgb_learningrate.png" width="350" />
+  <img src="../assets/img/post2/post2-xgb_childweight.png" width="350" />
 </p>
 
 For XGBoost we can slow down the overfitting issue with min_child_weight and learningrate parameters.
