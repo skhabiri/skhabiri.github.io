@@ -694,8 +694,8 @@ Looking at scatter plot of different features, it seems "Elevation" is an import
 
 
 <p float="left">
-  <img src="../assets/img/post2/post2_pairplot1.png" width="450" />
-      <img src="../assets/img/post2/post2_pairplot2.png" width="450" /> 
+  <img src="../assets/img/post2/post2_pairplot1.png" width="550" />
+      <img src="../assets/img/post2/post2_pairplot2.png" width="550" /> 
 </p>
 
 We make the following observations from the Count plots below.
@@ -837,17 +837,17 @@ for k, estimator in enumerate(tree_list):
 ```
 
 <p float="left">
-  <img src="../assets/img/post2/post2-rfc_maxdepth.png" width="300" />
-  <img src="../assets/img/post2/post2-gbc_maxdepth.png" width="300" /> 
-  <img src="../assets/img/post2/post2-xgbc_maxdepth.png" width="300" /> 
+  <img src="../assets/img/post2/post2-rfc_maxdepth.png" width="250" />
+  <img src="../assets/img/post2/post2-gbc_maxdepth.png" width="250" /> 
+  <img src="../assets/img/post2/post2-xgbc_maxdepth.png" width="250" /> 
 </p>
 
 Gradient Boost classifier family quickly overfit at max_depth>6. So it's important to keep the tree depth shallow.
 
 <p float="left">
-  <img src="../assets/img/post2/post2-rfc_sampleaf.png" width="300" />
-  <img src="../assets/img/post2/post2-rfc_maxfeat.png" width="300" />
-  <img src="../assets/img/post2/post2-gbc_maxfeat.png" width="300" /> 
+  <img src="../assets/img/post2/post2-rfc_sampleaf.png" width="250" />
+  <img src="../assets/img/post2/post2-rfc_maxfeat.png" width="250" />
+  <img src="../assets/img/post2/post2-gbc_maxfeat.png" width="250" /> 
 </p>
 
 max_feat parameter shows validation score saturates at numbers above 20, and starts to overfit. Lowering min_samples_leaf improves validation score. Hence we consider small numbers.
