@@ -9,12 +9,11 @@ image: /assets/img/post2_pairplot2.png
 comments: true
 ---
 
-In this post, five different machine learning classifiers are implemented to classify a multi-class target label. The classification techniques are evaluated on the forest cover type dataset provided by Jock A. Blackard and Colorado State University. 
-
-* **Dataset:** [https://archive.ics.uci.edu/ml/datasets/Covertype](https://archive.ics.uci.edu/ml/datasets/Covertype)
+In this post, common machine learning techniques, such as feature engineering, data transformation, Cross validation, and hyperparameter tuning are applied to a several regression-based and tree-based classifiers. For this comparative analysis the [Covertype dataset](https://archive.ics.uci.edu/ml/datasets/Covertype) from UCI machine learning repository is used to predict the type of forest coverage from one of the 7 categories. This is a single-label multi-class classification with equal weight classes. 
 
 * **Dataset information:**
-The dataset was obtained from the University of California, Irvine, School of Information and Computer Sciences database. It contains 15120 observations of cover type with 56 columns including the taget label. The data includes 7 categories of different cover types, 10 continuous variables, 4 wilderness areas and 40 binary soil types. It produces in total 54 different variables available for the models.
+Researchers at the Department of Forest Sciences at Colorado State University collected over half a million measurements from tree observations from four areas of the Roosevelt National Forest in Colorado. All observations are cartographic variables (no remote sensing) from 30-meter x 30-meter sections of forest.
+The resulting dataset includes information on tree type, shadow coverage, distance to nearby landmarks (roads etcetera), soil type, and local topography. This dataset was obtained from [UCI machine learning repository](https://archive.ics.uci.edu/ml/datasets/Covertype). It contains 15120 observations and 56 columns in total. This data includes 7 categories of different cover types, which will be used as the target label for prediction, 10 continuous variables, and 2 categorical variables, Wilderness areas and soil types. The categorical variables are encoded with one hot encoder.
 
 > Bache, K. & Lichman, M. (2013). UCI Machine Learning Repository. Irvine, CA: University of California, School of Information and Computer Science
 
@@ -753,8 +752,8 @@ The following plots show the feature_importances and permutation importances of 
 <img src="../assets/img/post2/post2_feature2.png">
 <img src="../assets/img/post2/post2_feature3.png">
 
-### XGBClassifier ovrerfitting
-XGBClassifier tends to overfit and its growth parameter needs to be controlled. To see that effect, an early stop fitting with 50 rounds is run.
+### Avoid Overfitting By Early Stop feature in XGBoost Classifier
+XGBClassifier tends to overfit and its growth parameters need to be controlled. To demonstrate that, an early stop fitting with 50 rounds is run below. We notice at some point in fitting process the validation error stops decreasing steady. 
 ```python
 # XGBoost early stop fit
 xform = make_pipeline(
@@ -902,6 +901,11 @@ LogisticRegression, RidgeClassifier RandomForestClassifier, GradientBoostingClas
 In this work, GradientBoostingClassifier with 87% accuracy on the test data shows the best performance among the five. 
 
 ## Conclusion
-This post evaluates the performance of five widely used classification methods in predicting the "Cover-Type" label of Covertype dataset. The dataset has 54 features and one target label with 7 classes. We splitted the 15120 obeservations into 80/20 train and test subset. By applying commonly used classification methods of feature selection through feature permutation importance, removing high cardinality features and constant features, scaling data, cross validation methods and hyper parameter tuning, we were able to achive accuracy scores ranging from 63% to 86% on test data. A typical fit of the models with their detailed score numbers can be found in [this](https://forestcover-metrics.herokuapp.com) webapp.
+This post evaluates and compares the performance of five multi-class classifiers to predict the "Cover-Type" label of [Covertype dataset](https://archive.ics.uci.edu/ml/datasets/Covertype). The dataset has 54 features, and one target label with 7 different classes. Target label classes are distributed evenly with baseline prediction of 14%. We splitted the total 15120 obeservations into train and test subsets. By applying commonly used classification methods such as feature selection, data scaling, cross validation, and hyperparameter optimization, we were able to achive accuracy scores ranging from 63% to 86% on test data subset. The score metrics of a typical fit of those classifiers can be found in [this](https://forestcover-metrics.herokuapp.com).
+
+## Links
+[Dataset](https://archive.ics.uci.edu/ml/datasets/Covertype)
+[Project Repository](https://github.com/skhabiri/DS17-Unit-2-Build)
+[Web Application](https://forestcover-metrics.herokuapp.com)
 
 
