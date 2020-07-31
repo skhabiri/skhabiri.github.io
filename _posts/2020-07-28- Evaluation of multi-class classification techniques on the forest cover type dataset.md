@@ -901,7 +901,9 @@ This post evaluates and compares the performance of five multi-class classifiers
 
 ## Links
 [Dataset](https://archive.ics.uci.edu/ml/datasets/Covertype)
+
 [Project Repository](https://github.com/skhabiri/DS17-Unit-2-Build)
+
 [Web Application](https://forestcover-metrics.herokuapp.com)
 
 
