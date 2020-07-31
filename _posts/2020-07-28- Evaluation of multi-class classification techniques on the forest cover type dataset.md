@@ -1,16 +1,16 @@
 ---
 layout: post
-title: Evaluation of Multi-class Classification Techniques on The Covertype Dataset
+title: A Comparison of Supervised Multi-class Classification Methods for the Prediction of Forest Cover Types
 #subtitle: Forest Cover Type
 gh-repo: https://github.com/skhabiri/DS17-Unit-2-Build
 gh-badge: [star, fork, follow]
-tags: [Predictive Modeling]
+tags: [Predictive Modeling][Supervised Classification]
 image: /assets/img/post2_pairplot2.png
 comments: true
 ---
 
 In this post, common machine learning techniques, such as feature engineering, data transformation, Cross validation, and hyperparameter tuning are applied to a several regression-based and tree-based classifiers. For this comparative analysis the [Covertype dataset](https://archive.ics.uci.edu/ml/datasets/Covertype) from UCI machine learning repository is used to predict the type of forest coverage from one of the 7 categories. This is a single-label multi-class classification with equal weight classes.  
-For this work we selected the following multi-class classifiers:  
+For this work we selected the following multi-class classifiers:
 1. Logistic Regression
 2. Ridge Regression
 3. Random Forest
@@ -730,19 +730,8 @@ print(f'train: {train.shape}, val: {val.shape}')
 train: (12096, 56), val: (3024, 56)
 
 ### Baseline model
-Normalized value counts of the target label shows an equal weight distribution for all classes, with baseline prediction of 14%.
-```python 
-y_train.value_counts(normalize=True)
-```
-1: 0.142857 
-2: 0.142857 
-3: 0.142857 
-4: 0.142857 
-5: 0.142857 
-6: 0.142857 
-7: 0.142857 
+Normalized value counts of the target label shows an equal weight distribution for all classes, with baseline prediction of 14.3%.
 
-Name: Cover_Type, dtype: float64
 
 ### Pipeline Estimators, Feature_importances and permutation_importance
 We are going to look at five different classifiers to compare their performance. For the regression classifiers we will standardize the data before fitting.
