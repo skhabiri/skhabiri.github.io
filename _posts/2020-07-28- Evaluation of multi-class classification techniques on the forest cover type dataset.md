@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Evaluation of Multi-class Classification Techniques on The Forest Cover Type Dataset
+title: Evaluation of Multi-class Classification Techniques on The Covertype Dataset
 #subtitle: Forest Cover Type
 gh-repo: https://github.com/skhabiri/DS17-Unit-2-Build
 gh-badge: [star, fork, follow]
