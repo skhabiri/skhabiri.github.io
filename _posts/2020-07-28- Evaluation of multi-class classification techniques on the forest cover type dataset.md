@@ -901,31 +901,7 @@ The accuracy scores above corresponds to
 LogisticRegression, RidgeClassifier RandomForestClassifier, GradientBoostingClassifier, XGBClassifier accordingly.
 In this work, GradientBoostingClassifier with 87% accuracy on the test data shows the best performance among the five. 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## Conclusion
-The process of inspecting, visualizing, cleaning, transforming, and modeling of the data with the objective of extracting useful information and drawing conclusion is data analysis. 
-We took a numerical dataset related to Parkinson's disease provided by University of Oxford. We went through every steps of the above, to analyze this dataset, and show how we could extract features that could be used for classification.
+This post evaluates the performance of five widely used classification methods in predicting the "Cover-Type" label of Covertype dataset. The dataset has 54 features and one target label with 7 classes. We splitted the 15120 obeservations into 80/20 train and test subset. By applying commonly used classification methods of feature selection through feature permutation importance, removing high cardinality features and constant features, scaling data, cross validation methods and hyper parameter tuning, we were able to achive accuracy scores ranging from 63% to 86% on test data. A typical fit of the models with their detailed score numbers can be found in [this](https://forestcover-metrics.herokuapp.com) webapp.
+
 
