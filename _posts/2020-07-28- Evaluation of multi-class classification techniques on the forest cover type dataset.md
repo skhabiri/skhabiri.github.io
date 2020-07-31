@@ -728,13 +728,13 @@ Normalized value counts of the target label shows an equal weight distribution f
 ```python 
 y_train.value_counts(normalize=True)
 ```
-7    0.142857
-6    0.142857
-5    0.142857
-4    0.142857
-3    0.142857
-2    0.142857
-1    0.142857
+7    0.142857. 
+6    0.142857. 
+5    0.142857. 
+4    0.142857. 
+3    0.142857. 
+2    0.142857. 
+1    0.142857. 
 Name: Cover_Type, dtype: float64
 
 ### Pipeline Estimators, Feature_importances and permutation_importance
