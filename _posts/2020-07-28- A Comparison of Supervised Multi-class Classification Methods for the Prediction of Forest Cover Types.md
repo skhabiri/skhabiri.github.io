@@ -2,7 +2,7 @@
 layout: post
 title: A Comparison of Supervised Multi-class Classification Methods for the Prediction of Forest Cover Types
 #subtitle: Forest Cover Type
-gh-repo: https://github.com/skhabiri/DS17-Unit-2-Build
+gh-repo: skhabiri/DS17-Unit-2-Build
 gh-badge: [star, fork, follow]
 tags: [Predictive Modeling]
 image: /assets/img/post2_pairplot2.png
