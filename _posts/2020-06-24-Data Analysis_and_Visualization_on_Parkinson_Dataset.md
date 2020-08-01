@@ -2,7 +2,7 @@
 layout: post
 title: Data Analysis and Visualization on Parkinson Dataset
 #subtitle: Oxford Parkinson's Disease Detection Dataset
-gh-repo: https://github.com/skhabiri/DS-Unit-1-Build
+gh-repo: skhabiri/DS-Unit-1-Build
 gh-badge: [star, fork, follow]
 tags: [Data Analysis]
 image: /assets/img/post1_cover3.png
