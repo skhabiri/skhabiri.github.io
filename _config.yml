@@ -40,11 +40,11 @@ round-avatar: true
 social-network-links:
   email: "shahnam.khabiri@gmail.com"
 #   facebook: deanattali
-  github: "https://github.com/skhabiri"
-#   twitter: daattali
+  github: skhabiri
+  twitter: shahnam_k
   rss: false
 #  reddit: yourname
-#  linkedin: "https://linkedin.com/in/skhabiri-823b53b"
+#  linkedin: "https://www.linkedin.com/in/shahnamkhabiri"
 #  xing: yourname
 #  stackoverflow: "3943160/daattali"
 #  snapchat: deanat78
@@ -64,7 +64,7 @@ social-network-links:
 # Select which social network share links to show in posts
 share-links-active:
   twitter: true
-  facebook: true
+  facebook: false
   linkedin: true
   vk: false
 
