@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Classification of Imbalanced Bridges to Prosperity (B2P) Dataset and FastAPI Framework deployment to AWS Elastic Beanstalk
+title: Classification of Imbalanced Dataset provided by Bridges to Prosperity (B2P) and FastAPI Framework deployment to AWS Elastic Beanstalk
 subtitle: Bridges to Prosperity (B2P)
 gh-repo: https://github.com/Lambda-School-Labs/bridges-to-prosperity-ds-d
 gh-badge: [star, fork, follow]
