@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Classification on Imbalanced Dataset and FastAPI App Deploymet to AWS Elastic Beanstalk
+title: Classification of Imbalanced Bridges to Prosperity (B2P) Dataset and FastAPI Framework deployment to AWS Elastic Beanstalk
 subtitle: Bridges to Prosperity (B2P)
 gh-repo: https://github.com/Lambda-School-Labs/bridges-to-prosperity-ds-d
 gh-badge: [star, fork, follow]
@@ -9,15 +9,28 @@ image: /assets/img/post2_pairplot2.png
 comments: false
 ---
 
-In this post we apply semi-supervised techniques to classify highly imbalance dataset provided by Bridges to Prosperity nonprofit organization. We use label propagation alorithm available in scikit-learn a machine learning library for Python. We also use Synthetic Minority Oversampling Technique (SMOTE) to deal with imbalanced data.
-The database is stored as PostgreSQL in AWS RDS (Amazon Relational Database Service). FastAPI application is used as data science API to connect to database and make live prediction on target class.
-The FastAPI app is deployed onto AWS Elastic Beanstalk.
 
-* **Dataset information:**
-Researchers at the Department of Forest Sciences at Colorado State University collected over half a million measurements from tree observations from four areas of the Roosevelt National Forest in Colorado. All observations are cartographic variables (no remote sensing) from 30-meter x 30-meter sections of forest.
-The resulting dataset includes information on tree type, shadow coverage, distance to nearby landmarks (roads etcetera), soil type, and local topography. This dataset was obtained from [UCI machine learning repository](https://archive.ics.uci.edu/ml/datasets/Covertype). It contains 15120 observations and 56 columns in total. This data includes 7 categories of different cover types, which will be used as the target label for prediction, 10 continuous variables, and 2 categorical variables, Wilderness areas and soil types. The categorical variables are encoded with one hot encoder.
+### About the Organization:
+[Bridges to Prosperity (B2P)](https://www.bridgestoprosperity.org/) footbridges works with isolated communities to create access to essential health care, education and economic opportunities by building footbridges over impassable rivers.
 
-> Bache, K. & Lichman, M. (2013). UCI Machine Learning Repository. Irvine, CA: University of California, School of Information and Computer Science
+Bridges to Prosperity currently operates field programs in Bolivia, Rwanda, Uganda, and is currently in its first year of a scaling initiative in Rwanda, which will see the completion of more than 300 footbridges over a five-year period, creating new safe access for more than a million people.
+
+Independent studies have demonstrated that B2P footbridges increase labor income by an average of 35.8%, farm profits by 75%, and the participation of women in the wage labor force by 60%, and that the annual return on investment at a community level is 20%. B2P believes that footbridges are a powerful and cost-effective tool for addressing poverty at scale.
+
+
+### Dataset:
+The dataset consists of survey data of 1472 sites (rows) with 44 features. The "Stage" column shows the status of the project. The "senior_engineering_review" shows if the site has been reviewed by engineering team or not. Among all the rows of the dataset only 65 projects are reviewed and approved and 24 projects are reviewed and rejected. The rest (1383 rows) do not have any target label.
+
+
+### Project Challenge:
+Based on the existing input data we want to know if we can classify the sites as being rejected or not in any future review conducted by senior engineering team. In other words we want to find out which sites will be technically rejected in future engineering reviews.
+
+
+### Project Overview:
+We use Synthetic Minority Oversampling Technique (SMOTE) to deal with highly imbalanced B2P dataset. Then we will apply label propagation, a semi-supervise alorithm available in scikit-learn, for binary classification.
+
+The database is stored as PostgreSQL in AWS RDS (Amazon Relational Database Service). We use pgAdmin to manage the PostgreSQL database stored in AWS RDS. FastAPI framework is used as data science API to connect to database and provide a route for live prediction on target. The FastAPI app is deployed onto AWS Elastic Beanstalk and interfaces with Web Frontend. Installed packages in the project are managed with docker container.
+
 
 ## *Loading dataset*
 
