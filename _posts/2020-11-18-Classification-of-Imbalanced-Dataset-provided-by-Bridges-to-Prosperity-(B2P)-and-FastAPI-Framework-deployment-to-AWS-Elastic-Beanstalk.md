@@ -236,6 +236,7 @@ y_pred = ss_model.predict(X)
 pd.Series(y_pred).value_counts()
 ```
 
+
 |0.0|1333|
 |---|----|
 |1.0|139 |
@@ -257,6 +258,37 @@ ax.set_title('Confusion Matrix');
 ```
 
 <img src= "../assets/img/post3/post3_confusion.png">
+
+The classifier has not misclassified any of the labeled documents. It's a good idea to examine the effect of clamping factor (alpha) in LabelSpreading to avoid overfitting. On another note, considering the small number of labeled data we did not split the data into training and validation set which would give us a way to evaluate the model. 
+As an alternative approach we use GridSearchCV combined with a supervised classifier such as RandomForestClassifier and perform cross validation to get a validation accuracy score.
+
+```
+pipe = make_pipeline_imb(
+    ce.OneHotEncoder(use_cat_names=True, cols=nonnum_features),
+    SimpleImputer(strategy='median'),
+    StandardScaler(),
+    SMOTE(random_state=42),
+    RandomForestClassifier(n_estimators=100, random_state=42)
+    )
+
+gs_params = {'randomforestclassifier__n_estimators': [100, 200, 50],
+              'randomforestclassifier__max_depth': [4, 6, 10, 12], 
+              'simpleimputer__strategy': ['mean', 'median']
+}
+
+gs_model = GridSearchCV(pipe, param_grid=gs_params, cv=10, 
+                        scoring='precision',
+                        return_train_score=True, verbose=0)
+gs_model.fit(X_train, y_train)
+
+gs_best = gs_model.best_estimator_
+```
+
+We compare both approach by checking the confusion matrix:
+
+<img src= "../assets/img/post3/post3_confusion2.png">
+
+
 
 
 
