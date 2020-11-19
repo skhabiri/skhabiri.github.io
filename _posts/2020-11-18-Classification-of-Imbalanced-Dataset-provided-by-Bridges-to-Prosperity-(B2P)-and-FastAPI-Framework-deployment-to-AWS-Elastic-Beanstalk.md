@@ -10,7 +10,8 @@ comments: false
 ---
 
 
-### About the Organization:
+
+***About the Organization:**
 [Bridges to Prosperity (B2P)](https://www.bridgestoprosperity.org/) footbridges works with isolated communities to create access to essential health care, education and economic opportunities by building footbridges over impassable rivers.
 
 Bridges to Prosperity currently operates field programs in Bolivia, Rwanda, Uganda, and is currently in its first year of a scaling initiative in Rwanda, which will see the completion of more than 300 footbridges over a five-year period, creating new safe access for more than a million people.
@@ -18,687 +19,143 @@ Bridges to Prosperity currently operates field programs in Bolivia, Rwanda, Ugan
 Independent studies have demonstrated that B2P footbridges increase labor income by an average of 35.8%, farm profits by 75%, and the participation of women in the wage labor force by 60%, and that the annual return on investment at a community level is 20%. B2P believes that footbridges are a powerful and cost-effective tool for addressing poverty at scale.
 
 
-### Dataset:
+***Dataset:**
 The dataset consists of survey data of 1472 sites (rows) with 44 features. The "Stage" column shows the status of the project. The "senior_engineering_review" shows if the site has been reviewed by engineering team or not. Among all the rows of the dataset only 65 projects are reviewed and approved and 24 projects are reviewed and rejected. The rest (1383 rows) do not have any target label.
 
 
-### Project Challenge:
+***Project Challenge:**
 Based on the existing input data we want to know if we can classify the sites as being rejected or not in any future review conducted by senior engineering team. In other words we want to find out which sites will be technically rejected in future engineering reviews.
 
 
-### Project Overview:
+***Project Overview:**
 We use Synthetic Minority Oversampling Technique (SMOTE) to deal with highly imbalanced B2P dataset. Then we will apply label propagation, a semi-supervise alorithm available in scikit-learn, for binary classification.
 
 The database is stored as PostgreSQL in AWS RDS (Amazon Relational Database Service). We use pgAdmin to manage the PostgreSQL database stored in AWS RDS. FastAPI framework is used as data science API to connect to database and provide a route for live prediction on target. The FastAPI app is deployed onto AWS Elastic Beanstalk and interfaces with Web Frontend. Installed packages in the project are managed with docker container.
 
 
-## *Loading dataset*
+### Loading dataset:
+After loading and cleaning the dataset:
 
-```python
-# Import data
-import pandas as pd
-import numpy as np
-
-data = pd.read_csv('https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/data/train.csv')
-print(data.shape)
-data.head()
 ```
+print(df.shape)
+df.head(1)
+```
+(1472, 44)
 
-(15120, 56)
 <table border="1" class="dataframe" style="overflow-x: scroll;display: block;">
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Id</th>
-      <th>Elevation</th>
-      <th>Aspect</th>
-      <th>Slope</th>
-      <th>Horizontal_Distance_To_Hydrology</th>
-      <th>Vertical_Distance_To_Hydrology</th>
-      <th>Horizontal_Distance_To_Roadways</th>
-      <th>Hillshade_9am</th>
-      <th>Hillshade_Noon</th>
-      <th>Hillshade_3pm</th>
-      <th>Horizontal_Distance_To_Fire_Points</th>
-      <th>Wilderness_Area1</th>
-      <th>Wilderness_Area2</th>
-      <th>Wilderness_Area3</th>
-      <th>Wilderness_Area4</th>
-      <th>Soil_Type1</th>
-      <th>Soil_Type2</th>
-      <th>Soil_Type3</th>
-      <th>Soil_Type4</th>
-      <th>Soil_Type5</th>
-      <th>Soil_Type6</th>
-      <th>Soil_Type7</th>
-      <th>Soil_Type8</th>
-      <th>Soil_Type9</th>
-      <th>Soil_Type10</th>
-      <th>Soil_Type11</th>
-      <th>Soil_Type12</th>
-      <th>Soil_Type13</th>
-      <th>Soil_Type14</th>
-      <th>Soil_Type15</th>
-      <th>Soil_Type16</th>
-      <th>Soil_Type17</th>
-      <th>Soil_Type18</th>
-      <th>Soil_Type19</th>
-      <th>Soil_Type20</th>
-      <th>Soil_Type21</th>
-      <th>Soil_Type22</th>
-      <th>Soil_Type23</th>
-      <th>Soil_Type24</th>
-      <th>Soil_Type25</th>
-      <th>Soil_Type26</th>
-      <th>Soil_Type27</th>
-      <th>Soil_Type28</th>
-      <th>Soil_Type29</th>
-      <th>Soil_Type30</th>
-      <th>Soil_Type31</th>
-      <th>Soil_Type32</th>
-      <th>Soil_Type33</th>
-      <th>Soil_Type34</th>
-      <th>Soil_Type35</th>
-      <th>Soil_Type36</th>
-      <th>Soil_Type37</th>
-      <th>Soil_Type38</th>
-      <th>Soil_Type39</th>
-      <th>Soil_Type40</th>
-      <th>Cover_Type</th>
+      <th>bridge_name</th>
+      <th>bridge_opportunity_project_code</th>
+      <th>bridge_opportunity_needs_assessment</th>
+      <th>bridge_opportunity_level1_government</th>
+      <th>bridge_opportunity_level2_government</th>
+      <th>bridge_opportunity_stage</th>
+      <th>bridge_opportunity_gps_latitude</th>
+      <th>bridge_opportunity_gps_longitude</th>
+      <th>bridge_opportunity_bridge_type</th>
+      <th>bridge_opportunity_span_m</th>
+      <th>bridge_opportunity_individuals_directly_served</th>
+      <th>bridge_opportunity_comments</th>
+      <th>form_form_name</th>
+      <th>form_created_by</th>
+      <th>proposed_bridge_location_gps_latitude</th>
+      <th>proposed_bridge_location_gps_longitude</th>
+      <th>current_crossing_method</th>
+      <th>nearest_all_weather_crossing_point</th>
+      <th>days_per_year_river_is_flooded</th>
+      <th>flood_duration_during_rainy_season</th>
+      <th>market_access_blocked_by_river</th>
+      <th>education_access_blocked_by_river</th>
+      <th>health_access_blocked_by_river</th>
+      <th>other_access_blocked_by_river</th>
+      <th>primary_occupations</th>
+      <th>primary_crops_grown</th>
+      <th>river_crossing_deaths_in_last_3_years</th>
+      <th>river_crossing_injuries_in_last_3_years</th>
+      <th>incident_descriptions</th>
+      <th>notes_on_social_information</th>
+      <th>cell_service_quality</th>
+      <th>four_wd _accessibility</th>
+      <th>name_of_nearest_city</th>
+      <th>name_of_nearest_paved_or_sealed_road</th>
+      <th>bridge_classification</th>
+      <th>flag_for_rejection</th>
+      <th>rejection_reason</th>
+      <th>bridge_type</th>
+      <th>estimated_span_m</th>
+      <th>height_differential_between_banks</th>
+      <th>bridge_opportunity_general_project_photos</th>
+      <th>bridge_opportunity_casesafeid</th>
+      <th>senior_engineering_review_conducted</th>
+      <th>country</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>1</td>
-      <td>2596</td>
-      <td>51</td>
-      <td>3</td>
-      <td>258</td>
-      <td>0</td>
-      <td>510</td>
-      <td>221</td>
-      <td>232</td>
-      <td>148</td>
-      <td>6279</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2</td>
-      <td>2590</td>
-      <td>56</td>
-      <td>2</td>
-      <td>212</td>
-      <td>-6</td>
-      <td>390</td>
-      <td>220</td>
-      <td>235</td>
-      <td>151</td>
-      <td>6225</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3</td>
-      <td>2804</td>
-      <td>139</td>
-      <td>9</td>
-      <td>268</td>
-      <td>65</td>
-      <td>3180</td>
-      <td>234</td>
-      <td>238</td>
-      <td>135</td>
-      <td>6121</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>4</td>
-      <td>2785</td>
-      <td>155</td>
-      <td>18</td>
-      <td>242</td>
-      <td>118</td>
-      <td>3090</td>
-      <td>238</td>
-      <td>238</td>
-      <td>122</td>
-      <td>6211</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>5</td>
-      <td>2595</td>
-      <td>45</td>
-      <td>2</td>
-      <td>153</td>
-      <td>-1</td>
-      <td>391</td>
-      <td>220</td>
-      <td>234</td>
-      <td>150</td>
-      <td>6172</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>5</td>
-    </tr>
-  </tbody>
-</table>
-
-All the columns have int dtype. * The dataset has 15120 rows and 56 columns. This is a multiclass classification with "Cover_Type" as the target label. Wilderness_Area and Soil_Type columns have been encoded with One Hot Encoder. For better visualization, we will convert all the Soil_Types and Wilderness_Areas columns into two categorical features "Soil_Type" and "Wilderness_Area".
-
-```python
-data1 = data.copy()
-# Encode Soil_Types and Wilderness_Area features into two new features
-ohe_bool = []
-enc_cols = ["Wilderness_Area", "Soil_Type"]
-for idx, val in enumerate(enc_cols):
-  val_df = data.filter(regex=val, axis=1)
-  print(f"{idx} {val} is ohe? {((val_df.sum(axis=1)) == 1).all()}")
-  data1[val] = val_df.dot(val_df.columns)
-  # Convert the constructed columns into int
-  data1[val] = data1[val].astype('str').str.findall(r"(\d+)").str[-1].astype('int')
-  data1 = data1.drop(val_df.columns, axis=1)
-
-# Reorder the columns
-data1 = data1.iloc[:,data1.columns!="Cover_Type"].merge(data1["Cover_Type"], left_index=True, right_index=True)
-data1.head(), data1.shape
-```
-(15120, 14)
-
-<table border="1" class="dataframe" style="overflow-x: scroll;display: block;">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Id</th>
-      <th>Elevation</th>
-      <th>Aspect</th>
-      <th>Slope</th>
-      <th>Horizontal_Distance_To_Hydrology</th>
-      <th>Vertical_Distance_To_Hydrology</th>
-      <th>Horizontal_Distance_To_Roadways</th>
-      <th>Hillshade_9am</th>
-      <th>Hillshade_Noon</th>
-      <th>Hillshade_3pm</th>
-      <th>Horizontal_Distance_To_Fire_Points</th>
-      <th>Wilderness_Area</th>
-      <th>Soil_Type</th>
-      <th>Cover_Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>2596</td>
-      <td>51</td>
-      <td>3</td>
-      <td>258</td>
-      <td>0</td>
-      <td>510</td>
-      <td>221</td>
-      <td>232</td>
-      <td>148</td>
-      <td>6279</td>
-      <td>1</td>
-      <td>29</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2</td>
-      <td>2590</td>
-      <td>56</td>
-      <td>2</td>
-      <td>212</td>
-      <td>-6</td>
-      <td>390</td>
-      <td>220</td>
-      <td>235</td>
-      <td>151</td>
-      <td>6225</td>
-      <td>1</td>
-      <td>29</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3</td>
-      <td>2804</td>
-      <td>139</td>
-      <td>9</td>
-      <td>268</td>
-      <td>65</td>
-      <td>3180</td>
-      <td>234</td>
-      <td>238</td>
-      <td>135</td>
-      <td>6121</td>
-      <td>1</td>
-      <td>12</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>4</td>
-      <td>2785</td>
-      <td>155</td>
-      <td>18</td>
-      <td>242</td>
-      <td>118</td>
-      <td>3090</td>
-      <td>238</td>
-      <td>238</td>
-      <td>122</td>
-      <td>6211</td>
-      <td>1</td>
-      <td>30</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>5</td>
-      <td>2595</td>
-      <td>45</td>
-      <td>2</td>
-      <td>153</td>
-      <td>-1</td>
-      <td>391</td>
-      <td>220</td>
-      <td>234</td>
-      <td>150</td>
-      <td>6172</td>
-      <td>1</td>
-      <td>29</td>
-      <td>5</td>
+      <td>Bukinga</td>
+      <td>1009317</td>
+      <td>Rwanda Needs Assessment 2018</td>
+      <td>Southern Province</td>
+      <td>Nyaruguru</td>
+      <td>Cancelled</td>
+      <td>-2.760833</td>
+      <td>29.488056</td>
+      <td>Suspended Bridge</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Steep slopes to deal with for anchors</td>
+      <td>Project Assessment - 2018.10.10</td>
+      <td>aimablengirabakunzi taroworks</td>
+      <td>-2.760833</td>
+      <td>29.488056</td>
+      <td>NaN</td>
+      <td>nan</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td></td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Huye</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Yes</td>
+      <td>There is a planned vehicular road with a vehicular bridge on this site</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>006f100000asFErAAM</td>
+      <td>Yes</td>
+      <td>Rwanda</td>
     </tr>
   </tbody>
 </table>
 
 
-```python
-data1.describe()
-```
-<table border="1" class="dataframe" style="overflow-x: scroll;display: block;">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Id</th>
-      <th>Elevation</th>
-      <th>Aspect</th>
-      <th>Slope</th>
-      <th>Horizontal_Distance_To_Hydrology</th>
-      <th>Vertical_Distance_To_Hydrology</th>
-      <th>Horizontal_Distance_To_Roadways</th>
-      <th>Hillshade_9am</th>
-      <th>Hillshade_Noon</th>
-      <th>Hillshade_3pm</th>
-      <th>Horizontal_Distance_To_Fire_Points</th>
-      <th>Wilderness_Area</th>
-      <th>Soil_Type</th>
-      <th>Cover_Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>15120.00000</td>
-      <td>15120.000000</td>
-      <td>15120.000000</td>
-      <td>15120.000000</td>
-      <td>15120.000000</td>
-      <td>15120.000000</td>
-      <td>15120.000000</td>
-      <td>15120.000000</td>
-      <td>15120.000000</td>
-      <td>15120.000000</td>
-      <td>15120.000000</td>
-      <td>15120.000000</td>
-      <td>15120.000000</td>
-      <td>15120.000000</td>
-    </tr>
-    <tr>
-      <th>mean</th>
-      <td>7560.50000</td>
-      <td>2749.322553</td>
-      <td>156.676653</td>
-      <td>16.501587</td>
-      <td>227.195701</td>
-      <td>51.076521</td>
-      <td>1714.023214</td>
-      <td>212.704299</td>
-      <td>218.965608</td>
-      <td>135.091997</td>
-      <td>1511.147288</td>
-      <td>2.800397</td>
-      <td>19.171362</td>
-      <td>4.000000</td>
-    </tr>
-    <tr>
-      <th>std</th>
-      <td>4364.91237</td>
-      <td>417.678187</td>
-      <td>110.085801</td>
-      <td>8.453927</td>
-      <td>210.075296</td>
-      <td>61.239406</td>
-      <td>1325.066358</td>
-      <td>30.561287</td>
-      <td>22.801966</td>
-      <td>45.895189</td>
-      <td>1099.936493</td>
-      <td>1.119832</td>
-      <td>12.626960</td>
-      <td>2.000066</td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td>1.00000</td>
-      <td>1863.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>-146.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>99.000000</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-    </tr>
-    <tr>
-      <th>25%</th>
-      <td>3780.75000</td>
-      <td>2376.000000</td>
-      <td>65.000000</td>
-      <td>10.000000</td>
-      <td>67.000000</td>
-      <td>5.000000</td>
-      <td>764.000000</td>
-      <td>196.000000</td>
-      <td>207.000000</td>
-      <td>106.000000</td>
-      <td>730.000000</td>
-      <td>2.000000</td>
-      <td>10.000000</td>
-      <td>2.000000</td>
-    </tr>
-    <tr>
-      <th>50%</th>
-      <td>7560.50000</td>
-      <td>2752.000000</td>
-      <td>126.000000</td>
-      <td>15.000000</td>
-      <td>180.000000</td>
-      <td>32.000000</td>
-      <td>1316.000000</td>
-      <td>220.000000</td>
-      <td>223.000000</td>
-      <td>138.000000</td>
-      <td>1256.000000</td>
-      <td>3.000000</td>
-      <td>17.000000</td>
-      <td>4.000000</td>
-    </tr>
-    <tr>
-      <th>75%</th>
-      <td>11340.25000</td>
-      <td>3104.000000</td>
-      <td>261.000000</td>
-      <td>22.000000</td>
-      <td>330.000000</td>
-      <td>79.000000</td>
-      <td>2270.000000</td>
-      <td>235.000000</td>
-      <td>235.000000</td>
-      <td>167.000000</td>
-      <td>1988.250000</td>
-      <td>4.000000</td>
-      <td>30.000000</td>
-      <td>6.000000</td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td>15120.00000</td>
-      <td>3849.000000</td>
-      <td>360.000000</td>
-      <td>52.000000</td>
-      <td>1343.000000</td>
-      <td>554.000000</td>
-      <td>6890.000000</td>
-      <td>254.000000</td>
-      <td>254.000000</td>
-      <td>248.000000</td>
-      <td>6993.000000</td>
-      <td>4.000000</td>
-      <td>40.000000</td>
-      <td>7.000000</td>
-    </tr>
-  </tbody>
-</table>
+### Loading dataset
+
+
+
+
+
+
+
+
+
+
+
 
 Next we plot the  Heatmap of correlation matrix. It shows Elevation and Soil_Type are highly correlated, and Hillshade_3pm is reversely correlated with Hillshade_9am. 
 
