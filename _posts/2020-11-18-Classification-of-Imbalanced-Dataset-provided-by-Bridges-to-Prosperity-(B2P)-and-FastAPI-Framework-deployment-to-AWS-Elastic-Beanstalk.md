@@ -5,7 +5,7 @@ subtitle: Bridges to Prosperity (B2P)
 gh-repo: https://github.com/Lambda-School-Labs/bridges-to-prosperity-ds-d
 gh-badge: [star, fork, follow]
 tags: [Predictive Modeling, Data Imbalance, FastAPI, AWS EB, Postgress, Semi-Supervised Learning, SMOTE]
-image: /assets/img/post2_pairplot2.png
+image: /assets/img/post3/post3_semisupervised_learning.png
 comments: false
 ---
 
