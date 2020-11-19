@@ -284,9 +284,56 @@ gs_model.fit(X_train, y_train)
 gs_best = gs_model.best_estimator_
 ```
 
-We compare both approach by checking the confusion matrix:
+Here we get some misclassifications in the form of FN.
 
 <img src= "../assets/img/post3/post3_confusion2.png">
+
+### Deployment of the model on AWS Elastic Beanstalk using FastAPI Framework:
+
+For the rest of this post we talk about how to create a endpoint for our machine learning model using a production-ready API such as FastAPI and deploy the model on AWS cloud.
+In general there are two different ways to use python web frameworks. We can use a full-stack web app with a user interface such as plotly dash that renders html or use a web service/ micro service as an API that its routes will return JSON data to the JavaScript app. This work utilizes the second approach to integrate the machine learning model with frontend web app.
+Our tech stack include three components:
+- [AWS Elastic Beanstalk](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html): Platform as a service, hosts the API.
+- [Docker](https://www.docker.com/blog/tag/python-env-series/): Container used for a reproducible environment.
+- [FastAPI](https://fastapi.tiangolo.com/): A Web framework similar to Flask, but faster, with automatic interactive docs.
+
+We start by instantiating fastapi app and creating routes.
+
+```
+from fastapi import APIRouter FastAPI
+from pydantic import BaseModel, Field, validator
+app = FastAPI()
+
+router = APIRouter()
+```
+FastAPI is able to create documentation by creating a class Data which inherits from pydantic.BaseModel. In this class, we provide information about the features we are using to generate the prediction.
+
+```
+class Item_query(BaseModel):
+    """Selected columns used in the model in JSON format"""
+
+    bridge_classification: str = Field(..., example='Standard')
+    bridge_opportunity_bridge_type: str = Field(..., example='Suspension Bridge')
+    bridge_opportunity_span_m: float = Field(..., example=85.0)
+    days_per_year_river_is_flooded: float = Field(..., example=121.0)
+    flag_for_rejection: str = Field(..., example='No')
+    height_differential_between_banks: float = Field(..., example=0.97)
+```
+
+The most important step in creating endpoint is handling GET or POST request. For the prediction route we are accessing the API by using a POST request.
+
+```
+@router.post('/prediction')
+async def predict(item: Item_query):
+    
+    def modelpredict(model, query):
+        return model.predict(query)[0], model.predict_proba(query)[0][int(model.predict(query)[0])]
+    
+    model = pickle.load(open("./app/api/gs_model",'rb'))
+    (y_pred, y_proba) = modelpredict(model, query)
+
+    return {'Good Site prediction': y_pred, 'Predicted Probability': y_proba}
+```
 
 
 
