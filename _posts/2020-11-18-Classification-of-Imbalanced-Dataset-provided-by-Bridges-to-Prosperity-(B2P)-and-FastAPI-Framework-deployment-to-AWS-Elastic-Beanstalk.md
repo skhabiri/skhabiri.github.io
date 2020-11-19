@@ -94,50 +94,50 @@ df.head(1)
   </thead>
   <tbody>
     <tr>
-      <th>10</th>
-      <td>Runyani</td>
-      <td>1007544</td>
+      <th>111</th>
+      <td>Karama_Muhengeri</td>
+      <td>1010917</td>
       <td>Rwanda Needs Assessment 2018</td>
-      <td>Southern Province</td>
-      <td>Nyaruguru</td>
-      <td>Complete</td>
-      <td>-2.71578</td>
-      <td>29.67607</td>
-      <td>Suspension Bridge</td>
-      <td>85.0</td>
-      <td>5421.0</td>
-      <td>500-1000 people directly served, Elevation:1591m, Cell:Yaramba, Injuries/Death-More peoples injured while trying to cross the river/ No person died while trying to cross the river Cross river on a normal day-50-150 people, Nearby city centers-Yaramba, Crossing River now-Simple timber bridge / hari uduti, Impossible/Dangerous to cross the river-1-3 months / Hagati y?ukwezi natatu,Travel to nearest safe bridge/river crossing-1-2 hours / Hagati y?isaha 1 n?amasaha 2,Hours walking to reach the Hospital-&gt;6 hours,Hours walking to reach the Health Center-1-2 hours,Hours of walking to reach the market-0.5-1 hours,Hours walking to reach Primary School-0.5-1 hours,Hours walking to reach Secondary School-0.5-1 hours,Hours walking to reach the Church-0.5-1 hours,Land within 50m of river bank-flat (flood plain) / ikibaya,Soil-Silt,Sand-Available / birahaboneka,Gravel-Not available on site, but local government can provide/ Ntibihaboneka ariko inzego z?ubuyobozi zabitanga,Stone-Available / birahaboneka,Timber-Available / birahaboneka,Stone provided by-Sector/ umurenge,Sand Provided by-Sector/ umurenge,Gravel provided by-District/ Akarere,Timber provided by-District/ Akarere,Cement provided by-Can not be provided at the time / Ntaruhare rwamenyekana muri aka kanya.,Reinforcement steel provided by-Can not be provided at the time / Ntaruhare rwamenyekana muri aka kanya.,Land ownership-Government of Rwanda / Guverinoma y? u RwandaPrivate landowner/ Umuturage, Land ownership permission-Yes / Yego, General Comments-The proposed bridge location is near the traditional crossing point at a distance of approximately 5m.-The proposed bridge span is approximately 40m.-The level difference between two banks is 0.02m.-The space for foundation is sufficient-The free board between the lowest point of the proposed bridge and the highest flood level is not sufficient-There is no confluence area near the place.-The river bed at the site is stable, there is no possibility of erosion.-The river bank of the site is showing a sign of erosion and it is located between flat areas.-The soil from the site is silt for both sides.</td>
-      <td>Project Assessment - 2018.10.29</td>
-      <td>theodornishimwe taroworks</td>
-      <td>-2.71578</td>
-      <td>29.67607</td>
+      <td>Northern Province</td>
+      <td>Gicumbi</td>
+      <td>Identified</td>
+      <td>-1.671847</td>
+      <td>30.057339</td>
+      <td>Suspended Bridge</td>
+      <td>45.0</td>
+      <td>1619.0</td>
+      <td>There is no longer an existence of timbers to Karama Bridge, the commuinty just pass through the water Karama bridge . Gitumba Secondary School and Mutete health center are social services needed by the community while crossing the river.In case of flooding,the nearest crossing point is at 7km from Karama Bridge.</td>
+      <td>Project Assessment - 2018.8.5</td>
+      <td>graceumumararungu taroworks</td>
+      <td>-1.66992</td>
+      <td>30.05585</td>
       <td>None</td>
-      <td>0.6 km</td>
-      <td>121.0</td>
-      <td>6 hours</td>
-      <td>Communities 2,4,5 don't have access to Busoro market</td>
-      <td>Communities 2,4,5 don't have access to Runyami Primary school and Murama secondary schools and communities 1,3 don't have access to Yaramba school</td>
-      <td>Communities 2,4,5 don't have access to Ngera Health center</td>
-      <td>Communities 2,4,5 don't have access to Ngera sector office</td>
-      <td>Daily farmers of coffee and traders at Busoro market</td>
-      <td>bean, coffe, maiz, sweet potato</td>
+      <td>None</td>
+      <td>16.0</td>
+      <td>3</td>
+      <td>Market,church, school, health center on both side, maize factor(Isaro) right side of the river,</td>
+      <td>Both side primary and secondary school</td>
+      <td>Health center both side but the closer one is on right side, and on left side there is post of health</td>
+      <td>Churches on both sides</td>
+      <td>School, Market, Farms</td>
+      <td>soghrom</td>
+      <td>3.0</td>
       <td>0.0</td>
-      <td>0.0</td>
-      <td>NaN</td>
-      <td>Busoro market which is open twice a week ( village 2,4,5); Ngera Health center ( village 2,4,5), Murama and Runyami school( village ) ;Yaramba school( village 1,3) , Ngera sector office ( village 2,4,5). Population information for each village was provided by the village leader of each village respectively and population information was sourced from village census data collected in June</td>
+      <td>They was died when they are trying to cross the river and it was flooded</td>
+      <td>Information given by people who were cultivating near to the proposed site, one of them was in charge of security of Karama community and the team was compose of different communities which used the crossing existing even they don't have bridge</td>
       <td>Good</td>
       <td>Never</td>
-      <td>Huye</td>
-      <td>Huye - Akanyaru</td>
+      <td>Gicumbi city</td>
+      <td>Base_Kisaro_ nyagatare</td>
       <td>Standard</td>
-      <td>No</td>
+      <td>NaN</td>
       <td>NaN</td>
       <td>Suspension</td>
-      <td>50.0</td>
+      <td>37.0</td>
       <td>NaN</td>
-      <td>https://www.flickr.com/photos/bridgestoprosperity/albums/72157712688008003</td>
-      <td>006f100000a86GKAAY</td>
-      <td>Yes</td>
+      <td>NaN</td>
+      <td>006f100000c5ivZAAQ</td>
+      <td>NaN</td>
       <td>Rwanda</td>
     </tr>
   </tbody>
