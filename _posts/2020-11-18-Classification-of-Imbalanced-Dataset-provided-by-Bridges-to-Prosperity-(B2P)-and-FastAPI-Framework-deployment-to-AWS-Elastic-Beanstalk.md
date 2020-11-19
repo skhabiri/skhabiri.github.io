@@ -335,6 +335,10 @@ async def predict(item: Item_query):
     return {'Good Site prediction': y_pred, 'Predicted Probability': y_proba}
 ```
 
+<img src= "../assets/img/post3/post3_api.png">
+<img src= "../assets/img/post3/post3_api2.png">
+
+
 
 
 
