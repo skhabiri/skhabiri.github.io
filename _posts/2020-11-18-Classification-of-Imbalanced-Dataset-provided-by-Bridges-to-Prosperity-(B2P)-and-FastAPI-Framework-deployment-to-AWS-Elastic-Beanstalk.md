@@ -172,15 +172,55 @@ df.loc[unknown, 'good_site'] = -1
 df['good_site'].value_counts()
 ```
 -1.0    1383
+
  1.0      65
+ 
  0.0      24
+
 Name: good_site, dtype: int64
 
-Many of the features in the dataset are not directly related to identifying the sites that would technically be a approved for construction. e could have used feature permutation or feature importances to identify the more relevant features. However, since the features are very descriptive and relatively easy to interpret we select a few features that are most relevant for the modeling purpose.
+Many of the features in the dataset are not directly related to identifying the sites that would technically be a approved for construction. e could have used feature permutation or feature importances to identify the more relevant features. However, since the features are very descriptive and relatively easy to interpret we select six features, which are most relevant for our modeling purpose.
 
-### Semi-supervised model for imbalanced data using LabelSpreading:
+```
+# Columns that are related to predicting whether final engineering review would pass or fail
+keep_list = ['bridge_opportunity_bridge_type', 'bridge_opportunity_span_m', 'days_per_year_river_is_flooded',
+             'bridge_classification', 'flag_for_rejection', 'height_differential_between_banks']
+```
 
 
+### Semi-supervised model:
+Before we create any model we define the input and target column, as following:
+
+```
+# Includes unlabeled sites
+y = df['good_site']
+X = df[keep_list]
+```
+Some of the selected features are categorical. We will use One hot encoder to convert them to numbers.
+
+```
+# Numeric and categorical featuers
+numeric_features = X.select_dtypes(include='number').columns.to_list()
+nonnum_features = X.columns[~X.columns.isin(numeric_features)].to_list()
+print("nonnum_features:\n", nonnum_features)
+```
+nonnum_features:
+['bridge_opportunity_bridge_type', 'bridge_classification', 'flag_for_rejection']
+
+Missing values in numerical features are filled with the mean value of each feature. This would prevent the FastAPI to arbitrary uses 0 as a replacement for missing numerical types.
+
+```
+X[numeric_features] = X[numeric_features].fillna(value=X[numeric_features].mean().round(decimals=2))
+X[numeric_features].info()
+```
+Data columns (total 3 columns):
+ #   Column                             Non-Null Count  Dtype  
+---  ------                             --------------  -----  
+ 0   bridge_opportunity_span_m          1472 non-null   float64
+ 1   days_per_year_river_is_flooded     1472 non-null   float64
+ 2   height_differential_between_banks  1472 non-null   float64
+dtypes: float64(3)
+memory usage: 34.6 KB
 
 
 
