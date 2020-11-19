@@ -171,6 +171,7 @@ df.loc[unknown, 'good_site'] = -1
 
 df['good_site'].value_counts()
 ```
+
 |-1.0|1383|
 |----|----|
 |1.0 |65  |
@@ -188,7 +189,7 @@ keep_list = ['bridge_opportunity_bridge_type', 'bridge_opportunity_span_m', 'day
 
 
 ### Semi-supervised model:
-Before we create any model we define the input and target column, as following:
+Before we create any model let's define the input and target column, as following:
 
 ```
 # Includes unlabeled sites
@@ -203,14 +204,16 @@ numeric_features = X.select_dtypes(include='number').columns.to_list()
 nonnum_features = X.columns[~X.columns.isin(numeric_features)].to_list()
 print("nonnum_features:\n", nonnum_features)
 ```
+
 nonnum_features:
 ['bridge_opportunity_bridge_type', 'bridge_classification', 'flag_for_rejection']
 
-Missing values in numerical features are filled with the mean value of each feature. This would prevent the FastAPI to arbitrary uses 0 as a replacement for missing numerical types.
+Missing values in numerical features are filled with the mean value of each feature. This would prevent the FastAPI to arbitrary fills them with 0.
 
 ```
 X[numeric_features] = X[numeric_features].fillna(value=X[numeric_features].mean().round(decimals=2))
 ```
+We need to process the input data in multiple steps. First using an encoder to convert the categorical data into numerical values. Then We'll apply SimpleImputer to fill the nan values based on the selected strategy. Next we'll apply StandardScaler to normalize our numerical data. 
 
 
 
