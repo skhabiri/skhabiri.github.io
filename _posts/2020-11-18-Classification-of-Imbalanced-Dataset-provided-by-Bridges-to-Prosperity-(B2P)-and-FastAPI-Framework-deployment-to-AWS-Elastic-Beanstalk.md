@@ -171,11 +171,10 @@ df.loc[unknown, 'good_site'] = -1
 
 df['good_site'].value_counts()
 ```
--1.0    1383
-
- 1.0      65
- 
- 0.0      24
+|-1.0|1383|
+|----|----|
+|1.0 |65  |
+|0.0 |24  |
 
 Name: good_site, dtype: int64
 
@@ -211,16 +210,8 @@ Missing values in numerical features are filled with the mean value of each feat
 
 ```
 X[numeric_features] = X[numeric_features].fillna(value=X[numeric_features].mean().round(decimals=2))
-X[numeric_features].info()
 ```
-Data columns (total 3 columns):
- #   Column                             Non-Null Count  Dtype  
----  ------                             --------------  -----  
- 0   bridge_opportunity_span_m          1472 non-null   float64
- 1   days_per_year_river_is_flooded     1472 non-null   float64
- 2   height_differential_between_banks  1472 non-null   float64
-dtypes: float64(3)
-memory usage: 34.6 KB
+
 
 
 
