@@ -172,6 +172,7 @@ df.loc[unknown, 'good_site'] = -1
 df['good_site'].value_counts()
 ```
 
+
 |-1.0|1383|
 |----|----|
 |1.0 |65  |
@@ -213,7 +214,52 @@ Missing values in numerical features are filled with the mean value of each feat
 ```
 X[numeric_features] = X[numeric_features].fillna(value=X[numeric_features].mean().round(decimals=2))
 ```
-We need to process the input data in multiple steps. First using an encoder to convert the categorical data into numerical values. Then We'll apply SimpleImputer to fill the nan values based on the selected strategy. Next we'll apply StandardScaler to normalize our numerical data. 
+We need to process the input data in multiple steps. First using an encoder to convert the categorical data into numerical values. Then We'll apply SimpleImputer to fill the nan values based on the selected strategy. Next we'll apply StandardScaler to normalize our numerical data. After standardizing our data we use SMOTE to synthetically generate data as a remedy to our imbalanced dataset. Finally we'll use LabelSpreading to label the majority of the data that is unlabeled. Label propagation is a semi supervised technique that uses labeled data in the training set to define the proximity and then the algorithm attempts to label the rest of the data that are unlabeled. It’s also possible to give the algorithm a degree of freedom so that it can relax the boundaries and reassign some unlabelled data to an adjacent category that is more appropriate. This can be used in hypertuning to optimize the performance of the classifier. We wrap all the mentioned steps into a pipeline and fit the estimator based on our X and y.
+
+```
+# Semi supervised pipeline
+ss_model = make_pipeline_imb(
+    ce.OneHotEncoder(use_cat_names=True, cols=nonnum_features),
+    SimpleImputer(strategy='median'),
+    StandardScaler(),
+    SMOTE(random_state=42),
+    LabelSpreading(kernel='knn', n_neighbors=2)
+    )
+
+# Fit
+ss_model.fit(X, y)
+```
+After fitting the model all the predicted values are labeled now.
+
+```
+y_pred = ss_model.predict(X)
+pd.Series(y_pred).value_counts()
+```
+
+|0.0|1333|
+|---|----|
+|1.0|139 |
+
+dtype: int64
+
+Now we can plot the confusion matrix to evaluate the training accuracy.
+
+```
+mask = (y==0) + (y==1)
+import seaborn as sns
+import matplotlib.pyplot as plt
+ax= plt.subplot()
+cm = confusion_matrix(y[mask], y_pred[mask], labels=ss_model.classes_)
+
+sns.heatmap(cm, annot=True, ax = ax, cmap='viridis'); #annot=True to annotate cells
+ax.set_xlabel('Predicted labels');ax.set_ylabel('True labels'); 
+ax.set_title('Confusion Matrix'); 
+```
+
+<img src= "../assets/img/post3/post3_confusion.png">
+
+
+
 
 
 
