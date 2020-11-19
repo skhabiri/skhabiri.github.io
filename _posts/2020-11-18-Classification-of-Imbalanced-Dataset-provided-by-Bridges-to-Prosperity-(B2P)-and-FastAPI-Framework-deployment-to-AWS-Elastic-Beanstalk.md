@@ -143,7 +143,47 @@ df.head(1)
   </tbody>
 </table>
 
-### Loading dataset
+
+Next we will use "bridge_opportunity_stage" and "senior_engineering_review_conducted" columns to create a new feature "good_site" representing the sites that are rejected or approved or not labeled:
+
+```
+# Positives:
+positive = (
+  (df['senior_engineering_review_conducted']=='Yes') & 
+  (df['bridge_opportunity_stage'].isin(
+  ['Complete', 'Prospecting', 'Confirmed', 'Under Construction']))
+  )
+  
+# Negatives:
+negative = (
+  (df['senior_engineering_review_conducted']=='Yes') & 
+  (df['bridge_opportunity_stage'].isin(['Rejected', 'Cancelled']))
+  )
+
+# Unknown:
+unknown = df['senior_engineering_review_conducted'].isna()
+
+# Create a new column named "Good Site." This is the target to predict.
+# Assign a 1 for the positive class, 0 for the negative class and -1 for unkown class.
+df.loc[positive, 'good_site'] = 1
+df.loc[negative, 'good_site'] = 0
+df.loc[unknown, 'good_site'] = -1
+
+df['good_site'].value_counts()
+```
+-1.0    1383
+ 1.0      65
+ 0.0      24
+Name: good_site, dtype: int64
+
+Many of the features in the dataset are not directly related to identifying the sites that would technically be a approved for construction. e could have used feature permutation or feature importances to identify the more relevant features. However, since the features are very descriptive and relatively easy to interpret we select a few features that are most relevant for the modeling purpose.
+
+### Semi-supervised model for imbalanced data using LabelSpreading:
+
+
+
+
+
 
 
 
