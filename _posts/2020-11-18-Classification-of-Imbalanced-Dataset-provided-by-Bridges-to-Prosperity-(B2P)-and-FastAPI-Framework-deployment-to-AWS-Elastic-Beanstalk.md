@@ -336,240 +336,28 @@ async def predict(item: Item_query):
 ```
 
 <img src= "../assets/img/post3/post3_api.png">
+
 <img src= "../assets/img/post3/post3_api2.png">
 
+### Containerizing the application:
+The portability aspect in containers enables easy and quick deployment to multiple hardware platforms and operating systems. To achieve this we will be using docker. To set up docker follow the instructions [here](https://docs.docker.com/compose/).
 
+After updating requirements.txt we need to update the docker image by `docker-compose build`. We can run the FastAPI app with `docker-compose up`.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Next we plot the  Heatmap of correlation matrix. It shows Elevation and Soil_Type are highly correlated, and Hillshade_3pm is reversely correlated with Hillshade_9am. 
-
-<img src= "../assets/img/post2/post2_heatmap.png">
-
-Looking at scatter plot of different features, it seems "Elevation" is an important parameter in separating different classes of target label.
-
-
-<p float="left">
-  <img src="../assets/img/post2/post2_pairplot1.png" width="550" />
-      <img src="../assets/img/post2/post2_pairplot2.png" width="550" /> 
-</p>
-
-We make the following observations from the Count plots below.
-* Soil_Type10 shows a significant class distinction for Cover_Type=6.
-* Similarly Wilderness_Area4 and Cover_Type=4 are strongly associated.
-
-<img src= "../assets/img/post2/post2_countplot1.png">
-
-List of unique values in the feature shows Soil_Type15 and Soil_Type7 are constant. Additionally, Id column is a unique identifier for each observation. We'll drop those three columns as they do not carry any information to identify the target label.
-There are also skewness in some features. "Horizontal_Distance_To_Hydrology" is an example of that.
-<img src="../assets/img/post2/figures/post2_skew.png">
-
-### Train-Test Split
-After removing "Id" and constant columns, data is split into train and validation set.
-
-```python
-from sklearn.model_selection import train_test_split
-# Split train into train & val
-train, val = train_test_split(data, train_size=0.80, test_size=0.20, stratify=data["Cover_Type"], random_state=42)
-# Separate class label and data 
-y_train = train["Cover_Type"]
-X_train = train.drop("Cover_Type", axis=1)
-y_val = val["Cover_Type"]
-X_val = val.drop("Cover_Type", axis=1)
-print(f'train: {train.shape}, val: {val.shape}')
+After commiting the changes, use these EB CLI commands (Elastic Beanstalk command line interface) to deploy the app.
 ```
-train: (12096, 56), val: (3024, 56)
-
-### Baseline model
-Normalized value counts of the target label shows an equal weight distribution for all classes, with baseline prediction of 14.3%.
-
-
-### Pipeline Estimators, Feature_importances and permutation_importance
-We are going to look at five different classifiers to compare their performance. For the regression classifiers we will standardize the data before fitting.
-
-1. LogesticRegression
-2. RidgeClassifier
-3. RandomForestClassifier
-4. GradientBoostingClassifier
-5. XGBCLassifier
-
-The following plots show the feature_importances and permutation importances of the tree-base classifiers. "Elevation" is given a higher importance weight compared to other features, as we saw earlier. Without the help of permutation, XGBClassifier does not seem to detect the importance of "Elevation" feature.
-
-<img src="../assets/img/post2/post2_feature1.png">
-<img src="../assets/img/post2/post2_feature2.png">
-<img src="../assets/img/post2/post2_feature3.png">
-
-### Avoid Overfitting By Early Stop feature in XGBoost Classifier
-XGBClassifier tends to overfit and its growth parameters need to be controlled. To demonstrate that, an early stop fitting with 50 rounds is run below. We notice at some point in fitting process the validation error stops decreasing steady. 
-```python
-# XGBoost early stop fit
-xform = make_pipeline(
-    FunctionTransformer(wrangle, validate=False), 
-    # ce.OrdinalEncoder(),
-)
-
-xform.set_params(functiontransformer__kw_args = kwargs_dict)
-
-X_train_xform = xform.fit_transform(X_train)
-X_val_xform = xform.transform(X_val)
-
-clf = XGBClassifier(
-    n_estimators = 1000,
-    max_depth=8,
-    learning_rate=0.5,
-    num_parallel_tree = 10,
-    n_jobs=-1
-)
-
-#eval_set
-eval_set = [(X_train_xform, y_train), (X_val_xform, y_val)]
-
-clf.fit(X_train_xform, y_train, 
-          eval_set=eval_set, 
-          eval_metric=['merror', 'mlogloss'], 
-          early_stopping_rounds=50,
-          verbose=False) # Stop if the score hasn't improved in 50 rounds
-
-print('Training Accuracy:', clf.score(X_train_xform, y_train))
-print('Validation Accuracy:', clf.score(X_val_xform, y_val))
+eb init --platform docker b2p-app --region us-east-1
+eb create b2p-app
+eb open
 ```
-Training Accuracy: 0.9987599206349206
-Validation Accuracy: 0.8528439153439153
+We can configure a domain name with HTTPS for our data science API by using [AWS route 53](https://console.aws.amazon.com/route53/).
 
-XGBoost trains upto 0.999 and yields 0.85 validation accuracy. The following graph shows how validation error remains constant while training error reduces.
+In this project we also used AWS RDS Postgres to create a [PostgreSQL database instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.PostgreSQL.html#CHAP_GettingStarted.Creating.PostgreSQL).
 
-<img src="../assets/img/post2/post2-earlystop.png">
-
-### Cross Validation Curve
-
-The training set is split into kfolds and the model is cross validated based on a classifier parameter.
-
-```python
-kfold=4
-for k, estimator in enumerate(tree_list):
-  print(f"********** {est_dict[estimator][0].__class__.__name__} **********")
-  classifier_name = clf_name(estimator, est_dict)  
-  # estimator.set_params(functiontransformer__kw_args = kwargs_dict)
-  # print(est_dict[estimator][1])
-  
-  param_distributions = {classifier_name.lower()+'__'+ est_dict[estimator][1][j]: est_dict[estimator][2][j] for j in range(len(est_dict[estimator][1]))}
-  
-  for i in range(len(est_dict[estimator][1])):
-    param_name=classifier_name.lower()+'__'+ est_dict[estimator][1][i]
-    param_range = est_dict[estimator][2][i]
-    estimator.set_params(functiontransformer__kw_args = kwargs_dict)
-
-    train_scores, val_scores = validation_curve(estimator, X_train, y_train,
-    # param_name='functiontransformer__kw_args',
-    param_name=param_name, 
-    param_range=param_range, 
-    scoring='accuracy', cv=kfold, n_jobs=-1, verbose=0
-    )
-
-    print(f'**** {param_name} ****\n')
-    print("val scores mean:\n", np.mean(val_scores, axis=1))
-
-    # Averaging CV scores
-    fig, ax = plt.subplots(figsize=(12,8))
-
-    ax.plot(param_range, np.mean(train_scores, axis=1), color='blue', label='mean training accuracy')
-    ax.plot(param_range, np.mean(val_scores, axis=1), color='red', label='mean validation accuracy')
-    ax.set_title(f'Cross Validation with {kfold:d} folds', fontsize=20)
-    ax.set_xlabel(param_name, fontsize=18)
-    ax.set_ylabel('model score: Accuracy', fontsize=18)
-    ax.legend(fontsize=12)
-    ax.tick_params(axis='both', labelsize=16)
-    ax.grid(which='both')
-```
-
-<p float="left">
-  <img src="../assets/img/post2/post2-rfc_maxdepth.png" width="350" />
-  <img src="../assets/img/post2/post2-gbc_maxdepth.png" width="350" /> 
-  <img src="../assets/img/post2/post2-xgbc_maxdepth.png" width="350" /> 
-</p>
-
-Gradient Boost classifier family quickly overfit at max_depth>6. So it's important to keep the tree depth shallow.
-
-<p float="left">
-  <img src="../assets/img/post2/post2-rfc_sampleaf.png" width="350" />
-  <img src="../assets/img/post2/post2-rfc_maxfeat.png" width="350" />
-  <img src="../assets/img/post2/post2-gbc_maxfeat.png" width="350" /> 
-</p>
-
-max_feat parameter shows validation score saturates at numbers above 20, and starts to overfit. Lowering min_samples_leaf improves validation score. Hence we consider small numbers.
-
-<p float="left">
-  <img src="../assets/img/post2/post2-xgb_learningrate.png" width="350" />
-  <img src="../assets/img/post2/post2-xgb_childweight.png" width="350" />
-</p>
-
-For XGBoost we can slow down the overfitting issue with min_child_weight and learningrate parameters.
-
-### Hyper Parameter Tunning
-The parameters of all five estimators are optimized by RandomizedSearchCV.
-```python
-kfold=4
-n_iter = 10
-best_ests = [np.NaN]*len(est)
-best_scores = [np.NaN]*len(est)
-best_params = [np.NaN]*len(est)
-
-for i, estimator in enumerate(est):
-  print(f"\n********** {est_dict[estimator][0].__class__.__name__} **********")
-  estimator.set_params(functiontransformer__kw_args = kwargs_dict)
-
-  classifier_name = clf_name(estimator=estimator, est_dict=est_dict)
-  print(est_dict[estimator][1])
-  
-  param_distributions = {classifier_name.lower()+'__'+ est_dict[estimator][1][j]: 
-                         est_dict[estimator][2][j] for j in range(len(est_dict[estimator][1]))}
-
-  rscv = RandomizedSearchCV(estimator, param_distributions=param_distributions, 
-    n_iter=n_iter, cv=kfold, scoring='accuracy', verbose=1, return_train_score=True, 
-    n_jobs=-1)
-  
-  rscv.fit(X_train, y_train)
-  best_ests[i] = rscv.best_estimator_
-  best_scores[i] = rscv.best_score_
-  best_params[i] = rscv.best_params_
-
-best_ypreds = [best_est.predict(X_val) for best_est in best_ests]
-best_testscores = [accuracy_score(y_val, best_ypred) for best_ypred in best_ypreds]
-print('Test accuracy\n', best_testscores)
-print('best cross validation accuracy\n', best_scores)
-```
-Test accuracy
- [0.6911375661375662, 0.6326058201058201, 0.7754629629629629, 0.8700396825396826, 0.8498677248677249]
-best cross validation accuracy
- [0.7080026455026454, 0.6332671957671958, 0.7709986772486773, 0.8645833333333334, 0.8445767195767195]
-
-The accuracy scores above corresponds to 
-LogisticRegression, RidgeClassifier RandomForestClassifier, GradientBoostingClassifier, XGBClassifier accordingly.
-In this work, GradientBoostingClassifier with 87% accuracy on the test data shows the best performance among the five. 
 
 ## Conclusion
-This post evaluates and compares the performance of five multi-class classifiers to predict the "Cover-Type" label of [Covertype dataset](https://archive.ics.uci.edu/ml/datasets/Covertype). The dataset has 54 features, and one target label with 7 different classes. Target label classes are distributed evenly with baseline prediction of 14%. We splitted the total 15120 obeservations into train and test subsets. By applying commonly used classification methods such as feature selection, data scaling, cross validation, and hyperparameter optimization, we were able to achive accuracy scores ranging from 63% to 86% on test data subset. The score metrics of a typical fit of those classifiers can be found in [this](https://forestcover-metrics.herokuapp.com).
+This work uses semi supervised learning techniques to create a predictive model to classify an unbalanced dataset. We used SMOTE and LabelSpreading to generate synthetic data and construct similarity graph over all items in the input dataset. We also used cross validation as a way to evaluate the model performance in the absence of enough training data. Last we deployed the model on AWS EB using FastAPI.
 
-## Links
-[Dataset](https://archive.ics.uci.edu/ml/datasets/Covertype)
-[Project Repository](https://github.com/skhabiri/DS17-Unit-2-Build)
-[Web Application](https://forestcover-metrics.herokuapp.com)
+
 
 
