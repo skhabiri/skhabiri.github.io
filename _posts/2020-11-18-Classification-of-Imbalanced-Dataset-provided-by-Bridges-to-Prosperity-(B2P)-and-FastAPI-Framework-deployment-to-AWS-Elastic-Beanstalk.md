@@ -354,6 +354,10 @@ We can configure a domain name with HTTPS for our data science API by using [AWS
 
 In this project we also used AWS RDS Postgres to create a [PostgreSQL database instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.PostgreSQL.html#CHAP_GettingStarted.Creating.PostgreSQL).
 
+Here is the architecture diagram for this project.
+<img src= "../assets/img/post3/post3_b2p_architecture.png">
+
+
 
 ## Conclusion
 This work uses semi supervised learning techniques to create a predictive model to classify an unbalanced dataset. We used SMOTE and LabelSpreading to generate synthetic data and construct similarity graph over all items in the input dataset. We also used cross validation as a way to evaluate the model performance in the absence of enough training data. Last we deployed the model on AWS EB using FastAPI.
