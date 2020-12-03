@@ -406,7 +406,7 @@ The way it works is, When a machine (or human) wants to connect to the API, they
 This is step one, where the caller (aka client) asks the name servers in the hosted zone to translate the domain name (e.g. b2p.skhabiri.com) to a proper IP address. Once the client has the IP address, it will connect to the API, which is hosted in the Elastic Beanstalk environment. We'll make this connection secure by adding an SSL certificate to the load balancer and enabling HTTPS. The client will then send encrypted traffic over the internet to your API. Then, the load balancer sends the traffic to your actual API instances, running on servers or in containers. Since your load balance and application instances are on the same private network (not on the internet) we don't need to keep the traffic encrypted, which adds cost and reduces performance.
 The traffic is decrypted by the load-balancer and sent to your application as unencrypted HTTP traffic on port 80.
 
-<img src= "../assets/img/post3/post3_api2.png">
+<img src= "../assets/img/post3/SSL_aws.png">
 
 
 In this project we also used AWS RDS Postgres to create a [PostgreSQL database instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.PostgreSQL.html#CHAP_GettingStarted.Creating.PostgreSQL).
