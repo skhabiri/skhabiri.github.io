@@ -337,8 +337,6 @@ async def predict(item: Item_query):
 ```
 
 
-
-
 #### *Containerizing the application:*
 
 The portability aspect in containers enables easy and quick deployment to multiple hardware platforms and operating systems. To achieve this we will be using docker. To set up docker follow the instructions [here](https://docs.docker.com/compose/).
@@ -398,9 +396,8 @@ For subsequent redeployment, we won't need to initialize and create the app anym
 ```
 $ git commit ...
 $ eb deploy
-$ eb open
+$ eb open 
 ```
-
 
 
 #### *AWS Route 53 and Configuring SSL Termination:*
