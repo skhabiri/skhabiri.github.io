@@ -338,7 +338,8 @@ async def predict(item: Item_query):
 
 
 
-* **Containerizing the application:**
+#### *Containerizing the application:*
+
 The portability aspect in containers enables easy and quick deployment to multiple hardware platforms and operating systems. To achieve this we will be using docker. To set up docker follow the instructions [here](https://docs.docker.com/compose/).
 
 After updating requirements.txt we need to update the docker image by `docker-compose build`. We can run the FastAPI app with `docker-compose up`.
@@ -370,7 +371,8 @@ Entering http://0.0.0.0:80 in web browser should launch the API locally.
 <img src= "../assets/img/post3/post3_api2.png">
 
 
-* **Deployment on AWS Elastic Beanstalk:**
+#### *Deployment on AWS Elastic Beanstalk:*
+
 For first time deployment follow these steps:
 
 - Install [AWS Command Line Interface](https://aws.amazon.com/cli/).
@@ -399,7 +401,7 @@ $ eb open
 ```
 
 
-* **AWS Route 53 and Configuring SSL Termination:**
+#### *AWS Route 53 and Configuring SSL Termination:*
 
 When the application is deployed to Elastic Beanstalk, we'll get an automatically generated URL that can be used to connect to the API.
 Route 53 is Amazon's [Domain Name System (DNS)](https://simple.wikipedia.org/wiki/Domain_Name_System) web service.
@@ -413,7 +415,7 @@ The traffic is decrypted by the load-balancer and sent to your application as un
 
 
 
-* **AWS RDS Postgres:**
+#### *AWS RDS Postgres:*
 
 In order to have access to the dataset while connecting to data science API, We create a PostgreSQL database instance in Amazon RDS. Here you can find instruction for [creating a PostgreSQL DB Instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.PostgreSQL.html#CHAP_GettingStarted.Creating.PostgreSQL).
 After DB instance is created, you can use any standard SQL client application such as [pgAdmin](https://www.pgadmin.org/) to connect to the database instance. We can download and use pgAdmin without having a local instance of PostgreSQL on our client computer. Using the database client we create a database in RDS cloud and connect to it from client computer through psycopg2 a python library for PostgreSQL.
