@@ -290,8 +290,8 @@ Here we get some misclassifications in the form of FN.
 
 ### Deployment of the model on AWS Elastic Beanstalk using FastAPI Framework:
 
-For the rest of this post we talk about how to create a endpoint for our machine learning model using a production-ready API such as FastAPI and deploy the model on AWS cloud.
-In general there are two different ways to use python web frameworks. We can use a full-stack web app with a user interface such as plotly dash that renders html or use a web service/ micro service as an API that its routes will return JSON data to the JavaScript app. This work utilizes the second approach to integrate the machine learning model with frontend web app.
+For the rest of this post we talk about how to create an endpoint for our machine learning model using a production-ready API such as FastAPI and deploy the model on AWS cloud.
+In general there are two different ways to use python web frameworks. We can use a full-stack web app with a user interface such as plotly dash that renders html or use a web/micro service as an API that its routes will return JSON data to the JavaScript app. This work utilizes the second approach to integrate the machine learning model with frontend web app.
 Our tech stack include three components:
 - [AWS Elastic Beanstalk](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html): Platform as a service, hosts the API.
 - [Docker](https://www.docker.com/blog/tag/python-env-series/): Container used for a reproducible environment.
@@ -335,22 +335,79 @@ async def predict(item: Item_query):
     return {'Good Site prediction': y_pred, 'Predicted Probability': y_proba}
 ```
 
-<img src= "../assets/img/post3/post3_api.png">
-
-<img src= "../assets/img/post3/post3_api2.png">
 
 ### Containerizing the application:
 The portability aspect in containers enables easy and quick deployment to multiple hardware platforms and operating systems. To achieve this we will be using docker. To set up docker follow the instructions [here](https://docs.docker.com/compose/).
 
 After updating requirements.txt we need to update the docker image by `docker-compose build`. We can run the FastAPI app with `docker-compose up`.
 
-After commiting the changes, use these EB CLI commands (Elastic Beanstalk command line interface) to deploy the app.
+To recreate this work, clone the [repository](https://github.com/skhabiri/bridges-to-prosperity-b2p) into your local machine.
+`$ git clone https://github.com/skhabiri/bridges-to-prosperity-b2p.git`
+
+Use this [Docker Compose](https://docs.docker.com/compose/) command, `docker-compose build` to build your Docker web service image. You may get the docker image id by `docker-compose images`. Please note the you don't need to rebuild the docker image anytime you update the code. You'd only need to rebuild if you update your requirements.txt or Dockerfile.
+
+Our docker-compose.yml looks like this:
+
+version: '3.7'
+services:
+  web:
+    build: ./project
+    command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
+    volumes:
+      - ./project:/usr/src/app
+    ports:
+      - 80:8000
+
+80:8000 on the last line connects host port 80 (the default port for HTTP) to container port 8000 (where the app is running).
+Commit your work by `git add --all` and `git commit -m "Your commit message"`. Then launch the web service in docker container locally with `docker-compose up`.
+Entering http://0.0.0.0:80 in web browser should launch the API locally.
+
+
+<img src= "../assets/img/post3/post3_api.png">
+
+<img src= "../assets/img/post3/post3_api2.png">
+
+
+### Deployment on AWS Elastic Beanstalk
+For first time deployment follow these steps:
+
+- Install [AWS Command Line Interface](https://aws.amazon.com/cli/).
+- [Configure AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config).
+- Install AWS Elastic Beanstalk CLI.
+
+```
+$ aws configure`
+$ pip install pipx
+$ pipx install awsebcli
+```
+
+After commiting the changes, use these EB CLI (Elastic Beanstalk command line interface) commands to deploy the app.
 ```
 eb init --platform docker b2p-app --region us-east-1
 eb create b2p-app
 eb open
 ```
-We can configure a domain name with HTTPS for our data science API by using [AWS route 53](https://console.aws.amazon.com/route53/).
+
+For subsequent redeployment, we won't need to initialize and create the app anymore.
+
+```
+$ git commit ...
+$ eb deploy
+$ eb open
+```
+
+### AWS Route 53 and Configuring SSL Termination
+
+When the application is deployed to Elastic Beanstalk, we'll get an automatically generated URL that can be used to connect to the API.
+Route 53 is Amazon's [Domain Name System (DNS)](https://simple.wikipedia.org/wiki/Domain_Name_System) web service.
+Follow the [instructions](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-creating.html#resource-record-sets-elb-dns-name-procedure) to configure a domain name with [HTTPS] for our data science API (https://console.aws.amazon.com/route53/).
+
+The way it works is, When a machine (or human) wants to connect to the API, they first need to find the IP address of the endpoint where the API is hosted.
+This is step one, where the caller (aka client) asks the name servers in the hosted zone to translate the domain name (e.g. b2p.skhabiri.com) to a proper IP address. Once the client has the IP address, it will connect to the API, which is hosted in the Elastic Beanstalk environment. We'll make this connection secure by adding an SSL certificate to the load balancer and enabling HTTPS. The client will then send encrypted traffic over the internet to your API. Then, the load balancer sends the traffic to your actual API instances, running on servers or in containers. Since your load balance and application instances are on the same private network (not on the internet) we don't need to keep the traffic encrypted, which adds cost and reduces performance.
+The traffic is decrypted by the load-balancer and sent to your application as unencrypted HTTP traffic on port 80.
+
+<img src= "../assets/img/post3/post3_api2.png">
+
 
 In this project we also used AWS RDS Postgres to create a [PostgreSQL database instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.PostgreSQL.html#CHAP_GettingStarted.Creating.PostgreSQL).
 
