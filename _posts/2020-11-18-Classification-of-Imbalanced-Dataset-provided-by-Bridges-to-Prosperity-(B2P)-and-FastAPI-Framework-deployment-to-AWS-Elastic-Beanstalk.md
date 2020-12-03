@@ -33,7 +33,7 @@ We use Synthetic Minority Oversampling Technique (SMOTE) to deal with highly imb
 The database is stored as PostgreSQL in AWS RDS (Amazon Relational Database Service). We use pgAdmin to manage the PostgreSQL database stored in AWS RDS. FastAPI framework is used as data science API to connect to database and provide a route for live prediction on target. The FastAPI app is deployed onto AWS Elastic Beanstalk and interfaces with Web Frontend. Installed packages in the project are managed with docker container.
 
 
-### Loading dataset:
+### Loading dataset
 After loading and cleaning the dataset:
 
 ```
@@ -189,7 +189,8 @@ keep_list = ['bridge_opportunity_bridge_type', 'bridge_opportunity_span_m', 'day
 ```
 
 
-### Semi-supervised model:
+
+### Semi-supervised model
 Before we create any model let's define the input and target column, as following:
 
 ```
@@ -288,7 +289,7 @@ Here we get some misclassifications in the form of FN.
 
 <img src= "../assets/img/post3/post3_confusion2.png">
 
-### Deployment of the model on AWS Elastic Beanstalk using FastAPI Framework:
+### Deployment of the model on AWS Elastic Beanstalk using FastAPI Framework
 
 For the rest of this post we talk about how to create an endpoint for our machine learning model using a production-ready API such as FastAPI and deploy the model on AWS cloud.
 In general there are two different ways to use python web frameworks. We can use a full-stack web app with a user interface such as plotly dash that renders html or use a web/micro service as an API that its routes will return JSON data to the JavaScript app. This work utilizes the second approach to integrate the machine learning model with frontend web app.
@@ -336,7 +337,8 @@ async def predict(item: Item_query):
 ```
 
 
-### Containerizing the application:
+
+* **Containerizing the application:**
 The portability aspect in containers enables easy and quick deployment to multiple hardware platforms and operating systems. To achieve this we will be using docker. To set up docker follow the instructions [here](https://docs.docker.com/compose/).
 
 After updating requirements.txt we need to update the docker image by `docker-compose build`. We can run the FastAPI app with `docker-compose up`.
@@ -368,7 +370,7 @@ Entering http://0.0.0.0:80 in web browser should launch the API locally.
 <img src= "../assets/img/post3/post3_api2.png">
 
 
-### Deployment on AWS Elastic Beanstalk
+* **Deployment on AWS Elastic Beanstalk:**
 For first time deployment follow these steps:
 
 - Install [AWS Command Line Interface](https://aws.amazon.com/cli/).
@@ -396,7 +398,8 @@ $ eb deploy
 $ eb open
 ```
 
-### AWS Route 53 and Configuring SSL Termination
+
+* **AWS Route 53 and Configuring SSL Termination:**
 
 When the application is deployed to Elastic Beanstalk, we'll get an automatically generated URL that can be used to connect to the API.
 Route 53 is Amazon's [Domain Name System (DNS)](https://simple.wikipedia.org/wiki/Domain_Name_System) web service.
@@ -409,15 +412,100 @@ The traffic is decrypted by the load-balancer and sent to your application as un
 <img src= "../assets/img/post3/SSL_aws.png">
 
 
-In this project we also used AWS RDS Postgres to create a [PostgreSQL database instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.PostgreSQL.html#CHAP_GettingStarted.Creating.PostgreSQL).
 
-Here is the architecture diagram for this project.
+* **AWS RDS Postgres:**
+
+In order to have access to the dataset while connecting to data science API, We create a PostgreSQL database instance in Amazon RDS. Here you can find instruction for [creating a PostgreSQL DB Instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.PostgreSQL.html#CHAP_GettingStarted.Creating.PostgreSQL).
+After DB instance is created, you can use any standard SQL client application such as [pgAdmin](https://www.pgadmin.org/) to connect to the database instance. We can download and use pgAdmin without having a local instance of PostgreSQL on our client computer. Using the database client we create a database in RDS cloud and connect to it from client computer through psycopg2 a python library for PostgreSQL.
+
+Here is a snippet of the code in Jupyter Notebook.
+```
+# Install database related packages
+!pip install python-dotenv
+!pip install psycopg2-binary
+!pip install SQLAlchemy
+
+# Add the newly installed packages to the requirements.txt file to rebuild docker-compose
+echo python-dotenv >> requirements.txt
+echo psycopg2-binary>> requirements.txt
+echo SQLAlchemy>> requirements.txt
+
+# Import packages
+import psycopg2
+from dotenv import load_dotenv
+import sqlalchemy
+from sqlalchemy.ext.declarative import declarative_base
+import logging
+
+# Loading .env file with database credentials
+file_path = os.path.abspath('$APP_DIR')
+load_dotenv(os.path.join(file_path, '.env'))
+
+db_name = os.getenv("DB_NAME")
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASSWORD")
+db_host = os.getenv("DB_HOST")
+db_port = os.getenv("DB_PORT")
+
+# Connect to database
+engine = sqlalchemy.create_engine(f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}")
+con = engine.connect()
+
+# Upload the data into database tables
+dfp = pd.read_csv("../Data/predict_df.csv")
+df = pd.read_csv("../Data/main_data_clean.csv")
+df.to_sql('cleaneddata_table', con, if_exists='replace')
+dfp.to_sql('model_table', con, if_exists='replace')
+con.close()
+```
+
+Let's make a query to validate the data in the created tables.
+
+```
+# test query
+def conn_curs():
+    """
+    makes a connection to the database
+    """
+    global db_name
+    global db_user
+    global db_password
+    global db_host
+    global db_port
+
+    connection = psycopg2.connect(dbname=db_name, user= db_user, password=db_password, host= db_host,port=db_port)
+    cursor = connection.cursor()
+    return connection, cursor
+
+def fetch_query_records(query):
+    global conn_curs
+    conn, cursor = conn_curs()
+    cursor.execute(query)
+    result = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return result
+
+fetch_query_records("""SELECT bridge_name from cleaneddata_table LIMIT 5;""")
+```
+
+[('Bukinga',),
+ ('Kagarama',),
+ ('Karambi',),
+ ('Rugeti',),
+ ('Nyakabuye - Nkomane',)]
+
+
+
+
+An overall architecture of this work is presented in teh following diagram.
+
 <img src= "../assets/img/post3/post3_b2p_architecture.png">
 
 
 
-## Conclusion
-This work uses semi supervised learning techniques to create a predictive model to classify an unbalanced dataset. We used SMOTE and LabelSpreading to generate synthetic data and construct similarity graph over all items in the input dataset. We also used cross validation as a way to evaluate the model performance in the absence of enough training data. Last we deployed the model on AWS EB using FastAPI.
+### Conclusion
+This work applied semi supervised learning techniques to create a predictive model for classification of an unbalanced dataset. We used SMOTE and LabelSpreading to generate synthetic data and construct similarity graph over all items in the input dataset. We also used cross validation as a way to evaluate the model performance in the absence of enough training data. The second part of the work explains in detail the deployment of the machine learning model on AWS elastic beanstalk using FastAPI framework.
 
 
 
