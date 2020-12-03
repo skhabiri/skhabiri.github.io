@@ -502,7 +502,7 @@ fetch_query_records("""SELECT bridge_name from cleaneddata_table LIMIT 5;""")
 
 
 
-An overall architecture of this work is presented in teh following diagram.
+An overall architecture of this work is presented in teh following diagram. The deployed app is available [here](https://b2p.skhabiri.com)
 
 <img src= "../assets/img/post3/post3_b2p_architecture.png">
 
