@@ -30,7 +30,7 @@ The resulting dataset includes information on tree type, shadow coverage, distan
 import pandas as pd
 import numpy as np
 
-data = pd.read_csv('https://github.com/skhabiri/DS17-Unit-2-Build/blob/master/data/train.csv')
+data = pd.read_csv('https://github.com/skhabiri/PredictiveModeling-CoverType-u2build/blob/master/data/train.csv?raw=true')
 print(data.shape)
 data.head()
 ```
@@ -897,11 +897,11 @@ LogisticRegression, RidgeClassifier RandomForestClassifier, GradientBoostingClas
 In this work, GradientBoostingClassifier with 87% accuracy on the test data shows the best performance among the five. 
 
 ## Conclusion
-This post evaluates and compares the performance of five multi-class classifiers to predict the "Cover-Type" label of [Covertype dataset](https://archive.ics.uci.edu/ml/datasets/Covertype). The dataset has 54 features, and one target label with 7 different classes. Target label classes are distributed evenly with baseline prediction of 14%. We splitted the total 15120 obeservations into train and test subsets. By applying commonly used classification methods such as feature selection, data scaling, cross validation, and hyperparameter optimization, we were able to achive accuracy scores ranging from 63% to 86% on test data subset. The score metrics of a typical fit of those classifiers can be found in [this](https://forestcover-metrics.herokuapp.com).
+This post evaluates and compares the performance of five multi-class classifiers to predict the "Cover-Type" label of [Covertype dataset](https://archive.ics.uci.edu/ml/datasets/Covertype). The dataset has 54 features, and one target label with 7 different classes. Target label classes are distributed evenly with baseline prediction of 14%. We splitted the total 15120 obeservations into train and test subsets. By applying commonly used classification methods such as feature selection, data scaling, cross validation, and hyperparameter optimization, we were able to achive accuracy scores ranging from 63% to 86% on test data subset. The score metrics of a typical fit of those classifiers has been deployed onto [heroku](https://predictivemodeling-covertype.herokuapp.com).
 
 ## Links
 [Dataset](https://archive.ics.uci.edu/ml/datasets/Covertype)
-[Project Repository](https://github.com/skhabiri/DS17-Unit-2-Build)
-[Web Application](https://forestcover-metrics.herokuapp.com)
+[Project Repository](https://github.com/skhabiri/PredictiveModeling-CoverType-u2build)
+[Web Application](https://predictivemodeling-covertype.herokuapp.com)
 
 
