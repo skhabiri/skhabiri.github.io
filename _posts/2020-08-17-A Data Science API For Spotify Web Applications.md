@@ -274,6 +274,15 @@ The deployed API app is accessible [here](https://fastapi-spotify.herokuapp.com/
 <img src= "../assets/img/post4/post4_routes.png">
 
 
+### Links
+- [FastAPI](https://fastapi.tiangolo.com/)
+- [Heroku](https://devcenter.heroku.com/)
+- [Pipenv](https://pipenv.pypa.io/en/latest/)
+- [Plotly](https://plotly.com/python/)
+- [Uvicorn](https://www.uvicorn.org/#quickstart)
+- [SQLAlchemy](https://www.sqlalchemy.org/)
+- [Spotipy](https://spotipy.readthedocs.io/)
+- [SciKit-Learn](https://scikit-learn.org/stable/getting_started.html)
 
 
 
