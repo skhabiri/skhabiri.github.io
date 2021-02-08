@@ -5,7 +5,7 @@ subtitle: Building A WEB API Service with Python And FastAPI
 gh-repo: skhabiri/FastAPI-Spotify
 gh-badge: [star, fork, follow]
 tags: [FastApi, Heroku, Spotify]
-image: /assets/img/post4/post4_viz.png
+image: /assets/img/post4/post4_logo.png
 comments: false
 ---
 
