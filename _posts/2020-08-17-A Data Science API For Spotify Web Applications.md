@@ -14,7 +14,6 @@ This article will discuss how to use FastAPI framework to implement a data scien
 
 
 ### File structure
-
 The file structure of the project is shown below.
 
 <img src= "../assets/img/post4/post4_file_structure.png">
