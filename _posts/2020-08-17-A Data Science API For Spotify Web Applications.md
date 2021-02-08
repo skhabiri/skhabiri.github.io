@@ -275,6 +275,7 @@ The deployed API app is accessible [here](https://fastapi-spotify.herokuapp.com/
 
 
 ### Links
+- [deployed App](https://fastapi-spotify.herokuapp.com/)
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [Heroku](https://devcenter.heroku.com/)
 - [Pipenv](https://pipenv.pypa.io/en/latest/)
