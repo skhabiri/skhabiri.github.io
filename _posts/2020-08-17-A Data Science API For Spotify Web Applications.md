@@ -16,7 +16,6 @@ This article will discuss how to use FastAPI framework to implement a data scien
 ### File structure
 The file structure of the project is shown below.
 
-<img src= "../assets/img/post4/post4_file_structure.png">
 
 ```zsh
 FastAPI-Spotify
@@ -258,6 +257,10 @@ heroku create fastapi-spotify
 heroku git:remote -a fastapi-spotify
 git push heroku main
 ```
+The deployed API app is accessible [here](https://fastapi-spotify.herokuapp.com/).
+
+<img src= "../assets/img/post4/post4_routes.png">
+
 
 
 
