@@ -1,7 +1,7 @@
 ---
 layout: post
-title: A Data Science API For Spotify Web Application Using FastAPI Framework
-subtitle: Building The WEB API Service with Python And FastAPI
+title: A Data Science API For Spotify Web Applications
+subtitle: Building a WEB API Service with Python And FastAPI
 gh-repo: skhabiri/FastAPI-Spotify
 gh-badge: [star, fork, follow]
 tags: [FastApi, Heroku, Spotify]
