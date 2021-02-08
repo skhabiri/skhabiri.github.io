@@ -61,11 +61,11 @@ There are different ways to run a python file in the project. After activating t
 * Running a .py file as script: `FastAPI-Spotify % python appdir/tests/test_predict.py`
   - sets test_predict.__package__ = None and test_predict.__name__ = __main__. It also adds the full path of test_predict containing directory, i.e. “tests” to sys.path., but does not add the higher level directories to the sys.path.
 * Running a .py file in vscode is similar to run it as a script on the terminal.
-* Importing a .py file in python repl interactive session: 
-``` 
-<FastAPI-Spotify> python
->>> from appdir.tests import test_predict
-```
+* Importing a .py file in python repl interactive session:
+ ``` 
+ <FastAPI-Spotify> python
+ >>> from appdir.tests import test_predict
+ ```
   - test_predict.__package__ = “” (empty string) and the repl session takes the name “main”. sys.path would not contain any path to the project.
 
 ### Absolute path vs. Relative path::
