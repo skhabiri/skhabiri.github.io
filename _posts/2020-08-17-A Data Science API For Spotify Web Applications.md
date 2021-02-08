@@ -5,7 +5,7 @@ subtitle: Building A WEB API Service with Python And FastAPI
 gh-repo: skhabiri/FastAPI-Spotify
 gh-badge: [star, fork, follow]
 tags: [FastApi, Heroku, Spotify]
-image: /assets/img/post2_pairplot2.png
+image: /assets/img/post4/post4_viz.png
 comments: false
 ---
 
@@ -239,11 +239,23 @@ return fig.to_json(), fig.show()
 ### API endpoints
 The endpoints provided by the data science API are listed below, with a brief description for each of them. 
 * _predict:_ Receives a song track-id and uses a pre trained machine learning model to return a list of suggested songs based on the audio features of the provided track.
+<img src= "../assets/img/post4/post4_predict.png">
+
 * _viz:_ provide a JSON format of a plotly radar chart comparing the audio features of the provided song and the average of the list of suggested songs.
+<img src= "../assets/img/post4/post4_viz.png">
+
 * _spotifysearch:_ Receives a phrase and requested number of queries. Then makes an API call to Spotify to find the matching tracks limited by the number of queries.
+<img src= "../assets/img/post4/post4_spotifysearch.png">
+
 * _cvs_dump:_ gets a keyword and find all the related tracks for a limited number of artists and saves all the provided information into spotify_query.csv.
+<img src= "../assets/img/post4/post4_csvdump.png">
+
 * _db_reload:_ initialize an elephantSQL database and load it with spotify_query.csv
+<img src= "../assets/img/post4/post4_dbreload.png">
+
 * _db_query:_ Instead of a query to Spotify makes a query to database and fetch the first n number of rows.
+<img src= "../assets/img/post4/post4_dbquery.png">
+
 * _db_reset:_ resets the database
 * _readme:_ documentation
 
