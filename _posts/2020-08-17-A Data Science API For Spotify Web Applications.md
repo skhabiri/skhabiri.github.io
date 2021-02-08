@@ -59,14 +59,14 @@ The metadata files are in the project directories. That includes
 
 
 
-### Setting up the project
 
+### Setting up the project
 Create a repository in the [github](https://github.com/skhabiri/FastAPI-Spotify) and clone the repo to your local machine, `git clone https://github.com/skhabiri/FastAPI-Spotify.git`. In order to be able to reproduce the work make sure to create a virtual environment, `pipenv --python 3.7`. Now with `pipenv shell` activate the virtual environment.
 
 
 
-### Install required packages and dependencies
 
+### Install required packages and dependencies
 List of main packages that are required are:
 * _fastapi:_ A python web framework to build new applications
 * _uvicorn:_ ASGI web server 
@@ -82,8 +82,8 @@ List of main packages that are required are:
 Use `pipenv install <package_name>`
 
 
-### API modules
 
+### API modules
 * __main.py:__ The app runs by `uvicorn appdir.main:app`. main.py is the main module to run. Inside main.py, we instantiate the app as an instance of FastAPI() and define most of the routes including the root.
 ```
 from fastapi import FastAPI
