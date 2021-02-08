@@ -12,7 +12,9 @@ comments: false
 This article will discuss how to use FastAPI framework to implement a data science API. The data science API as a micro service allows deployment of a machine learning model and provides multiple endpoints to interact with a frontend JavaScript Web App. The data is sent over to the frontend as JSON format. This is a part of a Web application that interacts with Spotify API.
 
 
+
 ### File structure
+
 The file structure of the project is shown below.
 
 <img src= "../assets/img/post4/post4_file_structure.png">
@@ -57,11 +59,15 @@ The metadata files are in the project directories. That includes
 * *tests:* Another subpackage directory for unit testing
 
 
+
 ### Setting up the project
+
 Create a repository in the [github](https://github.com/skhabiri/FastAPI-Spotify) and clone the repo to your local machine, `git clone https://github.com/skhabiri/FastAPI-Spotify.git`. In order to be able to reproduce the work make sure to create a virtual environment, `pipenv --python 3.7`. Now with `pipenv shell` activate the virtual environment.
 
 
+
 ### Install required packages and dependencies
+
 List of main packages that are required are:
 * _fastapi:_ A python web framework to build new applications
 * _uvicorn:_ ASGI web server 
@@ -128,6 +134,7 @@ valence: float
 popularity: int
 ```
 
+
 * __ormdb.py:__ Connects sqlalchemy engine to ElephantSQL, a cloud based database. It defines the database schema, “Songdb”, which is a subclass of sqlalchemy.ext.declarative.declarative_base. “Songdb” happens to have similar types and fields as the one defined by pydantic.BaseModel, which is received by frontend app. This is common as we usually pass the same data stored in the database to the frontend.
 ```
 from sqlalchemy.ext.declarative import declarative_base
@@ -166,6 +173,7 @@ class Songdb(Base):
         return '-name:{}, artist:{}, trid:{}-'.format(self.name, self.artist, self.trid)
 ```
 
+
 * __parser.py:__ It uses spotipy library to connect to Spotify API and pull data from it. Here is code snippet for this purpose.
 ```
 import spotipy
@@ -187,6 +195,7 @@ for item in range(len(result['tracks']['items'])):
 return record_list 
 ```
 
+
 * __predict.py:__ This module imports a pre trained machine learning model to suggest a list of songs based on a song audio features.
 ```
 from fastapi import APIRouter, HTTPException
@@ -207,6 +216,7 @@ raise HTTPException(status_code=500, detail="Input is not in trained database")
 return {'Suggested track IDs': pred} 
 ```
 
+
 * __viz.py:__ Returns the JSON format of the radar plot for the audio features of the inquired song and the average of those audio features for the suggested songs.
 ```
 import plotly.graph_objects as go
@@ -224,6 +234,7 @@ return fig.to_json(), fig.show()
 
 
 ### API endpoints
+
 The endpoints provided by the data science API are listed below, with a brief description for each of them. 
 * _predict:_ Receives a song track-id and uses a pre trained machine learning model to return a list of suggested songs based on the audio features of the provided track.
 * _viz:_ provide a JSON format of a plotly radar chart comparing the audio features of the provided song and the average of the list of suggested songs.
@@ -236,6 +247,7 @@ The endpoints provided by the data science API are listed below, with a brief de
 
 
 ### Deploy the app to Heroku
+
 When deploying to the cloud we usually need a process file to instruct how to run the app. It is something like `web: uvicorn --host 0.0.0.0 --port $PORT appdir.main:app`. For simple apps, Heroku platform automatically detects the language and creates a default web process type to boot the application server. To deploy the app to Heroku after committing all the changes, login to Heroku, create an app name, and create a heroku remote, and push the code to heroku remote
 ```
 heroku login
