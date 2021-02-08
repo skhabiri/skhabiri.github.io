@@ -134,6 +134,7 @@ popularity: int
 ```
 
 
+
 * __ormdb.py:__ Connects sqlalchemy engine to ElephantSQL, a cloud based database. It defines the database schema, “Songdb”, which is a subclass of sqlalchemy.ext.declarative.declarative_base. “Songdb” happens to have similar types and fields as the one defined by pydantic.BaseModel, which is received by frontend app. This is common as we usually pass the same data stored in the database to the frontend.
 ```
 from sqlalchemy.ext.declarative import declarative_base
@@ -173,6 +174,7 @@ class Songdb(Base):
 ```
 
 
+
 * __parser.py:__ It uses spotipy library to connect to Spotify API and pull data from it. Here is code snippet for this purpose.
 ```
 import spotipy
@@ -193,6 +195,7 @@ for item in range(len(result['tracks']['items'])):
         record_list.append(keyword_dict)
 return record_list 
 ```
+
 
 
 * __predict.py:__ This module imports a pre trained machine learning model to suggest a list of songs based on a song audio features.
@@ -216,6 +219,7 @@ return {'Suggested track IDs': pred}
 ```
 
 
+
 * __viz.py:__ Returns the JSON format of the radar plot for the audio features of the inquired song and the average of those audio features for the suggested songs.
 ```
 import plotly.graph_objects as go
@@ -232,8 +236,8 @@ return fig.to_json(), fig.show()
 ```
 
 
-### API endpoints
 
+### API endpoints
 The endpoints provided by the data science API are listed below, with a brief description for each of them. 
 * _predict:_ Receives a song track-id and uses a pre trained machine learning model to return a list of suggested songs based on the audio features of the provided track.
 * _viz:_ provide a JSON format of a plotly radar chart comparing the audio features of the provided song and the average of the list of suggested songs.
@@ -245,8 +249,8 @@ The endpoints provided by the data science API are listed below, with a brief de
 * _readme:_ documentation
 
 
-### Deploy the app to Heroku
 
+### Deploy the app to Heroku
 When deploying to the cloud we usually need a process file to instruct how to run the app. It is something like `web: uvicorn --host 0.0.0.0 --port $PORT appdir.main:app`. For simple apps, Heroku platform automatically detects the language and creates a default web process type to boot the application server. To deploy the app to Heroku after committing all the changes, login to Heroku, create an app name, and create a heroku remote, and push the code to heroku remote
 ```
 heroku login
