@@ -1,11 +1,11 @@
 ---
 layout: post
 title: Importing Modules In Python
-subtitle: How to make sure our import always works
+#subtitle: How to make sure our import always works
 gh-repo: skhabiri/FastAPI-Spotify
 gh-badge: [star, fork, follow]
 tags: [Python, Python Package, Import Module]
-image: /assets/img/post4/post4_logo.png
+image: /assets/img/post5/post5_logo.png
 comments: false
 ---
 
