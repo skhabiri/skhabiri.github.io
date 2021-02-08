@@ -261,6 +261,11 @@ The endpoints provided by the data science API are listed below, with a brief de
 
 
 
+### Unit testing
+In addition to _api_ subpackage that includes all the production modules there is another subpackage named _tests_ that contains unit test modules for test automation. Those test modules do not provide a 100% coverage and can be expanded to cover more functionalities.
+
+
+
 ### Deploy the app to Heroku
 When deploying to the cloud we usually need a process file to instruct how to run the app. It is something like `web: uvicorn --host 0.0.0.0 --port $PORT appdir.main:app`. For simple apps, Heroku platform automatically detects the language and creates a default web process type to boot the application server. To deploy the app to Heroku after committing all the changes, login to Heroku, create an app name, and create a heroku remote, and push the code to heroku remote
 ```
@@ -274,7 +279,8 @@ The deployed API app is accessible [here](https://fastapi-spotify.herokuapp.com/
 <img src= "../assets/img/post4/post4_routes.png">
 
 
-### Links
+### Tech Stack
+More details about the technologies and tools that are used in this work can be found below.
 - [deployed App](https://fastapi-spotify.herokuapp.com/)
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [Heroku](https://devcenter.heroku.com/)
