@@ -276,6 +276,11 @@ HypoTweet is deployed and accessible [here](https://hypotweet.herokuapp.com).
 
 <img src= "../assets/img/post6/post6_homepage.png">
 
+Here is an example of how the prediction works. It's worth noting that the model accuracy is not high and the this is more for proff of concept rather than production.
+
+<img src= "../assets/img/post6/post6_homepage.png">
+
+
 
 
 
