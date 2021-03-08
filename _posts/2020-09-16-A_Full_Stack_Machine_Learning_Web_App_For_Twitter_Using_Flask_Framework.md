@@ -132,7 +132,7 @@ DB.init_app(app)
 ```
 #### Creating the routes
 A URL route defines the available routes in the frontend. Each url route is associated with a view function. This association is created by using the route() decorator. The view function tell the app how to render the information on the browser. By default, the Flask route responds to GET requests. However, you can change this preference by providing method parameters for the route() decorator, such as a POST method in a URL route.
-In our app the root route loads all the users from database onto the home page.
+In our app the root route loads all the users from database onto the home page. `base.html` will serve as the home page, where we will have all the field required to run the model.
 ```
 @app.route('/')
 def root():
@@ -178,7 +178,7 @@ return render_template('prediction.html', title='Prediction', message=message)
 ```
 We can also define /reset and /update routes which would reset or update the timeline in the database.
 
-#### Data model for database
+### Data model for database
 Here we define two data model. One for the User and another for the Tweet. Therefore our database has two tables where instances of the corresponding data models are enteries in the database table. Each datamodel has a primary key and they are joined together through back reference. 
 ```
 class User(DB.Model):
@@ -195,7 +195,7 @@ class Tweet(DB.Model):
 ```
 The maximum tweet length is 270 characters to cover longer urls we define the text column to be 300 Unicode chatrcaters to be able to capture emojis too.
 
-#### Connect to Twitter API
+### Connect to Twitter API
 tweepy is a python library that acts as a wrapper to access the Twitter API. `twitter.py` module create an authenticated tweepy instance that can retrieve various information through the Twitter API. In this module we also use spacy to get an embedding representation of the tweets and store them in the database for future modeling tasks. 
 ```
 from os import getenv
@@ -227,219 +227,65 @@ def add_or_update_user(username):
 ```
 
 
-#### Machine learning model
+### Machine learning model
 There are generally three different ways to train and serve models into production. It can be a one-off, batch, real-time/online training. A model can be just trained ad-hoc and pushed to production as a pickle object until its performance deteriorates enough that it's called to be refreshed. Batch training allows us to have a constantly refreshed version of a model based on the latest batch train data . For this application change of selected users means changing the input features. Therefore it's more suitable to use real-time training aka online training. For that reason we select the small version of spacy model for  embedding tweets. It convert a tweet to a numerical vector with 96 dimenstions. The small model helps to shorten the response time and ease the deployment. Alternatively we can use [Basilica](https://www.basilica.ai) for embedding. Basilica has it's own API that we need to connect to get the 760 dimension embedding vector in real-time.
 The data science model is mostly in predict.py. For real time training we use sklearn.LogisticRegression which is relatively fast and suitable demonstrate proof of concept.
 
 * **Installing spacy for deployment:**
 In the activated virtual environment use `pipenv instal spacy`. For the model if we were only running locally, we would simply download and install the model with `python -m spacy download en_core_web_sm`. However, for deploying on heroku We need to add `pipenv install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0.tar.gz` to the Pipfile, so that heroku can download and install the model in the process of building the app. This version of en_core_web_sm requires python 3.8.
 
-
-
-
-
-
-
-
-
-
-
-
-### API modules
-* __main.py:__ The app runs by `uvicorn appdir.main:app`. main.py is the main module to run. Inside main.py, we instantiate the app as an instance of FastAPI() and define most of the routes including the root.
 ```
-from fastapi import FastAPI
-app = FastAPI()
-```
-A route is defined by use of a decorator and a function right afterwards. Depending on http method we’ll use a get or post method. Here are two examples on how to use a get and post method.
-```
-from appdir.api import fedata, predict, parser, ormdb, viz
-@app.post('/SpotifySearch/')
-def spotifysearch(phrase: str, limit: int = 5):
-""" An API call to Spotify, to search for a keyword and return a list of "limit" number of items containing the artist, album and track names.
-ex/ key_word = {"california dreamin"}
-return: list of dictionary """
-return parser.spotify_parser(phrase, limit)
-@app.get("/DB_reload")
-def DB_reload(file_name: str = "./spotify_query.csv"):
-"""Reset and reload the database from a csv file"""
-ormdb.reset_db(ormdb.engine)
-session = ormdb.get_session()
-ormdb.load_csv(session, file_name)
-songs = session.query(ormdb.Songdb).all()
-session.close()
-return f"{len(songs)} records from {file_name} loaded to the DB" 
+from sklearn.linear_model import LogisticRegression
+from .models import User
+from .twitter import nlp 
+
+def predict_user(user1_name, user2_name, user3_name, user4_name, tweet_text):
+    user_names = set((user1_name, user2_name, user3_name, user4_name))
+    
+    # Create X for sklearn model
+    users = []
+    user_embeddings = []
+    for username in user_names:
+        user = User.query.filter(User.name == username).one()
+        users.append(user)
+        user_embeddings.append(np.array([tweet.embedding for tweet in user.tweets]))
+
+    embeddings = np.vstack(user_embeddings)
+
+    # create target labels y
+    ulabels = []
+    for i, user in enumerate(users):
+        ulabels.append(i * np.ones(len(user.tweets)))
+
+    labels = np.concatenate(ulabels)
+
+    log_reg = LogisticRegression().fit(embeddings, labels)
+
+    tweet_embedding = nlp(tweet_text).vector
+
+    # predict returns float
+    return users[int(log_reg.predict(np.array(tweet_embedding).reshape(1, -1))[0])].name
 ```
 
-Under appdir/api we have several modules that are organized as follows.
-* __fedata.py:__ FastAPI is built on top of pydantic, a data validation and setting library in python. This file defines a data model for the songs, “Song” that is received by Frontend JavaScript app. “Song” is a child class of pydantic.BaseModel data model. FastAPI uses the type hint to validate the receiving data type. 
-```
-from pydantic import BaseModel
-class Song(BaseModel):
-"""Front end data model used by fastapi"""
-album: str
-aluri: str
-track_number: int
-trid: str
-name: str
-artist: str
-arid: str
-acousticness: float = Field(..., example=0.029400)
-energy: float = Field(..., example=0.579)
-instrumentalness: float
-liveness: float
-loudness: float
-speechiness: float
-tempo: float
-valence: float
-popularity: int
-```
+### Deploying the app to Heroku
+Heroku is a multi-language cloud application platform that enables developers to deploy, scale, and manage their applications. So far we have trained the ML model and created the web app using Flask. To deploy the app to Heroku after committing all the changes, login to Heroku, create an app name, and create a heroku remote, and push the code to heroku remote. ALternatively, we may commit the code to Github and by connecting Github to Heroku instead of Heroku CLI we can build the app and deploy it to the cloud. 
+Heroku uses the Pipfile to build the app with all the package dependencies and uses the Procfile to instruct the web server how to run the app. For simple apps, Heroku platform automatically detects the language and creates a default web process type to boot the application server. Other than the code, there are two local elements in our app that we need to move them to Heroku platform. `.env` and local database created by sqlite3. Heroku interface allows to define the envionment variables in `config Vars` and setup an add-on Heroku PostgreSQL database for the app as a replacement for the local setup, `heroku addons:create heroku-postgresql`. The cloud base database is empty and we need to initialize it by reset route before we can access it. 
 
-
-
-* __ormdb.py:__ Connects sqlalchemy engine to ElephantSQL, a cloud based database. It defines the database schema, “Songdb”, which is a subclass of sqlalchemy.ext.declarative.declarative_base. “Songdb” happens to have similar types and fields as the one defined by pydantic.BaseModel, which is received by frontend app. This is common as we usually pass the same data stored in the database to the frontend.
-```
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from .settings import DATABASE_URL
-import psycopg2
-# connect an engine to ElephantSQL
-engine = create_engine(DATABASE_URL)
-# create a SessionLocal class bound to the engine
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
-Base.metadata.create_all(bind=engine)
-class Songdb(Base):
-    __tablename__ = "Song_table"
-    """Song_db data model based on sqlalchemy used by elephant postgres database """
-    index = Column(Integer, primary_key=True, index=True)
-    album = Column(String)
-    aluri = Column(String(255), index=True)
-    track_number = Column(Integer)
-    trid = Column(String(255), index=True)
-    name = Column(String(255))
-    artist = Column(String)
-    arid = Column(String(255), index=True)
-    acousticness = Column(Float)
-    danceability = Column(Float)
-    energy = Column(Float)
-    instrumentalness = Column(Float)
-    liveness = Column(Float)
-    loudness = Column(Float)
-    speechiness = Column(Float)
-    tempo = Column(Float)
-    valence = Column(Float)
-    popularity = Column(Integer)
-    def __repr__(self):
-        return '-name:{}, artist:{}, trid:{}-'.format(self.name, self.artist, self.trid)
-```
-
-
-
-* __parser.py:__ It uses spotipy library to connect to Spotify API and pull data from it. Here is code snippet for this purpose.
-```
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
-from .settings import *
-client_cred = SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
-sp = spotipy.Spotify(client_credentials_manager=client_cred)
-def spotify_parser(phrase: str, limit: int):
-""" An API call to Spotify, to search for a keyword and return a list of dictionaries with    three keys for each of "limit" number of items
-:return: record_list = [{"artist":<value>, "album":<value>,"track":<value>}, {...}, ...]"""
-result = sp.search(phrase, limit)
-record_list = []
-for item in range(len(result['tracks']['items'])):
-        keyword_dict = {}
-        keyword_dict['artist'] = result['tracks']['items'][item]['artists'][0]['name']
-        keyword_dict['album'] = result['tracks']['items'][item]['album']['name']
-        keyword_dict['track'] = result['tracks']['items'][item]['name']
-        record_list.append(keyword_dict)
-return record_list 
-```
-
-
-
-* __predict.py:__ This module imports a pre trained machine learning model to suggest a list of songs based on a song audio features.
-```
-from fastapi import APIRouter, HTTPException
-import joblib
-apipath = dirname(__file__)
-FILENAME = join(apipath, "BW_Spotify_Final.joblib")
-csv_url = join(apipath, "BW_Spotify_Final.csv")
-router = APIRouter()
-knn = joblib.load(FILENAME)
-@router.get('/predict/{id}')
-async def predict_func(id: str):
-"""Takes a trackID string as input and returns a list of similar trackIDs"""
-try:
-pred = predict_model(track_id= id, df=df, knn=knn)
-except Exception as e:
-print(e.args)
-raise HTTPException(status_code=500, detail="Input is not in trained database")
-return {'Suggested track IDs': pred} 
-```
-
-
-
-* __viz.py:__ Returns the JSON format of the radar plot for the audio features of the inquired song and the average of those audio features for the suggested songs.
-```
-import plotly.graph_objects as go
-@router.get('/viz/{track_id}')
-async def viz_func(track_id: str):
-r = feature_average(track_id)
-attributes = ['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'speechiness', 'valence']
-rid = (df[df["id"]==track_id][attributes].values.round(3)).tolist()[0]
-fig = go.Figure()
-fig.add_trace(go.Scatterpolar(r=r, theta=attributes, fill='toself', name='Suggestion'))
-fig.add_trace(go.Scatterpolar(r=rid, theta=attributes, fill='toself', name='Query'))   
-fig.update_layout(polar=dict(radialaxis=dict(visible=True)), showlegend=True)
-return fig.to_json(), fig.show()
-```
-
-
-
-### API endpoints
-The endpoints provided by the data science API are listed below, with a brief description for each of them. 
-* _predict:_ Receives a song track-id and uses a pre trained machine learning model to return a list of suggested songs based on the audio features of the provided track.
-<img src= "../assets/img/post4/post4_predict.png">
-
-* _viz:_ provide a JSON format of a plotly radar chart comparing the audio features of the provided song and the average of the list of suggested songs.
-<img src= "../assets/img/post4/post4_viz.png">
-
-* _spotifysearch:_ Receives a phrase and requested number of queries. Then makes an API call to Spotify to find the matching tracks limited by the number of queries.
-<img src= "../assets/img/post4/post4_spotifysearch.png">
-
-* _cvs_dump:_ gets a keyword and find all the related tracks for a limited number of artists and saves all the provided information into spotify_query.csv.
-<img src= "../assets/img/post4/post4_csvdump.png">
-
-* _db_reload:_ initialize an elephantSQL database and load it with spotify_query.csv
-<img src= "../assets/img/post4/post4_dbreload.png">
-
-* _db_query:_ Instead of a query to Spotify makes a query to database and fetch the first n number of rows.
-<img src= "../assets/img/post4/post4_dbquery.png">
-
-* _db_reset:_ resets the database
-* _readme:_ documentation
-
-
-
-### Unit testing
-In addition to _api_ subpackage that includes all the production modules there is another subpackage named _tests_ that contains unit test modules for test automation. Those test modules do not provide a 100% coverage and can be expanded to cover more functionalities.
-
-
-
-### Deploy the app to Heroku
-When deploying to the cloud we usually need a process file to instruct how to run the app. It is something like `web: uvicorn --host 0.0.0.0 --port $PORT appdir.main:app`. For simple apps, Heroku platform automatically detects the language and creates a default web process type to boot the application server. To deploy the app to Heroku after committing all the changes, login to Heroku, create an app name, and create a heroku remote, and push the code to heroku remote
-```
-heroku login
-heroku create fastapi-spotify
-heroku git:remote -a fastapi-spotify
-git push heroku main
-```
-The deployed API app is accessible [here](https://fastapi-spotify.herokuapp.com/).
+### Deployed app: 
+HypoTweet is deployed and accessible [here](https://hypotweet.herokuapp.com).
 
 <img src= "../assets/img/post4/post4_routes.png">
+
+
+
+
+
+
+
+
+
+
+
 
 
 ### Tech Stack
