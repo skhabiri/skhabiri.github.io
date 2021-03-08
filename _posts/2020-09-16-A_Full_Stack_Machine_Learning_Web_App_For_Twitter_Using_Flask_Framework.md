@@ -70,6 +70,39 @@ A web application is composed of three elements: front-end, back-end and databas
 When the web browser makes a request for the page, this content is stored in a database and the particular page created full only when the user requests it. Before the page is returned to the caller, the back-end server retrieves the data from the database and populates it on the html page. 
 Flask is a micro-framework because it is lightweight and only provides components that are essential, such as routing, request handling, sessions, and so on. In our application Flask is used for the backend, but it makes use of a templating language called Jinja2 which is used to create HTML, and other markup formats that are returned to the user via an HTTP request. We use jinja2 use inside HTML so that the content on the HTML page becomes dynamic. ANother key aspect of Flask is being able to work with WSGI. The Web Server Gateway Interface, or more commonly known as WSGI, is a standard that describes the specifications concerning the communication between a web server and a client application. 
 
+### Connecting Frontend to Backend in Flask 
+There are three ways to interact between python file (back-end) and html file (front-end).
+
+* Using `flask.request.values` to access user entries through the html post method argument “name”. With this method we retrieve informations such as user1, user2, user3, user4, tweet_text, user_name.
+```
+<form action="/compare" method="post">
+<select name="user1">
+
+* request.values['user1'],
+
+<form action="/user" method="post">
+    <input type="text" name="user_name" placeholder="Type a user">
+
+* request.values['user_name']
+```
+
+* In .py file we use arguments of render_template(), such as tweets, users, title, message to pass a value to jinja2 variables in html
+```
+{% for user in users %}
+<h1>{{ title }}</h1>
+{% for tweet in tweets %}
+
+* return render_template('user.html', title=name, tweets=tweets, message=message)
+* return render_template('base.html', title='Home', users=User.query.all())
+```
+* Through jinja2 we add a variable to the route in GET method such as /user/{{ user.name }}. Then in .py we pass the variable to the function under the decorator.
+```
+<a href="/user/{{ user.name }}">
+
+* @app.route('/user/<name>', methods=['GET'])
+    def user(name=None, message=''):
+```
+
 ### Creating the Flask App
 Main components of our Flask app is in `app.py`. Here are the steps that we need to take to create our app.
 
@@ -196,8 +229,10 @@ def add_or_update_user(username):
 
 #### Machine learning model
 There are generally three different ways to train and serve models into production. It can be a one-off, batch, real-time/online training. A model can be just trained ad-hoc and pushed to production as a pickle object until its performance deteriorates enough that it's called to be refreshed. Batch training allows us to have a constantly refreshed version of a model based on the latest batch train data . For this application change of selected users means changing the input features. Therefore it's more suitable to use real-time training aka online training. For that reason we select the small version of spacy model for  embedding tweets. It convert a tweet to a numerical vector with 96 dimenstions. The small model helps to shorten the response time and ease the deployment. Alternatively we can use [Basilica](https://www.basilica.ai) for embedding. Basilica has it's own API that we need to connect to get the 760 dimension embedding vector in real-time.
+The data science model is mostly in predict.py. For real time training we use sklearn.LogisticRegression which is relatively fast and suitable demonstrate proof of concept.
 
-
+* **Installing spacy for deployment:**
+In the activated virtual environment use `pipenv instal spacy`. For the model if we were only running locally, we would simply download and install the model with `python -m spacy download en_core_web_sm`. However, for deploying on heroku We need to add `pipenv install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0.tar.gz` to the Pipfile, so that heroku can download and install the model in the process of building the app. This version of en_core_web_sm requires python 3.8.
 
 
 
