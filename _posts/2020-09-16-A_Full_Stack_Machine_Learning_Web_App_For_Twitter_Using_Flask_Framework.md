@@ -44,7 +44,7 @@ HypoTweet
 `twitapp` is the application directory where all the app related files reside. `__init__.py` marks the app directory as a Python package. It also serves as the point of entry for the app.
 `app.py` is the main python file assigned to create the app and handle most of the routings. `db.sqlite` is a local database that stores the users information for testing the app locally. Later on when the app is deployed to the cloud we switch to a cloud base database.
 For creating the database we use SQLAlchemy an object-relational mapper (ORM) database toolkit for python. `models.py` specify the database data models. To pull twitter data we use tweepy. It's a python library to connect to Twitter API. `twitter.py` interacts with Twitter API and stores the data in database.
-The machine learning model and classification tasks are performed in `predict.py`.
+The machine learning model and classification tasks are performed in `predict.py`. The templates irectory include a few html templates for different url routes.
 
 ### Setting up the project
 Create a repository in the github to fork the [repo](https://github.com/skhabiri/HypoTweet) or clone it to your local machine. We use en_core_web_sm,  model for spacy to speed up the prediction and minimize the file sizes before being deployed to heroku. Version 3.0.0 of the spacy model requires python version >= 3.8.
@@ -71,11 +71,105 @@ When the web browser makes a request for the page, this content is stored in a d
 Flask is a micro-framework because it is lightweight and only provides components that are essential, such as routing, request handling, sessions, and so on. In our application Flask is used for the backend, but it makes use of a templating language called Jinja2 which is used to create HTML, and other markup formats that are returned to the user via an HTTP request. We use jinja2 use inside HTML so that the content on the HTML page becomes dynamic. ANother key aspect of Flask is being able to work with WSGI. The Web Server Gateway Interface, or more commonly known as WSGI, is a standard that describes the specifications concerning the communication between a web server and a client application. 
 
 ### Creating the Flask App
-Main components of our Flask app is in `app.py`. For creating the Flask app we need to import the Flask and the modules that interacts with frontend.
+Main components of our Flask app is in `app.py`. Here are the steps that we need to take to create our app.
+
+#### Importing modules
+Let's import the Flask and the modules that interacts with frontend.
 ```
 from flask import Flask, render_template, request
+
+from .models import DB, User
+from .predict import predict_user
+from .twitter import add_or_update_user, insert_example_users
 ```
 `request` is used to pass variable from html POST to python module. `render_template` passes variable from python module to jinja2 which is a template inside html.
+
+#### Create the Flask object
+To create the app we need to instantiate a Flask object. This object will be our WSGI application called `app`.
+```
+ app = Flask(__name__)   
+```
+
+#### Connect the app to the database
+In this step we the datbase server is initialized and connected to the application.
+```
+app.config['SQLALCHEMY_DATABASE_URI'] = getenv('DATABASE_URL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+DB.init_app(app)
+```
+#### Creating the routes
+A URL route defines the available routes in the frontend. Each url route is associated with a view function. This association is created by using the route() decorator. The view function tell the app how to render the information on the browser. By default, the Flask route responds to GET requests. However, you can change this preference by providing method parameters for the route() decorator, such as a POST method in a URL route.
+In our app the root route loads all the users from database onto the home page.
+```
+@app.route('/')
+def root():
+    return render_template('base.html', title='Home', users=User.query.all())
+```
+It is possible to have two decorators with the same view function. The `/user` route could have a POST or GET method. If it's a POST method we update add the user to the database and update it's timeline. If the user click on an existing user it directs to `/user/<name>` route which renders a page with the user's timeline.
+```
+@app.route('/user', methods=['POST'])
+@app.route('/user/<name>', methods=['GET'])
+def user(name=None, message=''):
+    name = name or request.values['user_name']
+    try:
+        if request.method == 'POST':
+            add_or_update_user(name)
+            message = "User {} successfully added!".format(name)
+        tweets = User.query.filter(User.name == name).one().tweets
+    except Exception as e:
+        message = "Error adding {}: {}".format(name, e)
+        tweets = []
+    return render_template('user.html', title=name, tweets=tweets, message=message)
+```
+There is also another route in the app that fits a logistic regression model based on the suggested tweet and predicts which user might say that.
+```
+@app.route('/compare', methods=['POST'])
+def compare(message=''):
+    count = 0
+    username, filler = [None] * 4, None
+
+    for i in range(4):
+        name = f'user{i+1}'
+
+        try:
+            username[i] = request.values[name]
+            count += 1
+        except Exception as e:
+            pass
+```
+After handling exceptions the route returns:
+```
+user_name = predict_user(username[0], username[1], username[2], username[3], hypotext)
+message = '"{}" is more likely to be said by {}'.format(hypotext, user_name)
+return render_template('prediction.html', title='Prediction', message=message)
+```
+We can also define /reset and /update routes which would reset or update the timeline in the database.
+
+#### Data model for database
+Here we define two data model. One for the User and another for the Tweet. Therefore our database has two tables where instances of the corresponding data models are enteries in the database table. Each datamodel has a primary key and they are joined together through back reference. 
+```
+class User(DB.Model):
+    id = DB.Column(DB.BigInteger, primary_key=True)
+    name = DB.Column(DB.String(15), nullable=False)
+    newest_tweet_id = DB.Column(DB.BigInteger)
+
+class Tweet(DB.Model):
+    id = DB.Column(DB.BigInteger, primary_key=True)
+    text = DB.Column(DB.Unicode(300))
+    embedding = DB.Column(DB.PickleType, nullable=False)
+    user_id = DB.Column(DB.BigInteger, DB.ForeignKey('user.id'), nullable=False)
+    user = DB.relationship('User', backref=DB.backref('tweets', lazy=True))
+```
+The maximum tweet length is 270 characters to cover longer urls we define the text column to be 300 Unicode chatrcaters to be able to capture emojis too.
+
+#### Connect to Twitter API
+tweepy is a python library that acts as a wrapper to access the Twitter API. `twitter.py` module create an authenticated tweepy instance that can retrieve various information through the Twitter API. In this module we also use spacy to get an embedding representation of the tweets and store them in the database for future modeling tasks. 
+
+
+
+#### Machine learning model
+There are generally three different ways to train and serve models into production. It can be a one-off, batch or real-time/online training. A model can be just trained ad-hoc and pushed to production as a pickle object until its performance deteriorates enough that it's called to be refreshed. Batch training allows us to have a constantly refreshed version of your model based on the latest train. For this application change of selected users means changing the input features. Therefore it's more suitable to use real time training. For that reason we selected a small model of spacy the embeds the documents with only 96 dimenstions. That would help to shorten the response time and ease the deployment.
+
 
 
 
