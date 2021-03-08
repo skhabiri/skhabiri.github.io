@@ -164,7 +164,34 @@ The maximum tweet length is 270 characters to cover longer urls we define the te
 
 #### Connect to Twitter API
 tweepy is a python library that acts as a wrapper to access the Twitter API. `twitter.py` module create an authenticated tweepy instance that can retrieve various information through the Twitter API. In this module we also use spacy to get an embedding representation of the tweets and store them in the database for future modeling tasks. 
+```
+from os import getenv
+import spacy
+import tweepy
+from .models import DB, Tweet, User
 
+TWITTER_API_KEY = getenv('TWITTER_API_KEY')
+TWITTER_API_KEY_SECRET = getenv('TWITTER_API_KEY_SECRET')
+TWITTER_AUTH = tweepy.OAuthHandler(TWITTER_API_KEY, TWITTER_API_KEY_SECRET)
+TWITTER = tweepy.API(TWITTER_AUTH)
+
+nlp = spacy.load("en_core_web_sm")
+
+def add_or_update_user(username):
+    twitter_user = TWITTER.get_user(username)
+    db_user = (User.query.get(twitter_user.id) or User(id=twitter_user.id, name=username))
+    DB.session.add(db_user)
+
+    tweets = twitter_user.timeline(count=200, exclude_replies=True, include_rts=False, tweet_mode='extended',                   
+    since_id=db_user.newest_tweet_id)
+    
+    for tweet in tweets:
+        embedding = nlp(tweet.full_text).vector
+        db_tweet = Tweet(id=tweet.id, text=tweet.full_text[:300], embedding=embedding)
+        db_user.tweets.append(db_tweet)
+        DB.session.add(db_tweet)
+        DB.session.commit()
+```
 
 
 #### Machine learning model
