@@ -280,8 +280,23 @@ Here is an example of how the prediction works. It's worth noting that the model
 
 <img src= "../assets/img/post6/post6_prediction.png">
 
+The updated tweets for any user routes to /user/<name>. Here is an example:
+<img src= "../assets/img/post6/post6_tweets.png">
 
-
+### Corner Cases:
+The following corner cases are covered by the app:
+1. From two to four different users are selected
+  > The classification will be performed as normal
+2. No user or only one user is seleted
+  > Returns an output message asking for more users to be selected
+3. More than one user is selected but all identical users
+  > Returns an output message asking for different users
+4. Users are selected properly but not text tweet entered
+  > Returns an output messsage asking for a text tweet to be entered.
+5. Adding a non existing twitter user
+  > Returns a message that the user does not exist
+6. Adding a valid twitter user that already exists in PostgreSQL database
+  > updates its timeline with the latest tweets
 
 
 
