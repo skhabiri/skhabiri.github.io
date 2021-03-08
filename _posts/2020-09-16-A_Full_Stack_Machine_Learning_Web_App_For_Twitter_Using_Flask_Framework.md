@@ -195,7 +195,7 @@ def add_or_update_user(username):
 
 
 #### Machine learning model
-There are generally three different ways to train and serve models into production. It can be a one-off, batch or real-time/online training. A model can be just trained ad-hoc and pushed to production as a pickle object until its performance deteriorates enough that it's called to be refreshed. Batch training allows us to have a constantly refreshed version of your model based on the latest train. For this application change of selected users means changing the input features. Therefore it's more suitable to use real time training. For that reason we selected a small model of spacy the embeds the documents with only 96 dimenstions. That would help to shorten the response time and ease the deployment.
+There are generally three different ways to train and serve models into production. It can be a one-off, batch, real-time/online training. A model can be just trained ad-hoc and pushed to production as a pickle object until its performance deteriorates enough that it's called to be refreshed. Batch training allows us to have a constantly refreshed version of a model based on the latest batch train data . For this application change of selected users means changing the input features. Therefore it's more suitable to use real-time training aka online training. For that reason we select the small version of spacy model for  embedding tweets. It convert a tweet to a numerical vector with 96 dimenstions. The small model helps to shorten the response time and ease the deployment. Alternatively we can use [Basilica](https://www.basilica.ai) for embedding. Basilica has it's own API that we need to connect to get the 760 dimension embedding vector in real-time.
 
 
 
