@@ -274,7 +274,8 @@ Heroku uses the Pipfile to build the app with all the package dependencies and u
 ### Deployed app: 
 HypoTweet is deployed and accessible [here](https://hypotweet.herokuapp.com).
 
-<img src= "../assets/img/post4/post4_routes.png">
+<img src= "../assets/img/post6/post6_homepage.png">
+
 
 
 
