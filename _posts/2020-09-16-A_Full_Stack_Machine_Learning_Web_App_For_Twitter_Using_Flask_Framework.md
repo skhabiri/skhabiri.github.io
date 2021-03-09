@@ -305,7 +305,6 @@ The figure below summeraize the main element of HypoTweet app and the ecosystem 
 ### Tech stack and links
 More details about the technologies and tools that are used in this work can be found below.
 - [HypoTweet](https://hypotweet.herokuapp.com)
-- [Flask](https://flask.palletsprojects.com/)
 - [Heroku](https://devcenter.heroku.com/)
 - [Pipenv](https://pipenv.pypa.io/en/latest/)
 - [Jinja2](https://jinja.palletsprojects.com/)
@@ -315,4 +314,5 @@ More details about the technologies and tools that are used in this work can be 
 - [SciKit-Learn](https://scikit-learn.org/stable/getting_started.html)
 - [spaCy](https://spacy.io/)
 - [PostgreSQL](https://www.postgresql.org/)
+- [Flask](https://flask.palletsprojects.com/)
 
