@@ -75,14 +75,15 @@ There are three ways to interact between python file (back-end) and html file (f
 
 * Using `flask.request.values` to access user entries through the html post method argument “name”. With this method we retrieve informations such as user1, user2, user3, user4, tweet_text, user_name.
 ```
+<div>
 <form action="/compare" method="post">
 <select name="user1">
-
+<div>
 * request.values['user1'],
-
+<div>
 <form action="/user" method="post">
     <input type="text" name="user_name" placeholder="Type a user">
-
+<div>
 * request.values['user_name']
 ```
 
