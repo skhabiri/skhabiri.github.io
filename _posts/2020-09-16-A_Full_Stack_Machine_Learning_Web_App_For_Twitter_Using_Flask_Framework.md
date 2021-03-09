@@ -304,6 +304,7 @@ The figure below summeraize the main element of HypoTweet app and the ecosystem 
 
 ### Tech stack and links
 More details about the technologies and tools that are used in this work can be found below.
+
 - [HypoTweet](https://hypotweet.herokuapp.com)
 - [Heroku](https://devcenter.heroku.com/)
 - [Pipenv](https://pipenv.pypa.io/en/latest/)
