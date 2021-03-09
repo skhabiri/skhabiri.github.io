@@ -108,7 +108,8 @@ return render_template('user.html', title=name, tweets=tweets, message=message)
 return render_template('base.html', title='Home', users=User.query.all())
 ```
 
-* Through jinja2 we add a variable to the route in GET method such as /user/{{ user.name }}. Then in .py we pass the variable to the function under the decorator.
+Through jinja2 we add a variable to the route in GET method such as /user/{{ user.name }}. Then in .py we pass the variable to the function under the decorator.
+
 ```html
 <a href="/user/{{ user.name }}">
 ```
