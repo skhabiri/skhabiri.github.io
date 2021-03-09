@@ -93,11 +93,13 @@ request.values['user_name']`
 * In .py file we use arguments of render_template(), such as tweets, users, title, message to pass a value to jinja2 variables in html
 
 ```
+{% raw %}
 {% for user in users %}
 {% endfor %}
 <h1>{{ title }}</h1>
 {% for tweet in tweets %}
 {% endfor %}
+{% endraw %}
 ```
 
 in .py file
