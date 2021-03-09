@@ -73,7 +73,7 @@ Flask is a micro-framework because it is lightweight and only provides component
 ### Connecting Frontend to Backend in Flask 
 There are three ways to interact between python file (back-end) and html file (front-end).
 
-* Using `flask.request.values` to access user entries through the html post method argument “name”. With this method we retrieve informations such as user1, user2, user3, user4, tweet_text, user_name.
+* Using `flask.request.values` to access user entries through the html post method argument “name”. With this method we retrieve informations such as user1, user2, user3, user4, tweet_text, user_name.777
 ```
 <div>
 <form action="/compare" method="post">
