@@ -283,29 +283,28 @@ def predict_user(user1_name, user2_name, user3_name, user4_name, tweet_text):
     return users[int(log_reg.predict(np.array(tweet_embedding).reshape(1, -1))[0])].name
 ```
 
-### Deploying the app to Heroku
+### Deploying HypoTweet app to Heroku
 Heroku is a multi-language cloud application platform that enables developers to deploy, scale, and manage their applications. So far we have trained the ML model and created the web app using Flask. To deploy the app to Heroku after committing all the changes, login to Heroku, create an app name, and create a heroku remote, and push the code to heroku remote. ALternatively, we may commit the code to Github and by connecting Github to Heroku instead of Heroku CLI we can build the app and deploy it to the cloud. 
 Heroku uses the Pipfile to build the app with all the package dependencies and uses the Procfile to instruct the web server how to run the app. For simple apps, Heroku platform automatically detects the language and creates a default web process type to boot the application server. Other than the code, there are two local elements in our app that we need to move them to Heroku platform. `.env` and local database created by sqlite3. Heroku interface allows to define the envionment variables in `config Vars` and setup an add-on Heroku PostgreSQL database for the app as a replacement for the local setup, `heroku addons:create heroku-postgresql`. The cloud base database is empty and we need to initialize it by reset route before we can access it. 
 
-### Deploying HypoTweet to Heroku 
-HypoTweet is deployed and accessible [here](https://hypotweet.herokuapp.com).
+Deployed HypoTweet is accessible [here](https://hypotweet.herokuapp.com).
 
 <img src= "../assets/img/post6/post6_homepage.png">
 
-#### Corner Cases:
-The following corner cases are covered by the app:
-1. From two to four different users are selected
-  > The classification will be performed as normal
-2. No user or only one user is seleted
-  > Returns an output message asking for more users to be selected
-3. More than one user is selected but all identical users
-  > Returns an output message asking for different users
-4. Users are selected properly but not text tweet entered
-  > Returns an output messsage asking for a text tweet to be entered.
-5. Adding a non existing twitter user
-  > Returns a message that the user does not exist
-6. Adding a valid twitter user that already exists in PostgreSQL database
-  > updates its timeline with the latest tweets
+#### Exception handling and corner cases:
+It's nice to have common cases of errors to be handled gracefully by our application to avoid unexpected results. By catching different exceptions and corner cases we can pass useful information to the user. Here is a list of common errors and the way the app would handle it.
+* Less than four but more than one different users are selected:
+    > The classification will be carried on as normal
+* Only one user or none is seleted:
+    > Returns an output message asking for more users to be selected
+* More than one user is selected but all the selected users are the same:
+    > Returns an output message asking for different users
+* Users are selected properly but no text tweet has been entered:
+    > Returns an output messsage asking for a text tweet to be entered.
+* A user name requested to be added does not exist in Twitter:
+    > Returns a message informing that the user does not exist
+* Requesting to add a valid twitter user that already exists in PostgreSQL database
+    > The app simply updates its timeline with the latest tweets
 
 Here is an example of how the prediction works. It's worth noting that the model accuracy is not high and the this is more for proff of concept rather than production.
 
