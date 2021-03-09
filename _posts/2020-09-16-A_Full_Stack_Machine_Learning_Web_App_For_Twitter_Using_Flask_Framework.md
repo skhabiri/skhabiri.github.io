@@ -1,7 +1,7 @@
 ---
 layout: post
 title: A Full Stack Machine Learning Web App For Twitter Using Flask Framework
-subtitle: HypoTweet
+subtitle:
 gh-repo: skhabiri/HypoTweet
 gh-badge: [star, fork, follow]
 tags: [Machine Learning, Flask, spaCy, NLP, Heroku, PostgreSQL, SQLALchemy, Twitter]
