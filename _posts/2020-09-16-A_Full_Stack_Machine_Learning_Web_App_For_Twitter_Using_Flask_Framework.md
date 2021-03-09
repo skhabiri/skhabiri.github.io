@@ -78,35 +78,34 @@ There are three ways to interact between python file (back-end) and html file (f
 ```html
 <form action="/compare" method="post">
 <select name="user1">
-```
-and in .py file
-```python
-request.values['user1'],
-```
-or
-```html
+
 <form action="/user" method="post">
     <input type="text" name="user_name" placeholder="Type a user">
 ```
+
 and in .py file
+
 ```python
+request.values['user1'],
 request.values['user_name']`
 ```
 
 * In .py file we use arguments of render_template(), such as tweets, users, title, message to pass a value to jinja2 variables in html
 
-```html
+```
 {% for user in users %}
 {% endfor %}
 <h1>{{ title }}</h1>
 {% for tweet in tweets %}
 {% endfor %}
 ```
+
 in .py file
 ```python
 return render_template('user.html', title=name, tweets=tweets, message=message)
 return render_template('base.html', title='Home', users=User.query.all())
 ```
+
 * Through jinja2 we add a variable to the route in GET method such as /user/{{ user.name }}. Then in .py we pass the variable to the function under the decorator.
 ```html
 <a href="/user/{{ user.name }}">
