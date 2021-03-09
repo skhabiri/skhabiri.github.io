@@ -89,9 +89,10 @@ There are three ways to interact between python file (back-end) and html file (f
 * In .py file we use arguments of render_template(), such as tweets, users, title, message to pass a value to jinja2 variables in html
 ```
 {% for user in users %}
+{% endfor %}
 <h1>{{ title }}</h1>
 {% for tweet in tweets %}
-
+{% endfor %}
 * return render_template('user.html', title=name, tweets=tweets, message=message)
 * return render_template('base.html', title='Home', users=User.query.all())
 ```
