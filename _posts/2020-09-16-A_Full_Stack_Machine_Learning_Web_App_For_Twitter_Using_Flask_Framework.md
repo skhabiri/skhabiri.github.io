@@ -5,7 +5,7 @@ subtitle: HypoTweet
 gh-repo: skhabiri/HypoTweet
 gh-badge: [star, fork, follow]
 tags: [Machine Learning, Heroku, Twitter, Flask, spaCy, NLP]
-image: /assets/img/post4/post4_logo.png
+image: /assets/img/post6/post6_blockdiagram.png
 comments: false
 ---
 
@@ -226,7 +226,6 @@ def add_or_update_user(username):
         DB.session.commit()
 ```
 
-
 ### Machine learning model
 There are generally three different ways to train and serve models into production. It can be a one-off, batch, real-time/online training. A model can be just trained ad-hoc and pushed to production as a pickle object until its performance deteriorates enough that it's called to be refreshed. Batch training allows us to have a constantly refreshed version of a model based on the latest batch train data . For this application change of selected users means changing the input features. Therefore it's more suitable to use real-time training aka online training. For that reason we select the small version of spacy model for  embedding tweets. It convert a tweet to a numerical vector with 96 dimenstions. The small model helps to shorten the response time and ease the deployment. Alternatively we can use [Basilica](https://www.basilica.ai) for embedding. Basilica has it's own API that we need to connect to get the 760 dimension embedding vector in real-time.
 The data science model is mostly in predict.py. For real time training we use sklearn.LogisticRegression which is relatively fast and suitable demonstrate proof of concept.
@@ -271,19 +270,12 @@ def predict_user(user1_name, user2_name, user3_name, user4_name, tweet_text):
 Heroku is a multi-language cloud application platform that enables developers to deploy, scale, and manage their applications. So far we have trained the ML model and created the web app using Flask. To deploy the app to Heroku after committing all the changes, login to Heroku, create an app name, and create a heroku remote, and push the code to heroku remote. ALternatively, we may commit the code to Github and by connecting Github to Heroku instead of Heroku CLI we can build the app and deploy it to the cloud. 
 Heroku uses the Pipfile to build the app with all the package dependencies and uses the Procfile to instruct the web server how to run the app. For simple apps, Heroku platform automatically detects the language and creates a default web process type to boot the application server. Other than the code, there are two local elements in our app that we need to move them to Heroku platform. `.env` and local database created by sqlite3. Heroku interface allows to define the envionment variables in `config Vars` and setup an add-on Heroku PostgreSQL database for the app as a replacement for the local setup, `heroku addons:create heroku-postgresql`. The cloud base database is empty and we need to initialize it by reset route before we can access it. 
 
-### Deployed app: 
+### Deploying HypoTweet to Heroku 
 HypoTweet is deployed and accessible [here](https://hypotweet.herokuapp.com).
 
 <img src= "../assets/img/post6/post6_homepage.png">
 
-Here is an example of how the prediction works. It's worth noting that the model accuracy is not high and the this is more for proff of concept rather than production.
-
-<img src= "../assets/img/post6/post6_prediction.png">
-
-The updated tweets for any user routes to /user/<name>. Here is an example:
-<img src= "../assets/img/post6/post6_tweets.png">
-
-### Corner Cases:
+#### Corner Cases:
 The following corner cases are covered by the app:
 1. From two to four different users are selected
   > The classification will be performed as normal
@@ -298,28 +290,29 @@ The following corner cases are covered by the app:
 6. Adding a valid twitter user that already exists in PostgreSQL database
   > updates its timeline with the latest tweets
 
+Here is an example of how the prediction works. It's worth noting that the model accuracy is not high and the this is more for proff of concept rather than production.
+
+<img src= "../assets/img/post6/post6_prediction.png">
+
+The updated tweets for any user routes to /user/<name>. Here is an example:
+<img src= "../assets/img/post6/post6_tweets.png">
+
+#### HypoTweet architecture
+The figure below summeraize the main element of HypoTweet app and the ecosystem surrounding it.
+<img src= "../assets/img/post6/post6_blockdiagram.png">
 
 
-
-
-
-
-
-
-
-
-
-### Tech Stack
+### Tech stack and links
 More details about the technologies and tools that are used in this work can be found below.
-- [deployed App](https://fastapi-spotify.herokuapp.com/)
-- [FastAPI](https://fastapi.tiangolo.com/)
+- [HypoTweet](https://hypotweet.herokuapp.com)
+- [Flask](https://flask.palletsprojects.com/)
 - [Heroku](https://devcenter.heroku.com/)
 - [Pipenv](https://pipenv.pypa.io/en/latest/)
-- [Plotly](https://plotly.com/python/)
-- [Uvicorn](https://www.uvicorn.org/#quickstart)
+- [Jinja2](https://jinja.palletsprojects.com/)
+- [gunicorn](https://docs.gunicorn.org/)
 - [SQLAlchemy](https://www.sqlalchemy.org/)
-- [Spotipy](https://spotipy.readthedocs.io/)
+- [Tweepy](https://docs.tweepy.org/)
 - [SciKit-Learn](https://scikit-learn.org/stable/getting_started.html)
-
-
+- [spaCy](https://spacy.io/)
+- [PostgreSQL](https://www.postgresql.org/)
 
