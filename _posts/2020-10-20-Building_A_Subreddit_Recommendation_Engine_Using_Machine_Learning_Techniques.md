@@ -125,6 +125,13 @@ sns.histplot(
 Ideally we would use the entire dataset for the training. However for practical reasons that would substantially increase the size of the serialized model and complicate the deployment of the model. For this reason we are going to use a smaller subset of the dataset for training. 
 The above graph shows that we have about 1000 posts per subreddit category as expected. However some the posts might have small amount of text that would not be sufficient for our natural language processing. 
 Hence we choose the posts that have enough text content. Later on we are going to choose only the categories (features) that  have enough number of posts (instances) to train on.
+
+<img src= "../assets/img/post7/post7_postlength.png">
+
+The above graph shows the length of posts per subreddit categories.
+
+
+
  
  
  
