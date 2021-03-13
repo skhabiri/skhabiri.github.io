@@ -18,8 +18,60 @@ PRAW can be installed using conda-forge channel:
 ```
 conda install -c conda-forge praw
 ```
+A python file connects to PRAW python API for Reddit and pulls information from 1000 posts in each of the 44 selected subreddit categories. The pulled information includes: `subreddit name`, `subreddit id`, `title`, and `post body`. The pulled information are stored in a local sql database.
+The created database contains 51610 rows and 4 columns. 
+```
+import sqlite3
+conn = sqlite3.connect('subreddit_db.sqlite3')
+c = conn.cursor()
+c.execute('''create table submission_table (
+               subreddit_name text,
+               subreddit_id text,
+               title text,
+               text text
+             )
+             ''')
+```
+Before `praw` can be used to scrape data we need to authenticate ourselves. For this we need to create a Reddit instance and provide it with a client_id , client_secret and a user_agent .
+```
+import praw
+import os
+from dotenv import load_dotenv
+
+# instantiate praw
+load_dotenv()
+reddit = praw.Reddit(client_id=os.getenv('CLIENT_ID'),
+                     client_secret=os.getenv('CLIENT_SECRET'),
+                     user_agent='veggiecode')
+```
+The model recommendation is limited to a selected number of subreddit categories that the model is trained on. Hence we pull data for those specific subreddits.
+```
+import time
+
+sleep_min = 2
+sleep_max = 5
+start_time = time.time()
+
+# sub_list is the list of pre selected categories
+for name in sub_list:
+    subreddit = reddit.subreddit(name)
+    records = []
+    for submission in subreddit.top(limit=1000):
+        records.append([subreddit.display_name, subreddit.id, submission.title, submission.selftext])
+    print(records[0])
+    c.executemany('''insert into submission_table
+                  (subreddit_name, subreddit_id, title, text)
+                  values (?, ?, ?, ?)
+                  ''', records)
+    conn.commit()
+    subreddit_count += 1
+    if subreddit_count % 5 == 0:
+        time.sleep(np.random.uniform(sleep_min, sleep_max))
 
 
+c.close()
+conn.close()
+```
 
 
 
