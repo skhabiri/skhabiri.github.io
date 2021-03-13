@@ -72,7 +72,7 @@ c.close()
 conn.close()
 ```
 ### Data Cleaning:
-For cleaning data first we'll import the stored data into a notebook.
+For cleaning data first import the stored data into a notebook.
 ```
 data = pd.read_sql_query("select * from submission_table order by random() limit 100000;", conn)
 # subreddit_subs: is the number of subscriber in the subreddit category
@@ -82,6 +82,20 @@ print(data.shape)
 Here is a sample of the data:
 
 <table border="1" class="dataframe" style="overflow-x: scroll;display: block; max-height: 300px;"><thead><tr style="text-align: right;"><th></th><th>subreddit_name</th><th>subreddit_id</th><th>title</th><th>text</th></tr></thead><tbody><tr><th>0</th><td>literature</td><td>2qhps</td><td>James Franco's poems: hard to forgive</td><td></td></tr><tr><th>1</th><td>technology</td><td>2qh16</td><td>Predator Drone Spotted in Minneapolis During George Floyd Protests</td><td></td></tr><tr><th>2</th><td>DIY</td><td>2qh7d</td><td>I restored a $5 Kitchen Aid mixer I found at the thrift store</td><td></td></tr><tr><th>3</th><td>news</td><td>2qh3l</td><td>Alabama just passed a near-total abortion ban with no exceptions for rape or incest</td><td></td></tr><tr><th>4</th><td>Parenting</td><td>2qhn3</td><td>I thought my 6 year old was doing one of his math activities on the tablet, but nah</td><td>My 6 year old has a bunch of new apps and activities that his teacher sent us to put on his tablet. He's been occasionally asking me, from the other room, the answers to different math problems, like what's 12+7 or what's 22-8.  I'm like sweet he's doing his math! Nope. He's trying to bypass the parental locks on kids YouTube so he can watch shit that is blocked. He keeps exiting out and going back in which is I assume why he had to ask multiple times.</td></tr></tbody></table>
+
+The database contains 51610 rows and 4 columns. To selected the subreddit posts for training, we choose the posts that have enough text content and then the categories (features) that have enough posts (instances).
+ #   Column          Non-Null Count  Dtype 
+---  ------          --------------  ----- 
+ 0   subreddit_name  51610 non-null  object
+ 1   subreddit_id    51610 non-null  object
+ 2   title           51610 non-null  object
+ 3   text            51610 non-null  object
+ 
+ 
+
+
+
+We select 100 post for each of 44 Subreddit categories and train different models based on the reduced dataset. The reason for using the smaller dataset is to limit the size of serialized model for heroku app deployment. Here is the list of serialized trained models:
 
 
 
