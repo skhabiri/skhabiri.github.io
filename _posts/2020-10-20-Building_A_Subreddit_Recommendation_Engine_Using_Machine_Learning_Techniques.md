@@ -92,7 +92,43 @@ The database contains 51610 rows and 4 columns. To selected the subreddit posts 
  2   title           51610 non-null  object
  3   text            51610 non-null  object
  ```
+Let's check the unique categories in our collected data:
+```
+ subreddit_names = data['subreddit_name'].unique()
+len(subreddit_names), subreddit_names
+ ```
+ Our created dataset consists of 53 categories.
+ ```
+ (53,
+ array(['literature', 'technology', 'DIY', 'news', 'Parenting', 'cars',
+        'WTF', 'MachineLearning', 'socialskills', 'Art', 'biology',
+        'politics', 'personalfinance', 'sports', 'worldpolitics',
+        'Documentaries', 'food', 'LifeProTips', 'movies',
+        'TwoXChromosomes', 'nottheonion', 'mildlyinteresting', 'Health',
+        'AskReddit', 'history', 'Cooking', 'Music', 'Fitness',
+        'GetMotivated', 'Design', 'gaming', 'entertainment', 'television',
+        'books', 'JusticeServed', 'math', 'investing', 'science',
+        'camping', 'Coronavirus', 'PublicFreakout', 'travel', 'funny',
+        'HomeImprovement', 'scifi', 'worldnews', 'AdviceAnimals',
+        'programming', 'gadgets', 'conspiracy', 'space', 'Showerthoughts',
+        'announcements'], dtype=object))
+ ```
+ Let's look at number of posts per subreddit category.
+ ```
+sns.histplot(
+    x=data['subreddit_name'].astype('category').cat.codes, 
+    bins=data['subreddit_id'].nunique(),
+    kde=True)
+ ```
+ <img src= "../assets/img/post6/post6_homepage.png">
+
+It shows we have about 1000 posts per subreddit category as expected.
  
+ 
+ 
+ 
+
+
 
 
 
