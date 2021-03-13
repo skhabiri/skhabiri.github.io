@@ -128,7 +128,7 @@ Hence we choose the posts that have enough text content. Later on we are going t
 
 To get an idea of the posts lengths, let's plot the average length of posts per subreddit category.
 ```
-post_mean = data=data1.groupby(by='subreddit_name').apply(lambda x: x['text_length'].mean())
+post_mean = data1.groupby(by='subreddit_name').apply(lambda x: x['text_length'].mean())
 plt.figure(figsize=(8,4))
 ax = sns.barplot(x=post_mean.index, y=post_mean.values)
 ax.set(xlabel='Subreddit Category', ylabel='Average length of posts')
@@ -138,6 +138,7 @@ plt.show()
 <img src= "../assets/img/post7/post7_postlength_avg.png">
 
 The above graph shows the average length of posts is not the same in different subreddit categories.
+After filtering the low count subreddit categories we end up with 44 categories and 4400 posts. We take a note that in a production setup we need more training data to achieve a reliable nlp model.
 
 
 
