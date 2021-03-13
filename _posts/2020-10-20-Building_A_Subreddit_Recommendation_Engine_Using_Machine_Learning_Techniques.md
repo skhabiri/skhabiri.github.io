@@ -126,9 +126,18 @@ Ideally we would use the entire dataset for the training. However for practical 
 The above graph shows that we have about 1000 posts per subreddit category as expected. However some the posts might have small amount of text that would not be sufficient for our natural language processing. 
 Hence we choose the posts that have enough text content. Later on we are going to choose only the categories (features) that  have enough number of posts (instances) to train on.
 
-<img src= "../assets/img/post7/post7_postlength.png">
+To get an idea of the posts lengths, let's plot the average length of posts per subreddit category.
+```
+post_mean = data=data1.groupby(by='subreddit_name').apply(lambda x: x['text_length'].mean())
+plt.figure(figsize=(8,4))
+ax = sns.barplot(x=post_mean.index, y=post_mean.values)
+ax.set(xlabel='Subreddit Category', ylabel='Average length of posts')
+ax.set(xticklabels=[])
+plt.show()
+```
+<img src= "../assets/img/post7/post7_postlength_avg.png">
 
-The above graph shows the length of posts per subreddit categories.
+The above graph shows the average length of posts is not the same in different subreddit categories.
 
 
 
