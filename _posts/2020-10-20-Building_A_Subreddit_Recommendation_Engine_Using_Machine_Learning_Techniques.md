@@ -333,33 +333,11 @@ dtype: object
 ```
 Results matches the previous prediction as expected.
 
-
-
- 
- 
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+### Conclusion
+In this work we built a machine learning model using NLP techniques and optimize that we scikit-learn RandomSearchCV() to predict a subreddit category for a given post. We used a python wrapper for Reddit API, PRAW, to create a database of subreddit posts from the categories of interest. Afte cleaning the data, we fit and tuned three different models and compared their performances. Other than the accuracy score we ran an article a sample input and used one of the models to get similar articles from the training set. We also used the sample input article to predict top subreddit categories that are related to the article. The serialized model can be deployed to a datascience API in order to build a full stack application.
 
 ### links
 - [Github repo](https://github.com/skhabiri/SubReddit-Recommender)
 - [PRAW](https://praw.readthedocs.io)
 - [SciKit-Learn](https://scikit-learn.org/stable/getting_started.html)
 - [spaCy](https://spacy.io/)
-
-
