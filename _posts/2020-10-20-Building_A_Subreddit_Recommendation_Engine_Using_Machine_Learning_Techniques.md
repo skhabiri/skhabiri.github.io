@@ -138,11 +138,48 @@ plt.show()
 <img src= "../assets/img/post7/post7_postlength_avg.png">
 
 The above graph shows the average length of posts is not the same in different subreddit categories.
-After filtering the low count subreddit categories we end up with 44 categories and 4400 posts. We take a note that in a production setup we need more training data to achieve a reliable nlp model.
+After filtering the low count subreddit categories we end up with 44 categories and 4400 posts. We take a note that in a production setup we need more training data to achieve a reliable results.
+
+### Machine Learning Model
+The model is supposed to recieve a text as a post content and classify it to one of the 44 subreddit categories. We consider a random classifier as baseline with an accuracy of 1/44, which is very low. To build our model we use a two stage pipeline. The first stage encodes the text into a numerical format and the the seconf stage classifies the text into one of the target labels.
+
+#### spaCy Embedding
+For the first stage of the pipeline we are going to use [spaCy](https://spacy.io) embedding. spaCy is an open-source software library for natural language processing. spaCy performs two major tasks for us, tokenizing and vectorizing. The `tokenizer` is a component that segments texts into tokens. In spaCy, it's rule-based and not trainable. It looks at whitespace and punctuation to determine which are the unique tokens in a sentence. The `tok2vec` layer is a machine learning component that learns how to produce context-based vectors for tokens. It does this by looking at lexical attributes of the token. The tok2vec component is already pretrained from external vectors data. The external vectors data already embeds some "meaning" or "similarity" of the tokens. 
+```
+import spacy
+from spacy.tokenizer import Tokenizer
+from spacy.lang.en.stop_words import STOP_WORDS
+#Create the nlp object
+nlp = spacy.load("en_core_web_md")
+```
+the `en_core_web_md` model has 685k keys, 20k unique vectors of 300 dimensions. We can define a function to embed the text and use it in a Scikit-learn `FunctionTransformer` as the first stage of the pipeline.
+```
+# Spacy embedding
+def get_word_vectors(docs):
+    """
+    docs: can be string or a list of strings
+    """
+    if isinstance(docs, str):
+      docs = [docs]
+    return np.array([nlp(str(doc)).vector for doc in docs])
+
+# Instantiate functiontransformer of the spacy vectorizer
+embed = FunctionTransformer(get_word_vectors)
+```
+The pipeline is defined as:
+```
+pipe = Pipeline([
+                 ('emb', embed), 
+                 ('clf', clfi)])
+```
+clfi is an instance of a classifier. For this work we try different classifers from Scikit-learn library, namely, KNeighborsClassifier(), GradientBoostingClassifier, and XGBClassifier from xgboost library.
+
+#### Hyperparameter Tuning
+We are going to benefit from hyperparameter tuning to optimize our model. For this purpose we use `RandomizedSearchCV()`. This would also perform the cross validation that is helpful considering the fact that our training data is rather small. Nevertheless we split the data into train and test to keep some data away to evaluate the model overfit.
+After model fit, KNeighborsClassifier, GradientBoostingClassifier, and XGBClassifier produce the test accuracy of 0.34, 0.51, and 0.53, respectively.
 
 
 
- 
  
  
  
