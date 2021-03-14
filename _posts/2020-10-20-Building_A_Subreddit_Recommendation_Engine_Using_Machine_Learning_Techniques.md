@@ -176,7 +176,32 @@ clfi is an instance of a classifier. For this work we try different classifers f
 
 #### Hyperparameter Tuning
 We are going to benefit from hyperparameter tuning to optimize our model. For this purpose we use `RandomizedSearchCV()`. This would also perform the cross validation that is helpful considering the fact that our training data is rather small. Nevertheless we split the data into train and test to keep some data away to evaluate the model overfit.
-After model fit, KNeighborsClassifier, GradientBoostingClassifier, and XGBClassifier produce the test accuracy of 0.34, 0.51, and 0.53, respectively.
+```
+est = {}
+for key, value in est_dict.items():
+  clfi = value[0]
+  # print(clfi, type(clfi))
+  param_dist = value[1]
+  
+  # spacy embedding can be taken out of the pipeline to save time in hyperparameter tunning
+  pipe = Pipeline([
+                   ('emb', embed), 
+                   ('clf', clfi)])
+  
+  est["{0}_est".format(key)] = RandomizedSearchCV(pipe, 
+                                                  param_distributions=param_dist, 
+                                                  n_iter=4, cv=2, verbose=1)
+  
+  print('\n', 5*'*',' fitting',key, ' estimator..... ',5*'*')
+  est["{0}_est".format(key)].fit(X_train.values, y_train.values)
+  print("best params: ",est["{0}_est".format(key)].best_params_)
+  print("best score: ",est["{0}_est".format(key)].best_score_)
+  print("Test score: ",est["{0}_est".format(key)].score(X_test.values, y_test.values))
+```
+After model fit, KNeighborsClassifier, GradientBoostingClassifier, and XGBClassifier produce the test accuracy of 0.34, 0.51, and 0.53, respectively. Compared to our 0.02 baseline accuracy this is a huge leap forward.
+It is noteworthy that here in the hyperparameter tuning for every parameter set we are repeating the embedding process. Changing the hyperparameters should not affect the embedding. This is obviousely adds to the training time and to speed up the training we could have embed the training set beforehand. On the other side for our small training dataset this is not a showstopper and it is only done once. Additionally it stream lines the later use of the trained model as we could simply feed the string text and the trained model would embed it internally. Otherwise we would have needed to preprocess any query and embed it before feeding it to the trained model. Despite having the embedding stage as a part of the trained model we can still access the specific internal methods of the classifierFor example let's take the pipeline model of KNeighborsClassifier classifier. Let's say we want to  
+
+
 
 
 
