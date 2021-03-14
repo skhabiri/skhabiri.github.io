@@ -300,7 +300,38 @@ Similarly we would get the same results if we call the prediction function on pi
 ```
 prediction(est_best['knc'], query, 10)
 ```
+### Model Serialization
+There are a few ways to put trained machine learning (ML) models into production. The most common method is to serialize the model using some particular format after training, and deserialize that model in the production environment. One way of serializing an object is to write Python objects to a bytestream. This can be done with pickle a built-in python module. One can take this file and load it back into a separate Python interpreter at a later date, recovering the objects from the previous session. It's important to note that pickled files are tightly coupled with the environment in which they were created.
+```
+import pickle
+est_pickle = {}
+loaded_pickle ={}
 
+for key in est_dict:
+    print("key:", key)
+    with open(f'{key}_pkl', 'wb') as est_pickle[key]:
+        pickle.dump(est_best[key], est_pickle[key])
+
+    loaded_pickle[key] = pickle.load(open(f'{key}_pkl', 'rb'))
+```
+Now we can try the same sample input and check if we get the same results with pickled model.
+```
+prediction(loaded_pickle['knc'], query, 10)
+```
+```
+13          Parenting
+16    TwoXChromosomes
+19              books
+36       socialskills
+28               math
+25            history
+11    MachineLearning
+43      worldpolitics
+42          worldnews
+41             travel
+dtype: object
+```
+Results matches the previous prediction as expected.
 
 
 
@@ -325,18 +356,10 @@ prediction(est_best['knc'], query, 10)
 
 
 
-### Tech stack and links
-More details about the technologies and tools that are used in this work can be found below.
-
-- [HypoTweet](https://hypotweet.herokuapp.com)
-- [Heroku](https://devcenter.heroku.com/)
-- [Pipenv](https://pipenv.pypa.io/en/latest/)
-- [Jinja2](https://jinja.palletsprojects.com/)
-- [gunicorn](https://docs.gunicorn.org/)
-- [SQLAlchemy](https://www.sqlalchemy.org/)
-- [Tweepy](https://docs.tweepy.org/)
+### links
+- [Github repo](https://github.com/skhabiri/SubReddit-Recommender)
+- [PRAW](https://praw.readthedocs.io)
 - [SciKit-Learn](https://scikit-learn.org/stable/getting_started.html)
 - [spaCy](https://spacy.io/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [Flask](https://flask.palletsprojects.com/)
+
 
