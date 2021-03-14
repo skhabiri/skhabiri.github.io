@@ -296,10 +296,23 @@ The predicted subreddit categories are:
 42          worldnews
 41             travel
 ```
-Similarly we would get the same results if we call the prediction function on pipeline estimator and pass string query instead of embedding.
+We get the same results if we call the prediction function on pipeline estimator and pass string query instead of embedding.
 ```
 prediction(est_best['knc'], query, 10)
 ```
+```
+13          Parenting
+28               math
+25            history
+36       socialskills
+19              books
+16    TwoXChromosomes
+10        LifeProTips
+43      worldpolitics
+42          worldnews
+41             travel
+```
+Next we'll show how to serialize the model for deployment.
 ### Model Serialization
 There are a few ways to put trained machine learning (ML) models into production. The most common method is to serialize the model using some particular format after training, and deserialize that model in the production environment. One way of serializing an object is to write Python objects to a bytestream. This can be done with pickle a built-in python module. One can take this file and load it back into a separate Python interpreter at a later date, recovering the objects from the previous session. It's important to note that pickled files are tightly coupled with the environment in which they were created.
 ```
