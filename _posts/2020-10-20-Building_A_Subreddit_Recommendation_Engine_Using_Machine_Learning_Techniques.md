@@ -172,7 +172,7 @@ pipe = Pipeline([
                  ('emb', embed), 
                  ('clf', clfi)])
 ```
-clfi is an instance of a classifier. For this work we try different classifers from Scikit-learn library, namely, KNeighborsClassifier(), GradientBoostingClassifier, and XGBClassifier from xgboost library.
+clfi is an instance of a classifier. For this work we try different classifers from `Scikit-learn` library, namely, `KNeighborsClassifier()`, `GradientBoostingClassifier()`, and `XGBClassifier()` from `xgboost` library.
 
 #### Hyperparameter Tuning
 We are going to benefit from hyperparameter tuning to optimize our model. For this purpose we use `RandomizedSearchCV()`. This would also perform the cross validation that is helpful considering the fact that our training data is rather small. Nevertheless we split the data into train and test to keep some data away to evaluate the model overfit.
@@ -198,8 +198,56 @@ for key, value in est_dict.items():
   print("best score: ",est["{0}_est".format(key)].best_score_)
   print("Test score: ",est["{0}_est".format(key)].score(X_test.values, y_test.values))
 ```
-After model fit, KNeighborsClassifier, GradientBoostingClassifier, and XGBClassifier produce the test accuracy of 0.34, 0.51, and 0.53, respectively. Compared to our 0.02 baseline accuracy this is a huge leap forward.
-It is noteworthy that here in the hyperparameter tuning for every parameter set we are repeating the embedding process. Changing the hyperparameters should not affect the embedding. This is obviousely adds to the training time and to speed up the training we could have embed the training set beforehand. On the other side for our small training dataset this is not a showstopper and it is only done once. Additionally it stream lines the later use of the trained model as we could simply feed the string text and the trained model would embed it internally. Otherwise we would have needed to preprocess any query and embed it before feeding it to the trained model. Despite having the embedding stage as a part of the trained model we can still access the specific internal methods of the classifierFor example let's take the pipeline model of KNeighborsClassifier classifier. Let's say we want to  
+After model fit, `KNeighborsClassifier`, `GradientBoostingClassifier`, and `XGBClassifier` produce the test accuracy of 0.34, 0.51, and 0.53, respectively. Compared to our 0.02 baseline accuracy this is a huge leap forward.
+It is noteworthy that here in the hyperparameter tuning for every parameter set we are repeating the embedding process. Changing the hyperparameters should not affect the embedding. This is obviousely adds to the training time and to speed up the training we could have embed the training set beforehand. On the other side for our small training dataset this is not a showstopper and it is only done once. Additionally it streamlines the later use of the trained model as we could simply feed the string text and let the trained model embed it internally. Otherwise we would have needed to preprocess any query and embed it separately before feeding it to the trained model. 
+
+
+Despite having the embedding stage as a part of the trained model we can still access the specific internal methods of the classifier. For example let's take the pipeline model that includes `KNeighborsClassifier`. Let's say we want to give a random text and find the neighboring samples from the training set. First we define a function to preprocess the input text, which simply means embeding the text here.
+```
+# Convert input string to embedded vector
+def preprocess(query, vectorize):
+  """
+  Vectorizes the 'query' string by spacy pretrained model (nlp). 
+  the return value serves as a query to the prediction model
+  """
+  return vectorize(query).reshape(1,-1)
+```
+A `neighbors` function would recieve an embeded input and calls the `kneighbors()` method of the `KNeighborsClassifier()` to calculate the neighboring samples from the train set.
+```
+# Accessing the neighbors() method of the KNClassifier of the trained pipeline estimator 
+def neighbors(clf, input, X_train, y_train):
+  """
+  input: a string type text or vectorized array or an iterable data type
+  return: Dataframe of nearest neighbors and their subreddit categories
+  """
+  results = clf.kneighbors(input)
+  neighbors_idx, neighbors_dist = results[1][0], results[0][0]
+  neighbors_df = pd.concat([X_train.iloc[neighbors_idx], y_train.iloc[neighbors_idx]], axis=1)
+  return neighbors_df
+```
+Now for a given text:
+```
+query = """Does this seem too advanced for first month of kindergarten?
+Usually my husband is sitting with my son (working from home, but present) 
+during my son's Zoom class but yesterday I did. I was really surprised by 
+what the teacher was asking of the kids. My son's teacher wanted the students 
+to write stories live during the zoom meeting. She expected them to write full 
+sentences with words like "suddenly." She told them if they can't spell the 
+words to "sound it out." She kept reminding them to use connecting words to 
+transition between topics. The example story she wrote was about 5-6 sentences. 
+It was about going to the playground and waiting for her turn on the swings. 
+I was pretty surprised because the kids are still learning the alphabet. 
+how would they be able to write sentences for before learning letters? Before we 
+started school, the principal specifically told families at an info night, 
+"Don't worry if your kid doesn't know the alphabet, we'll reach them!" 
+So I don't think the teacher has expectations that the kids could already write."""
+```
+We preprocess the input text and call the neighbors function to get the minimum distance samples from teh train set.
+```
+vect = preprocess(query, get_word_vectors)
+kneighbors = neighbors(est_best['knc']['clf'], vect, X_train, y_train)
+kneighbors
+```
 
 
 
