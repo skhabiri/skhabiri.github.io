@@ -5,7 +5,7 @@ subtitle: Subreddit Recommender For Posts
 gh-repo: skhabiri/SubReddit-Recommender
 gh-badge: [star, fork, follow]
 tags: [Machine Learning, TF-IDF Vectorizer, spaCy, NLP, Reddit, PRAW API]
-image: /assets/img/post6/post6_blockdiagram.png
+image: /assets/img/post7/post7_reddit.jpg
 comments: false
 ---
 
