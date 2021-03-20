@@ -2,7 +2,7 @@
 layout: post
 title: Classification of Imbalanced Dataset provided by Bridges to Prosperity (B2P) and FastAPI Framework deployment to AWS Elastic Beanstalk
 subtitle: Bridges to Prosperity (B2P)
-gh-repo: https://github.com/Lambda-School-Labs/bridges-to-prosperity-ds-d
+gh-repo: skhabiri/Bridges2Prosperity-ML-FastAPI
 gh-badge: [star, fork, follow]
 tags: [Predictive Modeling, Data Imbalance, FastAPI, AWS EB, Postgress, Semi-Supervised Learning, SMOTE]
 image: /assets/img/post3/post3_semisupervised_learning.png
