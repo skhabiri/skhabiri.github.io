@@ -13,10 +13,10 @@ author: Shahnam Khabiri
 
 navbar-links:
   About Me: "aboutme"
-#   Resources:
-#     - Beautiful Jekyll: "https://beautifuljekyll.com"
-#     - Learn markdown: "https://www.markdowntutorial.com/"
-#   Author's home: "https://deanattali.com"
+  Resources:
+     - Bridges to Prosperity API: "https://b2p.skhabiri.com"
+     - Learn markdown: "https://www.markdowntutorial.com/"
+  Author's home: "https://skhabiri.com"
 
 # --- Logo --- #
 
@@ -32,19 +32,19 @@ round-avatar: true
 #title-img: /path/to/image
 
 
-# --- Footer options --- #
+# --- Footer social media links --- #
 
 # Select the social network links that you want to show in the footer.
 # Uncomment the links you want to show and add your information to each one.
 # If you don't want to show a link to an RSS feed, set rss to "false".
 social-network-links:
-  email: "shahnam.khabiri@gmail.com"
-#   facebook: deanattali
+  email: "veggiecode@gmail.com"
   github: skhabiri
-  twitter: shahnam_k
-  rss: false
+  twitter: shahnamkhabiri
+  linkedin: skhabiri
+#  rss: false
+#  facebook: deanattali
 #  reddit: yourname
-#  linkedin: "https://www.linkedin.com/in/shahnamkhabiri"
 #  xing: yourname
 #  stackoverflow: "3943160/daattali"
 #  snapchat: deanat78
@@ -59,6 +59,10 @@ social-network-links:
 #  calendly: yourname
 #  mastodon: instance.url/@username
 
+# If you want to show a link to an RSS in the footer, add the site description here.
+# If you don't want to show an RSS link, remove the following line.
+#rss-description: This website is a virtual proof that I'm awesome
+
 # --- General options --- #
 
 # Select which social network share links to show in posts
@@ -70,7 +74,7 @@ share-links-active:
 
 # How to display the link to your website in the footer
 # Remove this if you don't want a link in the footer
-url-pretty: "skhabiri.github.io"
+url-pretty: "skhabiri.com"
 
 # Create a "tags" index page and make tags on each post clickable
 link-tags: true
