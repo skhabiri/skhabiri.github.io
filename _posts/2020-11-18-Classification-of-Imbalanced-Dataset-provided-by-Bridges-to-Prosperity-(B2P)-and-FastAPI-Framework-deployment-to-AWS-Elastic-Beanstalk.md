@@ -343,8 +343,8 @@ The portability aspect in containers enables easy and quick deployment to multip
 
 After updating requirements.txt we need to update the docker image by `docker-compose build`. We can run the FastAPI app with `docker-compose up`.
 
-To recreate this work, clone the [repository](https://github.com/skhabiri/bridges-to-prosperity-b2p) into your local machine.
-`$ git clone https://github.com/skhabiri/bridges-to-prosperity-b2p.git`
+To recreate this work, clone the [repository](https://github.com/skhabiri/Bridges2Prosperity-ML-FastAPI) into your local machine.
+`$ git clone https://github.com/skhabiri/Bridges2Prosperity-ML-FastAPI.git`
 
 Use this [Docker Compose](https://docs.docker.com/compose/) command, `docker-compose build` to build your Docker web service image. You may get the docker image id by `docker-compose images`. Please note the you don't need to rebuild the docker image anytime you update the code. You'd only need to rebuild if you update your requirements.txt or Dockerfile.
 
