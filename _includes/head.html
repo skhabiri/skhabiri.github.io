@@ -77,9 +77,11 @@
   {% if page.share-img %}
   <meta property="og:image" content="{{ page.share-img }}">
   {% elsif site.avatar %}
-  #<meta property="og:image" content="{{ site.avatar | absolute_url }}">
+  <!--
+  <meta property="og:image" content="{{ site.avatar | absolute_url }}">
   #added by me
-  <meta name="image" property="og:image" content="/assets/img/Python-Libraries.png" >
+  -->
+  <meta name="image" property="og:image" content="https://github.com/skhabiri/skhabiri.github.io/raw/master/assets/img/Python-Libraries.png" >
   {% endif %}
 
 
