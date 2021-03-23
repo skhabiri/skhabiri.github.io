@@ -1,13 +1,16 @@
-# --- Basic options --- #
+# Welcome to Beautiful Jekyll!
+# This config file is meant for settings that affect your entire website. When you first
+# set up your website you should go through all these settings and edit them, but after
+# the initial set up you won't need to come back to this file often.
+
+# --- Required options --- #
 
 # Name of website
-title: Shahnam Khabiri
-
-# Short description of your site
-description: Data Science Projects
+title: Data Science Projects
 
 # Your name to show in the footer
 author: Shahnam Khabiri
+
 
 # --- List of links in the navigation bar --- #
 
@@ -84,6 +87,12 @@ link-tags: true
 
 # Excerpt Word Length - Truncates the excerpt to the specified number of words on the index page
 excerpt_length: 100
+
+# Whether or not to show an excerpt for every blog post in the feed page
+feed_show_excerpt: true
+
+# Whether or not to show a list of tags below each post preview in the feed page
+#feed_show_tags: true
 
 # --- Colours / background image --- #
 
