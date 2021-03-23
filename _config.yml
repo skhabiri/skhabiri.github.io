@@ -26,7 +26,6 @@ navbar-links:
 
 # --- Logo --- #
 
-<meta name="image" property="og:image" content="https://github.com/skhabiri/skhabiri.github.io/raw/master/assets/img/Python-Libraries.png" />
 # Image to show in the navigation bar - works best with a square image
 # Remove this parameter if you don't want an image in the navbar
 #avatar: "/assets/img/profile.jpg"
