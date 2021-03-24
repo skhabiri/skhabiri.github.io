@@ -9,7 +9,7 @@ image: /assets/img/post7/post7_reddit.jpg
 comments: false
 ---
 
-We are going to use TensorFlow Keras & a sample of the [Quickdraw dataset](https://github.com/googlecreativelab/quickdraw-dataset) to build a sketch classification model. The dataset has been sampled to only 10 classes and 10000 observations per class. We will build a baseline classification model then run a few experiments with different optimizers and learning rates.
+We are going to use TensorFlow Keras and a sample of the [Quickdraw dataset](https://github.com/googlecreativelab/quickdraw-dataset) to build a sketch classification model. The dataset has been sampled to only 10 classes and 10000 observations per class. We will build a baseline classification model then run a few experiments with different optimizers and learning rates.
 
 ### Load dataset
 Our data is in Numpy's compressed array (npz) format. We need to load it from a url address. First, we need to import the following modules.
