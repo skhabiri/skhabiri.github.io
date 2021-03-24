@@ -1,4 +1,3 @@
-
 ---
 layout: post
 title: Sketch Classification With Neural Networks
