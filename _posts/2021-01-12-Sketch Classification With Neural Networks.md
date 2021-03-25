@@ -75,7 +75,7 @@ def create_model(optim, lr=0.01):
 ```
 We have 784 inputs, two dense layers each with 32 neurons, and 10 output classes. Including the bias node at each layer, total number of weights are `784+1 * 32+1 * 32+1 * 10`. Since this is a multilable classification with integer classes, we use sparse_categorical_crossentropy.
 
-Below is a function to sweep values of a hyperparameter and fit the model. This would allow us to examine the sensitivity of the model to a particular hyperparameter.
+Let's sweep different hyperparameters and review its effect on the model accuracy. Below is a function to sweep values of a hyperparameter and fit the model. This would allow us to examine the sensitivity of the model to a particular hyperparameter.
 ```
 def fit_param(param_lst, key, **kwargs):
     """
@@ -134,6 +134,16 @@ for key, val in params_dic.items():
     # create model
     params_dic[key][1] = fit_param(params_dic[key][0], key, **kwargs)
 ```
+Now we can plot the validation accuracy for each hyper paramter and review its effect on the trained model.
+
+<p float="left">
+  <img src="../assets/img/post8/post8_optimizer.png" width="100" />
+  <img src="../assets/img/post8/post8_batchsize.png" width="100" /> 
+  <img src="../assets/img/post8/post8_lr.png" width="100" />
+</p>
+
+Among different choices for `optimizer` engine, SGD and Adam seems to be more efficient for this dataset. The choices of `batch size` does not seem to be critical to the accuracy of the model. As for `learning rate`, a large number like 1 fails to converge, while a very small number such as 0.0001 needs more epochs to train. 0.01 to 0.5 yield reasonable results.
+
 
 
 
