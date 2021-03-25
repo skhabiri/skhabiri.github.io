@@ -73,7 +73,67 @@ def create_model(optim, lr=0.01):
     model.compile(optimizer=opt, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     return model
 ```
-Here we have 784 inputs, two dense layers each with 32 neurons, and 10 output classes. Including the bias node at each layer, total number of weights are `784+1 * 32+1 * 32+1 * 10`. We use sparse_categorical_crossentropy as it is for multilable classification with integer classes.
+We have 784 inputs, two dense layers each with 32 neurons, and 10 output classes. Including the bias node at each layer, total number of weights are `784+1 * 32+1 * 32+1 * 10`. Since this is a multilable classification with integer classes, we use sparse_categorical_crossentropy.
+
+Below is a function to sweep values of a hyperparameter and fit the model. This would allow us to examine the sensitivity of the model to a particular hyperparameter.
+```
+def fit_param(param_lst, key, **kwargs):
+    """
+    This function fits a ANN created by create_model() while sweeping a parameter
+    param_list: list of values for the parameter
+    key: string key for the parameter. Values: "lr", "batch_size", "epochs", "optimizer"
+    return: a dictionary with 
+    {f"{par}_": [fitted model, fitted result],
+    "key": key, "param_lst": param_lst}
+    model_dict[f"{par}_"][0] is the model
+    model_dict[f"{par}_"][1] is the fit result
+    kwargs: all the keyword arguments that have been used in the function  
+    """
+
+    # initialize **kwargs:
+    if not kwargs:
+        kwargs = {"lr": 0.1, "batch": 128, "epoch": 5, "optimizer": Adam}
+    
+    model_dict={}
+    model_dict["key"] = key
+    model_dict["param_lst"] = param_lst
+    for par in param_lst:
+        kwargs[key] = par
+        print(f"********* Fitting for {key}={kwargs[key]} *********")
+        print(f""" Fitting for lr, batch, epoch, optimizer=
+        {kwargs["lr"]}, {kwargs["batch"]}, {kwargs["epoch"]}, {kwargs["optimizer"]}""")
+        # Initialize the dictionary
+        model_dict.setdefault(f"{par}_", [None, None])
+        model_dict[f"{par}_"][0] = create_model(kwargs["optimizer"], kwargs["lr"])
+        model_dict[f"{par}_"][1] = model_dict[f"{par}_"][0].fit(
+            X_train, y_train,
+            # Hyperparameters!
+            epochs=kwargs["epoch"], 
+            batch_size=kwargs["batch"], 
+            validation_data=(X_test, y_test))
+    
+    return model_dict
+```
+This function returns the trained model as well as the fitted results for each value of the swept parameter. Let's now fit the model for different values of each hyperparameter:
+```
+batch_lst = [8, 32, 512, 4096]
+lr_lst = [0.0001, 0.01, 0.5, 1]
+opt_lst = [Adadelta, Adam, SGD]
+
+params_dic = { 
+    "optimizer": [opt_lst, None, None, {"lr":0.01, "batch":32, "epoch":25, "optimizer":SGD}],
+    "batch_size": [batch_lst, None, None, {"lr":0.01, "batch":32, "epoch":25, "optimizer":SGD}],
+              "lr": [lr_lst, None, None, {"lr":0.01, "batch":32, "epoch":25, "optimizer":SGD}],
+             }
+df_lst = []
+
+for key, val in params_dic.items():
+    
+    kwargs = params_dic[key][3]
+
+    # create model
+    params_dic[key][1] = fit_param(params_dic[key][0], key, **kwargs)
+```
 
 
 
