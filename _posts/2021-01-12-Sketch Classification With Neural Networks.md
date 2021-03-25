@@ -49,7 +49,7 @@ X_train.max()
 ```
 1.0
 ### Build the model
-We write a function to returns a compiled TensorFlow Keras Sequential Model suitable for classifying the QuickDraw-10 dataset. We leave `learning rate` and  `optimizer` as hyper paramters for later tuning.
+We write a function to returns a compiled TensorFlow Keras Sequential Model suitable for classifying the QuickDraw-10 dataset. We leave `learning rate` and  `optimizer` as hyperparamters to tune later.
 ```
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense
@@ -57,8 +57,7 @@ from tensorflow.keras.optimizers import *
 
 def create_model(optim, lr=0.01):
     """
-    784+1 * 32+1 * 32+1 * 10
-    optim: name of the optimizer. values: [Adadelta, Adagrad, Adam, Ftrl, SGD]
+    optim: class of the optimizer. values: [Adadelta, Adagrad, Adam, Ftrl, SGD]
     """
     opt = optim(learning_rate=lr)
     model = Sequential(
@@ -71,11 +70,10 @@ def create_model(optim, lr=0.01):
         Dense(10, activation='softmax')       
         ]
     )
-    # sparse_categorical_crossentropy is for multilable classification with integer classes
     model.compile(optimizer=opt, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     return model
 ```
-
+Here we have 784 inputs, two dense layers each with 32 neurons, and 10 output classes. Including the bias node at each layer, total number of weights are `784+1 * 32+1 * 32+1 * 10`. We use sparse_categorical_crossentropy as it is for multilable classification with integer classes.
 
 
 
