@@ -5,7 +5,7 @@ subtitle: Classification of QuickDraw Dataset
 gh-repo: skhabiri/ML-ANN/tree/main/module2-Train
 gh-badge: [star, fork, follow]
 tags: [Machine Learning, Neural Network, QuickDraw, Classification, TensorFlow, Keras]
-image: /assets/img/post7/post7_reddit.jpg
+image: /assets/img/post8/post8_QuickDraw.png
 comments: false
 ---
 
