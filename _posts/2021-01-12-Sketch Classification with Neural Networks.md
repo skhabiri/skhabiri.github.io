@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Sketch Classification With Neural Networks
+title: Sketch Classification with Neural Networks
 subtitle: Classification of QuickDraw Dataset
 gh-repo: skhabiri/ML-ANN/tree/main/module2-Train
 gh-badge: [star, fork, follow]
