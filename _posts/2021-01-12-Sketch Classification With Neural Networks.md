@@ -48,8 +48,9 @@ X_test = X_test / xmax
 X_train.max()
 ```
 1.0
-The selected classes are:
-class_names = ['apple', 'anvil', 'airplane', 'banana', 'The Eiffel Tower', 'The Mona Lisa', 'The Great Wall of China', 'alarm clock', 'ant', 'asparagus']
+
+* The selected classes are:
+`class_names = ['apple', 'anvil', 'airplane', 'banana', 'The Eiffel Tower', 'The Mona Lisa', 'The Great Wall of China', 'alarm clock', 'ant', 'asparagus']`
 
 ### Build the model
 We write a function to returns a compiled TensorFlow Keras Sequential Model suitable for classifying the QuickDraw-10 dataset. We leave `learning rate` and  `optimizer` as hyperparamters to tune later.
@@ -140,9 +141,9 @@ for key, val in params_dic.items():
 Now we can plot the validation accuracy for each hyper paramter and review its effect on the trained model.
 
 <p float="left">
-  <img src="../assets/img/post8/post8_optimizer.png" width="300" />
-  <img src="../assets/img/post8/post8_batchsize.png" width="300" /> 
-  <img src="../assets/img/post8/post8_lr.png" width="300" />
+  <img src="../assets/img/post8/post8_optimizer.png" width="250" />
+  <img src="../assets/img/post8/post8_batchsize.png" width="250" /> 
+  <img src="../assets/img/post8/post8_lr.png" width="250" />
 </p>
 
 Among different choices for `optimizer` engine, SGD and Adam seems to be more efficient for this dataset. The choices of `batch size` does not seem to be critical to the accuracy of the model. The entire input X is divided into batches of size n and the neural network is trained on each batch of n samples. In our perceptron network, weights W's, and biases b's get updated at the end of each batch. Once all batches in a training dataset are trained the epoch counter goes up and we create another set of batches randomly and exclusively (like Kfold) and re-train based on each of the new batches again.
