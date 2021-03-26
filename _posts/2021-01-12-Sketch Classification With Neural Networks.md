@@ -48,6 +48,9 @@ X_test = X_test / xmax
 X_train.max()
 ```
 1.0
+The selected classes are:
+class_names = ['apple', 'anvil', 'airplane', 'banana', 'The Eiffel Tower', 'The Mona Lisa', 'The Great Wall of China', 'alarm clock', 'ant', 'asparagus']
+
 ### Build the model
 We write a function to returns a compiled TensorFlow Keras Sequential Model suitable for classifying the QuickDraw-10 dataset. We leave `learning rate` and  `optimizer` as hyperparamters to tune later.
 ```
