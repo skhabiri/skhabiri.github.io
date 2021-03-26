@@ -9,7 +9,7 @@ image: /assets/img/post7/post7_reddit.jpg
 comments: false
 ---
 
-We are going to use TensorFlow Keras and a sample of the [Quickdraw dataset](https://github.com/googlecreativelab/quickdraw-dataset) to build a sketch classification model. The dataset has been sampled to only 10 classes and 10000 observations per class. We will build a baseline classification model then run a few experiments with different optimizers and learning rates.
+We are going to use [TensorFlow Keras](https://keras.io/) with a 3 layer feed forward perceptron neural network to build a sketch classification model. The dataset is a subset of the [Quickdraw dataset](https://github.com/googlecreativelab/quickdraw-dataset). It has been sampled to only 10 classes and 10000 observations per class. We will build a baseline classification model then run a few experiments with different optimizers and learning rates to benchmark the performance of this simple Neural Network (NN) architecture.
 
 ### Load dataset
 Our data is in Numpy's compressed array (npz) format. We need to load it from a url address. First, we need to import the following modules.
@@ -53,7 +53,7 @@ Whenever all data is normalized to values within 0 and 1, that ensures that the 
 * The selected classes are:
 `class_names = ['apple', 'anvil', 'airplane', 'banana', 'The Eiffel Tower', 'The Mona Lisa', 'The Great Wall of China', 'alarm clock', 'ant', 'asparagus']`
 
-### Build the model
+### Define and compile the model
 We write a function to returns a compiled TensorFlow Keras Sequential Model suitable for classifying the QuickDraw-10 dataset. We leave `learning rate` and  `optimizer` as hyperparamters to tune later.
 ```
 from tensorflow.keras import Sequential
@@ -80,7 +80,7 @@ def create_model(optim, lr=0.01):
 ```
 We have 784 inputs, two dense layers each with 32 neurons, and 10 output classes. Including the bias node at each layer, total number of weights are `784+1 * 32+1 * 32+1 * 10`. Since this is a multilable classification with integer classes, we use sparse_categorical_crossentropy.
 
-### Fitting and evaluation
+### Train and validate
 Let's sweep different hyperparameters and review its effect on the model accuracy. Below is a function to sweep values of a hyperparameter and fit the model. This would allow us to examine the sensitivity of the model to a particular hyperparameter.
 ```
 def fit_param(param_lst, key, **kwargs):
@@ -152,7 +152,7 @@ Among different choices for `optimizer` engine, SGD and Adam seems to be more ef
 Considering two extreme cases, in stochastic gradient descent, batch size is set to one sample. Hence the accuracy of each update is low. However, number of updates per epoch are maximum, as there is one back-propagation update per batch. That resuls in long computing time and noisy training trend since the updates are done based on individual samples. On the other side for batch size gradient descent (GD), we have one batch per epoch, or in other word, the size of the batch is equal to the entire training set. Hence the epoch looks at the same set of data repeatedly and makes an update on every epoch run. Here since back propagation takes place after looking at the entire training set, the updates are more generalized and less noisy. Due to less number of batches per epoch, one batch per epoch, runtime is shorter. However, we need a large memory to process the entire dataset in one batch, and with large dataset that is not feasible.
 As for `learning rate`, a large number like 1 fails to converge, while a very small number such as 0.0001 underfits and needs more epochs to train. However, a learning rate between 0.01 to 0.5 yields reasonable results. We get a validation accuracy of about 0.84 for these typical runs.
 
-### Prediction
+### Evaluation
 To get a visual sense of the model performance let's try the test data that has been kept away from the model and try to predict the scetches. For this part we use two different models that have been saved during fitting process with different hyper parameter settings.
 ```python
 plt.figure(figsize=(15,8))
