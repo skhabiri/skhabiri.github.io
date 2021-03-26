@@ -48,6 +48,7 @@ X_test = X_test / xmax
 X_train.max()
 ```
 1.0
+Whenever all data is normalized to values within 0 and 1, that ensures that the update to all the weights are updated in equal proportions which can lead to quicker convergence on the optimal weight values. If your dataset's values range across multiple orders of magnitude (i.e.  101,  102,  103,  104 ), then gradient descent will update the weights in grossly uneven proportions.
 
 * The selected classes are:
 `class_names = ['apple', 'anvil', 'airplane', 'banana', 'The Eiffel Tower', 'The Mona Lisa', 'The Great Wall of China', 'alarm clock', 'ant', 'asparagus']`
@@ -173,120 +174,12 @@ for num in range(start, start+10,1):
 plt.show()
 ```
 <img src="../assets/img/post8/post8_prediction.png"/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Here is a sample of the data:
-
-<table border="1" class="dataframe" style="overflow-x: scroll;display: block; max-height: 300px;"><thead><tr style="text-align: right;"><th></th><th>subreddit_name</th><th>subreddit_id</th><th>title</th><th>text</th></tr></thead><tbody><tr><th>0</th><td>literature</td><td>2qhps</td><td>James Franco's poems: hard to forgive</td><td></td></tr><tr><th>1</th><td>technology</td><td>2qh16</td><td>Predator Drone Spotted in Minneapolis During George Floyd Protests</td><td></td></tr><tr><th>2</th><td>DIY</td><td>2qh7d</td><td>I restored a $5 Kitchen Aid mixer I found at the thrift store</td><td></td></tr><tr><th>3</th><td>news</td><td>2qh3l</td><td>Alabama just passed a near-total abortion ban with no exceptions for rape or incest</td><td></td></tr><tr><th>4</th><td>Parenting</td><td>2qhn3</td><td>I thought my 6 year old was doing one of his math activities on the tablet, but nah</td><td>My 6 year old has a bunch of new apps and activities that his teacher sent us to put on his tablet. He's been occasionally asking me, from the other room, the answers to different math problems, like what's 12+7 or what's 22-8.  I'm like sweet he's doing his math! Nope. He's trying to bypass the parental locks on kids YouTube so he can watch shit that is blocked. He keeps exiting out and going back in which is I assume why he had to ask multiple times.</td></tr></tbody></table>
-
-The database contains 51610 rows and 4 columns.
-```
- #   Column          Non-Null Count  Dtype 
----  ------          --------------  ----- 
- 0   subreddit_name  51610 non-null  object
- 1   subreddit_id    51610 non-null  object
- 2   title           51610 non-null  object
- 3   text            51610 non-null  object
- ```
-Let's check the unique categories in our collected data:
-```
- subreddit_names = data['subreddit_name'].unique()
-len(subreddit_names), subreddit_names
- ```
- Our created dataset consists of 53 categories.
- ```
- (53,
- array(['literature', 'technology', 'DIY', 'news', 'Parenting', 'cars',
-        'WTF', 'MachineLearning', 'socialskills', 'Art', 'biology',
-        'politics', 'personalfinance', 'sports', 'worldpolitics',
-        'Documentaries', 'food', 'LifeProTips', 'movies',
-        'TwoXChromosomes', 'nottheonion', 'mildlyinteresting', 'Health',
-        'AskReddit', 'history', 'Cooking', 'Music', 'Fitness',
-        'GetMotivated', 'Design', 'gaming', 'entertainment', 'television',
-        'books', 'JusticeServed', 'math', 'investing', 'science',
-        'camping', 'Coronavirus', 'PublicFreakout', 'travel', 'funny',
-        'HomeImprovement', 'scifi', 'worldnews', 'AdviceAnimals',
-        'programming', 'gadgets', 'conspiracy', 'space', 'Showerthoughts',
-        'announcements'], dtype=object))
- ```
- Let's look at number of posts per subreddit category.
- ```
-sns.histplot(
-    x=data['subreddit_name'].astype('category').cat.codes, 
-    bins=data['subreddit_id'].nunique(),
-    kde=True)
- ```
- <img src= "../assets/img/post7/post7_subredditposts.png">
-
-Ideally we would use the entire dataset for the training. However for practical reasons that would substantially increase the size of the serialized model and complicate the deployment of the model. For this reason we are going to use a smaller subset of the dataset for training. 
-The above graph shows that we have about 1000 posts per subreddit category as expected. However some the posts might have small amount of text that would not be sufficient for our natural language processing. 
-Hence we choose the posts that have enough text content. Later on we are going to choose only the categories (features) that  have enough number of posts (instances) to train on.
-
-To get an idea of the posts lengths, let's plot the average length of posts per subreddit category.
-```
-post_mean = data1.groupby(by='subreddit_name').apply(lambda x: x['text_length'].mean())
-plt.figure(figsize=(8,4))
-ax = sns.barplot(x=post_mean.index, y=post_mean.values)
-ax.set(xlabel='Subreddit Category', ylabel='Average length of posts')
-ax.set(xticklabels=[])
-plt.show()
-```
-<img src= "../assets/img/post7/post7_postlength_avg.png">
-
-The above graph shows the average length of posts is not the same in different subreddit categories.
-After filtering the low count subreddit categories we end up with 44 categories and 4400 posts. We take a note that in a production setup we need more training data to achieve a reliable results.
-
-
+The predictions seems to be reasonable and the ones that do not match the target labels are kind of justifiable.
 
 ### Conclusion
-In this work we built a machine learning model using NLP techniques and optimize that we scikit-learn RandomSearchCV() to predict a subreddit category for a given post. We used a python wrapper for Reddit API, PRAW, to create a database of subreddit posts from the categories of interest. Afte cleaning the data, we fit and tuned three different models and compared their performances. Other than the accuracy score we ran an article a sample input and used one of the models to get similar articles from the training set. We also used the sample input article to predict top subreddit categories that are related to the article. The serialized model can be deployed to a datascience API in order to build a full stack application.
+We selected a feed forward perceptron topology to train a model to classify 10 target label classes from [Quickdraw dataset](https://github.com/googlecreativelab/quickdraw-dataset). The neural network that we used comprised of two dense layers with 32 neurons each and a 10 neuron output layer for 10 classes. The input tensor was 100K samples with 784 dimensions. To train the model we used TensorFlow and Keras API. We tried several Optimizer, batch sizes and learning rates to get a benchmark for this topology. With SGD optimizer, 0.01 learning rate and batch_size of 512 we got an accuracy of 0.84.
 
 ### links
-- [Github repo](https://github.com/skhabiri/SubReddit-Recommender)
-- [PRAW](https://praw.readthedocs.io)
-- [SciKit-Learn](https://scikit-learn.org/stable/getting_started.html)
-- [spaCy](https://spacy.io/)
+- [Github repo](https://github.com/skhabiri/ML-ANN/tree/main/module2-Train)
+- [Keras](https://keras.io)
+- [TensorFlow](https://www.tensorflow.org)
