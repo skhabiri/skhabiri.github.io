@@ -137,12 +137,16 @@ for key, val in params_dic.items():
 Now we can plot the validation accuracy for each hyper paramter and review its effect on the trained model.
 
 <p float="left">
-  <img src="../assets/img/post8/post8_optimizer.png" width="100" />
-  <img src="../assets/img/post8/post8_batchsize.png" width="100" /> 
-  <img src="../assets/img/post8/post8_lr.png" width="100" />
+  <img src="../assets/img/post8/post8_optimizer.png" width="300" />
+  <img src="../assets/img/post8/post8_batchsize.png" width="300" /> 
+  <img src="../assets/img/post8/post8_lr.png" width="300" />
 </p>
 
-Among different choices for `optimizer` engine, SGD and Adam seems to be more efficient for this dataset. The choices of `batch size` does not seem to be critical to the accuracy of the model. As for `learning rate`, a large number like 1 fails to converge, while a very small number such as 0.0001 needs more epochs to train. 0.01 to 0.5 yield reasonable results.
+Among different choices for `optimizer` engine, SGD and Adam seems to be more efficient for this dataset. The choices of `batch size` does not seem to be critical to the accuracy of the model. The entire input X is divided into batches of size n and the neural network is trained on each batch of n samples. In our perceptron network, weights W's, and biases b's get updated at the end of each batch. Once all batches in a training dataset are trained the epoch counter goes up and we create another set of batches randomly and exclusively (like Kfold) and re-train based on each of the new batches again.
+Considering two extreme cases, in stochastic gradient descent, batch size is set to one sample. Hence the accuracy of each update is low. However, number of updates per epoch are maximum, as there is one back-propagation update per batch. That resuls in long computing time and noisy training trend since the updates are done based on individual samples. On the other side for batch size gradient descent (GD), we have one batch per epoch, or in other word, the size of the batch is equal to the entire training set. Hence the epoch looks at the same set of data repeatedly and makes an update on every epoch run. Here since back propagation takes place after looking at the entire training set, the updates are more generalized and less noisy. Due to less number of batches per epoch, one batch per epoch, runtime is shorter. However, we need a large memory to process the entire dataset in one batch, and with large dataset that is not feasible.
+As for `learning rate`, a large number like 1 fails to converge, while a very small number such as 0.0001 underfits and needs more epochs to train. However, a learning rate between 0.01 to 0.5 yields reasonable results.
+
+
 
 
 
