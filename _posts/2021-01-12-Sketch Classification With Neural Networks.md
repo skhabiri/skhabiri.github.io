@@ -172,7 +172,7 @@ for num in range(start, start+10,1):
     i += 1
 plt.show()
 ```
-
+<img src="../assets/img/post8/post8_prediction.png"/>
 
 
 
