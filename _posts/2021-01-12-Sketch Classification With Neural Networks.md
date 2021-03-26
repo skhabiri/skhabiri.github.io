@@ -79,6 +79,7 @@ def create_model(optim, lr=0.01):
 ```
 We have 784 inputs, two dense layers each with 32 neurons, and 10 output classes. Including the bias node at each layer, total number of weights are `784+1 * 32+1 * 32+1 * 10`. Since this is a multilable classification with integer classes, we use sparse_categorical_crossentropy.
 
+### Fitting and evaluation
 Let's sweep different hyperparameters and review its effect on the model accuracy. Below is a function to sweep values of a hyperparameter and fit the model. This would allow us to examine the sensitivity of the model to a particular hyperparameter.
 ```
 def fit_param(param_lst, key, **kwargs):
@@ -148,7 +149,31 @@ Now we can plot the validation accuracy for each hyper paramter and review its e
 
 Among different choices for `optimizer` engine, SGD and Adam seems to be more efficient for this dataset. The choices of `batch size` does not seem to be critical to the accuracy of the model. The entire input X is divided into batches of size n and the neural network is trained on each batch of n samples. In our perceptron network, weights W's, and biases b's get updated at the end of each batch. Once all batches in a training dataset are trained the epoch counter goes up and we create another set of batches randomly and exclusively (like Kfold) and re-train based on each of the new batches again.
 Considering two extreme cases, in stochastic gradient descent, batch size is set to one sample. Hence the accuracy of each update is low. However, number of updates per epoch are maximum, as there is one back-propagation update per batch. That resuls in long computing time and noisy training trend since the updates are done based on individual samples. On the other side for batch size gradient descent (GD), we have one batch per epoch, or in other word, the size of the batch is equal to the entire training set. Hence the epoch looks at the same set of data repeatedly and makes an update on every epoch run. Here since back propagation takes place after looking at the entire training set, the updates are more generalized and less noisy. Due to less number of batches per epoch, one batch per epoch, runtime is shorter. However, we need a large memory to process the entire dataset in one batch, and with large dataset that is not feasible.
-As for `learning rate`, a large number like 1 fails to converge, while a very small number such as 0.0001 underfits and needs more epochs to train. However, a learning rate between 0.01 to 0.5 yields reasonable results.
+As for `learning rate`, a large number like 1 fails to converge, while a very small number such as 0.0001 underfits and needs more epochs to train. However, a learning rate between 0.01 to 0.5 yields reasonable results. We get a validation accuracy of about 0.84 for these typical runs.
+
+### Prediction
+To get a visual sense of the model performance let's try the test data that has been kept away from the model and try to predict the scetches. For this part we use two different models that have been saved during fitting process with different hyper parameter settings.
+```python
+plt.figure(figsize=(15,8))
+start = np.random.randint(0, len(X_test)-10)
+i = 0
+for num in range(start, start+10,1):
+    plt.subplot(2,5, i+1)
+    plt.xticks([])
+    plt.yticks([])
+    plt.grid(False)
+    plt.imshow(X_test[num].reshape(28,28), cmap=plt.cm.binary)
+    
+    predict1 = params_dic["lr"][1]['0.01_'][0].predict(X_test[num].reshape(1,784))
+    predict2 = params_dic["batch_size"][1]["32_"][0].predict(X_test[num].reshape(1,784))
+    predicted1 = class_names[predict1.argmax()]
+    predicted2 = class_names[predict2.argmax()]
+    plt.xlabel(f"target:{class_names[y_test[num]]},\npredicted1:{predicted1},\npredicted2:{predicted2}")
+    i += 1
+plt.show()
+```
+
+
 
 
 
