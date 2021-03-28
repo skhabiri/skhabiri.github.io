@@ -35,53 +35,41 @@ The Dropout Regularization value is a percentage of neurons that you want to be 
 * **Number of units (neurons) per layer and number of layers:**
 Typically depth (more layers) is more important than width (more nodes) for neural networks. The more nodes and layers the longer it will take to train a network, and higher the probability of overfitting. The larger your network gets the more you'll need dropout regularization or other regularization techniques to keep it in check.
 
-
 ### Dataset
-`tensorflow.keras.datasets.mnist` is used to train a NN with 784 inputs representing a handwritten digit from 0 to 9. The training set is 60K and validation data is 10K. We try 32 node hidden dense layer connected to the input tensor, another 32 node hidden dense layer and finally a 10 node output dense layer.
-
-
-
-
-
+`tensorflow.keras.datasets.mnist` is used to train our neural network. The training set is 60K and validation data is 10K. The labels are fairly evenly distributed. We have 10 classes of hand written digits from 0 to 9. 
 ```
-import numpy as np
-from sklearn.utils import shuffle
-from sklearn.model_selection import train_test_split
-import wget
+from tensorflow.keras.datasets import mnist
+(X_train, y_train), (X_test, y_test) = mnist.load_data()
+print(X_train.shape, X_test.shape)
+np.unique(y_train, return_counts=True)
 ```
-We load, shuffle and split the data into train and test with a ratio of 0.2:
-```
-def load_quickdraw10(path):
-  wget.download(path)
-  data = np.load('quickdraw10.npz')
-  X = data['arr_0']
-  y = data['arr_1']
+((60000, 28, 28), (10000, 28, 28))
+(array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8),
+ array([5923, 6742, 5958, 6131, 5842, 5421, 5918, 6265, 5851, 5949]))
 
-  print(X.shape)
-  print(y.shape)
-
-  X, y = shuffle(X, y)
-  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-  
-  return X_train, y_train, X_test, y_test
-
-path = 'https://github.com/skhabiri/ML-ANN/raw/main/data/quickdraw10.npz'
-X_train, y_train, X_test, y_test = load_quickdraw10(path)
+The input sample images are represented by a 2-dimensional array of 28x28. Array values are from 0 to 255. It's not 100% necessary to normalize/scale your input data before feeding it to a neural network, as the network can learn the appropriate weights to deal with data as long as it is numerically represented. However, it is recommended to normalize the input data as it can speed up the training and reduces the chances of the gradient descent to get stuck in a local optimum. Let's normalize the input data and flatten it at the same time.
 ```
-(100000, 784)
-(100000,)
-We have 10 classes with 10K samples for each class. Each input sample image is represented by an array of 784 dimensions. Array values are from 0 to 255. As a good practice we normalize the input array values.
+maximum = np.concatenate([X_train, X_test]).max()
+X_train = X_train / maximum
+X_test = X_test / maximum
+X_train = X_train.reshape(60000, 784)
+X_test = X_test.reshape(10000, 784)
 ```
-xmax = X_train.max()
-X_train = X_train / xmax
-X_test = X_test / xmax
-X_train.max()
-```
-1.0
-Whenever all data is normalized to values within 0 and 1, that ensures that the update to all the weights are updated in equal proportions which can lead to quicker convergence on the optimal weight values. If your dataset's values range across multiple orders of magnitude (i.e.  101,  102,  103,  104 ), then gradient descent will update the weights in grossly uneven proportions.
+### Search strategies
+There are different ways to search the hyperparamter space. Here are three popular approaches.
+* **Grid search:**
+ - This has a specific downside in that if we specify 5 hyperparameters with 5 values each then we've created 5^5 combinations of hyperparameters to train on. If we also decide to cross validate our results with 5-fold input cross validation then our model has to run 15,625 times! I recommend not using grid search to test combinations of different hyperparameters, but only using it to test different specifications of a single hyperparameter. It's rare that combinations between different hyperparameters lead to big performance gains. Then retain the best result for that single parameter while you test another, until you tune all the parameters in that way.
 
-* The selected classes are:
-`class_names = ['apple', 'anvil', 'airplane', 'banana', 'The Eiffel Tower', 'The Mona Lisa', 'The Great Wall of China', 'alarm clock', 'ant', 'asparagus']`
+**RandomSearch:** Grid Search treats every parameter as if it was equally important, but this just isn't the case. Random Search allows searching to be specified along the most important parameter and experiments less along the dimensions of less important hyperparameters. The downside of Random search is that it won't find the absolute best hyperparameters, but it is much less costly to perform than Grid Search.
+
+**Bayesian Optimization:** Bayesian Optimization is a search strategy that tries to take into account the results of past searches in order to improve future ones. That is tuning our hyperparameter tuning. `keras-tuner` offers Bayesian methods implementation.
+
+
+
+
+
+
+
 
 ### Define and compile the model
 We write a function to returns a compiled TensorFlow Keras Sequential Model suitable for classifying the QuickDraw-10 dataset. We leave `learning rate` and  `optimizer` as hyperparamters to tune later.
