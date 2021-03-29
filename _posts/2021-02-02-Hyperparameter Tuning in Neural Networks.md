@@ -237,13 +237,66 @@ for num_units in HP_NUM_UNITS.domain.values:
                           run('logs/hparam_tuning/' + run_name, hparams)
                           session_num += 1
 ```
+The saved file can be opened by TensorBoard: `%tensorboard  --logdir "logs/hparam_tuning"`.
+
 <p float="left">
   <img src="../assets/img/post9/post9_Hparam1.png" width="350" />
   <img src="../assets/img/post9/post9_Hparam2.png" width="350" /> 
 </p>
 
+### Hyperparameter tuning with keras-tuner
+The third approach to tune hyperparameters for a neural network is by ising keras-tuner. First we use RandomSearch technique.
+#### RandomSearch()
+In RandomSearch() an instance of `HyperParameters` class is passed to the hypermodel parameter as an argument. An instance of `HyperParameters` class contains information about both the search space and the current values of each hyperparameter. Here we configure the `HyperParameters` for different activation functions, different number of units in the first and subsequent dense layers and different dropout values in building model and finally different learning rate in compile phase.
+```
+from tensorflow import keras
+from tensorflow.keras import layers
+from kerastuner.tuners import RandomSearch
+import kerastuner.tuners as kt
 
+def build_model(hp1):
+    
+    hp_act = hp1.Choice('dense_activation', values=['relu', 'tanh', 'sigmoid'], default='relu')
+    
+    model = keras.Sequential()
+    model.add(layers.Dense(units=hp1.Int('units',min_value=32,max_value=512,step=32, default=32), 
+                            activation=hp_act, input_dim=784))
+    
+    for i in range(1,4,1):
+        hp_units = hp1.Int('units_' + str(i), min_value=8, max_value=64, step=8)
+        # The variable hp_units gets overwritten in each pass, but the layer does not.
+        model.add(layers.Dense(units=hp_units, activation=hp_act))
 
+    
+    model.add(layers.Dropout(hp1.Float('dropout',min_value=0.0,max_value=0.1,default=0.005,step=0.01)))   
+    model.add(layers.Dense(10, activation='softmax'))
+    
+    model.compile(optimizer=keras.optimizers.Adam(hp1.Float(
+        'learning_rate', min_value=1e-4, max_value=1e-2, sampling='LOG', default=1e-3)),
+        loss='sparse_categorical_crossentropy',metrics=['accuracy'])
+    
+    return model
+    
+tuner = RandomSearch(
+    hypermodel=build_model,
+    objective='val_accuracy',
+    max_trials=5,
+    hyperparameters=None,
+    executions_per_trial=3,
+    directory='./keras-tuner-trial',
+    project_name='randomsearch')
+```
+In the above as mentioned before our search space has a size of 7, and can be viewed with ``tuner.search_space_summary(). Here `execution_per_trial` is the number of models that should be built and fit for each trial randomly, and `max_trials` represents the number of times that will be attempted by the tuner in a random search.
+```
+tuner.search(X_train, y_train,
+             epochs=5,
+             validation_data=(X_test, y_test))
+```
+Trial 5 Complete [00h 00m 42s]
+val_accuracy: 0.9708333412806193
+
+Best val_accuracy So Far: 0.9711333314577738
+Total elapsed time: 00h 03m 39s
 
 ### Conclusion
 We selected a feed forward perceptron topology to train a model to classify 10 target label classes from [Quickdraw dataset](https://github.com/googlecreativelab/quickdraw-dataset). The neural network that we used comprised of two dense layers with 32 neurons each and a 10 neuron output layer for 10 classes. The input tensor was 100K samples with 784 dimensions. To train the model we used TensorFlow and Keras API. We tried several Optimizer, batch sizes and learning rates to get a benchmark for this topology. With SGD optimizer, 0.01 learning rate and batch_size of 512 we got an accuracy of 0.84.
