@@ -74,21 +74,12 @@ Epoch 8/99
 
 The model stops training after 8 epochs at 0.91 accuracy.
 <img src="../assets/img/post10/post10_earlystopping.png" />
+As we see in the above TensorBoard's Graphs dashboard, after epoch=5 validation loss stops decreasing while training loss continue to improve. We could choose to relax the EarlyStopping condition in order to train the model further.
 
+### Weight Decay
+Regularizers allow you to apply penalties on layer parameters or layer activity during optimization. These penalties are summed into the loss function that the network optimizes. We mostly use l1 and l2 as loss function for regularization.
 
-
-
-
-
-
-
-
-
-
-
-
-
-### Loss function for regularization
+#### Loss function for regularization
 Ridge (l2) and Lasso (l1) are 2 out of possibily infinitly many ways to regularize a model by using a [distiance metric in Lp space](https://en.wikipedia.org/wiki/Lp_space). 
 * Ridge L2:
 Ordinary least squares (OLS) provides what is called the Best Linear Unbiased Estimator. That means that if you take any other unbiased estimator, it is bound to have a higher variance than the OLS solution. 
@@ -100,8 +91,8 @@ Similar to ridge regression different coefficients may reduce ununiformely. Howe
 
 Both L2 and L1 are used to help prevent overfitting. The key difference between them is that L1 will calcualte zero valued feature weights (i.e. w = 0) for a subset of features with redundant information. Mathematically, this is refered to as [MultiCollinearity](https://en.wikipedia.org/wiki/Multicollinearity). While L2 will shrink the value of all feature weights but almost never down to zero.
 
-### Weight Decay
-Regularizers allow you to apply penalties on layer parameters or layer activity during optimization. These penalties are summed into the loss function that the network optimizes. We mostly use l1 and l2 as loss function for regularization.
+
+
 
 
 
