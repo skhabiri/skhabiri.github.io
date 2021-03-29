@@ -9,54 +9,48 @@ image: /assets/img/post9/post9_HparamZoom.png
 comments: false
 ---
 
-Neural Networks are highly parameterized models and can be easily overfit to the training data. The most salient way to combat this problem is with regularization techniques. A common technique to prevent overfitting is to use `EarlyStopping`. This strategy will prevent your weights from being updated well past the point of their peak usefulness. We can also combine `EarlyStopping`, `Weight Decay` and `Dropout`, or replace `Weight Decay` with `Weigh Constraint`, which accomplish similar purpose.
-
-### Hyperparameters in neural networks
-Here we'll discuss trade-offs for commonly used hyperparamaters in neural networks.
-
-* **Batch size:**
-Batch size determines how many observations the model is shown before it calculates loss/error and updates the model weights via gradient descent. You're showing the model enough observations that you have enough information to update the weights, but not such a large batch size that you don't get a lot of weight update iterations performed in a given epoch. Feed-forward Neural Networks aren't as sensitive to batch_size as other networks. Smaller batch sizes will also take longer to train. Keras defaults to batch size of 32. Increasing the minibatch size could lower the effective learning rate that provides stable convergence.
-
-* **Learning rate:**
-For a given number of epochs, a small learning rate may not reach the optimum point and underfits. A very large learning rate can cause divergence behavior. 
-
-* **Momentum:**
-Momentum is a property that decides the willingness of an optimizer to overshoot beyond a local minimum. Imagine a ball rolling down one side of a bowl and then up the opposite side a little bit before settling back to the bottom. The purpose of momentum is to try and escape local minima.
-
-* **Activation function:**
-This is another hyperparameter to tune. Typically you'd want to use ReLU for hidden layers and either Sigmoid, or Softmax for output layers of binary and multi-class classification implementations respectively.
-
-* **Network weight initialization:**
- Your model will get further with less epochs if you initialize it with weights that are well suited to the problem you're trying to solve. ```init_mode = ['uniform', 'lecun_uniform', 'normal', 'zero', 'glorot_normal', 'glorot_uniform', 'he_normal', 'he_uniform']```
-
-* **Dropout regularization and the reight constraint:**
-The Dropout Regularization value is a percentage of neurons that you want to be randomly deactivated during training. The weight constraint is a second regularization parameter that works in tandem with dropout regularization. You should tune these two values at the same time. Using dropout on visible vs hidden layers might have a different effect. 
-
-* **Number of units (neurons) per layer and number of layers:**
-Typically depth (more layers) is more important than width (more nodes) for neural networks. The more nodes and layers the longer it will take to train a network, and higher the probability of overfitting. The larger your network gets the more you'll need dropout regularization or other regularization techniques to keep it in check.
+Neural Networks are highly parameterized models and can be easily overfit to the training data. The most salient way to combat this problem is with regularization techniques. A common technique to prevent overfitting is to use `EarlyStopping`. This strategy will prevent your weights from being updated well past the point of their peak usefulness. We can also combine `EarlyStopping`, `Weight Decay` and `Dropout`, or use `Weight Constraint` instead of `Weight Decay`, which accomplishes similar ends.
 
 ### Dataset
-`tensorflow.keras.datasets.mnist` is used to train our neural network. The training set is 60K and validation data is 10K. The labels are fairly evenly distributed. We have 10 classes of hand written digits from 0 to 9. 
+Our dataset is fashion_mnist with 60k train and 10k for test. There are 10 classes with equal distribution.
 ```
-import numpy as np
-from tensorflow.keras.datasets import mnist
-(X_train, y_train), (X_test, y_test) = mnist.load_data()
-print(X_train.shape, X_test.shape)
-np.unique(y_train, return_counts=True)
+from tensorflow.keras.datasets import fashion_mnist
+
+(X_train, y_train), (X_test, y_test) = fashion_mnist.load_data()
+X_train.shape, X_test.shape
 ```
 ((60000, 28, 28), (10000, 28, 28))
-(array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8),
- array([5923, 6742, 5958, 6131, 5842, 5421, 5918, 6265, 5851, 5949]))
+Here is a sample of images of different classes:
 
-The input sample images are represented by a 2-dimensional array of 28x28. Array values are from 0 to 255. Let's normalize the input data and flatten it at the same time.
+<img src="../assets/img/post9/post10_samples.png" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+we normalize and flatten the input tensor to make the array one dimensional.
 ```
-maximum = np.concatenate([X_train, X_test]).max()
-X_train = X_train / maximum
-X_test = X_test / maximum
-X_train = X_train.reshape(60000, 784)
-X_test = X_test.reshape(10000, 784)
+
 ```
-It's not 100% necessary to normalize/scale your input data before feeding it to a neural network, as the network can learn the appropriate weights to deal with data as long as it is numerically represented. However, it is recommended to normalize the input data as it can speed up the training and reduces the chances of the gradient descent to get stuck in a local optimum.
+
+
+
+
+
+
+
+
 
 ### Search strategies
 There are different ways to search the hyperparamter space. Here are three popular approaches.
