@@ -5,7 +5,7 @@ subtitle:
 gh-repo: skhabiri/ML-ANN/tree/main/module3-Tune
 gh-badge: [star, fork, follow]
 tags: [Machine Learning, Neural Network, Hyperparameter Tuning, Classification, TensorFlow, Keras]
-image: /assets/img/post8/post8_QuickDraws.png
+image: /assets/img/post9/post9_HparamZoom.png
 comments: false
 ---
 
@@ -237,26 +237,13 @@ for num_units in HP_NUM_UNITS.domain.values:
                           run('logs/hparam_tuning/' + run_name, hparams)
                           session_num += 1
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <p float="left">
-  <img src="../assets/img/post8/post8_optimizer.png" width="350" />
-  <img src="../assets/img/post8/post8_batchsize.png" width="350" /> 
-  <img src="../assets/img/post8/post8_lr.png" width="350" />
+  <img src="../assets/img/post9/post9_Hparam1.png" width="350" />
+  <img src="../assets/img/post9/post9_Hparam2.png" width="350" /> 
 </p>
+
+
+
 
 ### Conclusion
 We selected a feed forward perceptron topology to train a model to classify 10 target label classes from [Quickdraw dataset](https://github.com/googlecreativelab/quickdraw-dataset). The neural network that we used comprised of two dense layers with 32 neurons each and a 10 neuron output layer for 10 classes. The input tensor was 100K samples with 784 dimensions. To train the model we used TensorFlow and Keras API. We tried several Optimizer, batch sizes and learning rates to get a benchmark for this topology. With SGD optimizer, 0.01 learning rate and batch_size of 512 we got an accuracy of 0.84.
