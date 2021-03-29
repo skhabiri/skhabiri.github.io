@@ -22,7 +22,7 @@ X_train.shape, X_test.shape
 ((60000, 28, 28), (10000, 28, 28))
 Here is a sample of images of different classes:
 
-<img src="../assets/img/post9/post10_samples.png" />
+<img src="../assets/img/post10/post10_samples.png" />
 
 Next, we normalize and flatten the input tensor to make the array one dimensional. To convert a multidimensional tensor into a 1-D tensor, we can use `Flatten` layer from `tensorflow.keras.layers`.
 ```
