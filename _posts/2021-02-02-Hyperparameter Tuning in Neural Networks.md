@@ -14,14 +14,16 @@ Some of the important hyperparameters in neural networks to tune are batch_size,
 Hyperparameter tuning comes with a challenge. How can we compare models specified with different hyperparameters if our model's final error metric can vary somewhat erratically? How do we avoid just getting unlucky and selecting the wrong hyperparameter? This is a problem that to a certain degree we just have to live with as we test and test again. However, we can minimize it somewhat by pairing our experiments with Cross Validation to reduce the variance of our final accuracy values.
 
 ### Hyperparameters in Neural Networks
+Here we'll discuss trade-offs for commonly used hyperparamaters in neural networks.
+
 * **Batch Size:**
-Batch size determines how many observations the model is shown before it calculates loss/error and updates the model weights via gradient descent. You're showing the model enough observations that you have enough information to update the weights, but not such a large batch size that you don't get a lot of weight update iterations performed in a given epoch. Feed-forward Neural Networks aren't as sensitive to bach_size as other networks. Smaller batch sizes will also take longer to train. Keras defaults to batch size of 32. Increasing the minibatch size could lower the effective learning rate that provides stable convergence.
+Batch size determines how many observations the model is shown before it calculates loss/error and updates the model weights via gradient descent. You're showing the model enough observations that you have enough information to update the weights, but not such a large batch size that you don't get a lot of weight update iterations performed in a given epoch. Feed-forward Neural Networks aren't as sensitive to batch_size as other networks. Smaller batch sizes will also take longer to train. Keras defaults to batch size of 32. Increasing the minibatch size could lower the effective learning rate that provides stable convergence.
 
 * **Learning rate:**
-For a given number of epochs, a small learning rate may not reach the optimum point and under fit. A very large learning rate can cause divergence behavior. 
+For a given number of epochs, a small learning rate may not reach the optimum point and underfits. A very large learning rate can cause divergence behavior. 
 
 * **Momentum:**
-Momentum is a property that decides the willingness of an optimizer to overshoot the minimum. Imagine a ball rolling down one side of a bowl and then up the opposite side a little bit before settling back to the bottom. The purpose of momentum is to try and escape local minima.
+Momentum is a property that decides the willingness of an optimizer to overshoot beyond a local minimum. Imagine a ball rolling down one side of a bowl and then up the opposite side a little bit before settling back to the bottom. The purpose of momentum is to try and escape local minima.
 
 * **Activation Function:**
 This is another hyperparameter to tune. Typically you'd want to use ReLU for hidden layers and either Sigmoid, or Softmax for output layers of binary and multi-class classification implementations respectively.
@@ -58,9 +60,9 @@ X_test = X_test.reshape(10000, 784)
 ```
 It's not 100% necessary to normalize/scale your input data before feeding it to a neural network, as the network can learn the appropriate weights to deal with data as long as it is numerically represented. However, it is recommended to normalize the input data as it can speed up the training and reduces the chances of the gradient descent to get stuck in a local optimum.
 
-## Hyperparameter techniques in Neural Networks
 ### Search strategies
 There are different ways to search the hyperparamter space. Here are three popular approaches.
+
 * **Grid search:**
  - This has a specific downside in that if we specify 5 hyperparameters with 5 values each then we've created 5^5 combinations of hyperparameters to train on. If we also decide to cross validate our results with 5-fold input cross validation then our model has to run 15,625 times! I recommend not using grid search to test combinations of different hyperparameters, but only using it to test different specifications of a single hyperparameter. It's rare that combinations between different hyperparameters lead to big performance gains. It's better to retain the best result for that single parameter while you test another, until you tune all the parameters in that way.
 
@@ -70,7 +72,10 @@ There are different ways to search the hyperparamter space. Here are three popul
 * **Bayesian Optimization:** 
  - Bayesian Optimization is a search strategy that tries to take into account the results of past searches in order to improve future ones. That is tuning our hyperparameter tuning. `keras-tuner` offers Bayesian methods implementation.
 
-### HP Tuning with GridSearchCV through Keras sklearn wrapper:
+## Hyperparameter techniques in Neural Networks
+In this ection we'll present three different techniques to tune hyperparameters of a neural network.
+
+### HP Tuning with GridSearchCV through Keras sklearn wrapper
 In order to utilize the GridSearchCV, we use sklearn wrapper for keras, `KerasClassifier`. GridSearchCV will handle the parameteric grid search and cross validation folding aspect and the KerasClassifier will train the neural network for each parameter set and run for the specified number of epochs. For each parameter set Pj and input fold of Xi, keras will train a model. The parameter set which yields the maximum average score over all the folds, Pjmax, will be selected to train the keras model with the entire input dataset of X again. Now let's create a Keras model that we can use in sklearn.GridSearchCV():
 ```
 from sklearn.model_selection import GridSearchCV
