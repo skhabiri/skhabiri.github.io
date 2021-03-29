@@ -252,7 +252,7 @@ The saved file can be opened by TensorBoard: `%tensorboard  --logdir "logs/hpara
 ### 3) keras-tuner
 The third approach to tune hyperparameters for a neural network is by ising keras-tuner. First we use RandomSearch technique.
 
-#### RandomSearch()
+#### RandomSearch():
 In RandomSearch() an instance of `HyperParameters` class is passed to the hypermodel parameter as an argument. An instance of `HyperParameters` class contains information about both the search space and the current values of each hyperparameter. Here we configure the `HyperParameters` for different activation functions, different number of units in the first and subsequent dense layers and different dropout values in building model and finally different learning rate in compile phase.
 ```
 from tensorflow import keras
@@ -316,7 +316,7 @@ print("best parameters", tuner.get_best_hyperparameters(num_trials=1)[0].values)
 best accuracy: 0.9753000140190125
 best parameters {'dense_activation': 'sigmoid', 'units': 352, 'units_1': 24, 'units_2': 16, 'units_3': 40, 'dropout': 0.05, 'learning_rate': 0.00286700149775965}
 
-#### Hyperband
+#### Hyperband:
 Hyperband is an optimized version of random search which uses early-stopping to speed up the hyperparameter tuning process. The main idea is to fit a large number of models for a small number of epochs and to only continue training for the models achieving the highest accuracy on the validation set. The max_epochs variable is the max number of epochs that a model can be trained for.
 ```
 tuner_hb = kt.Hyperband(build_model,
