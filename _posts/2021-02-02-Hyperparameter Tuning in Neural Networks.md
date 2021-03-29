@@ -246,10 +246,8 @@ for num_units in HP_NUM_UNITS.domain.values:
 ```
 The saved file can be opened by TensorBoard: `%tensorboard  --logdir "logs/hparam_tuning"`.
 
-<p float="left">
-  <img src="../assets/img/post9/post9_Hparam1.png" width="350" />
-  <img src="../assets/img/post9/post9_Hparam2.png" width="350" /> 
-</p>
+<img src="../assets/img/post9/post9_Hparam1.png" />
+<img src="../assets/img/post9/post9_Hparam2.png" /> 
 
 ### 3) keras-tuner
 The third approach to tune hyperparameters for a neural network is by ising keras-tuner. First we use RandomSearch technique.
