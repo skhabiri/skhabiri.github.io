@@ -75,7 +75,7 @@ There are different ways to search the hyperparamter space. Here are three popul
 ## Hyperparameter techniques in Neural Networks
 In this ection we'll present three different techniques to tune hyperparameters of a neural network.
 
-### HP Tuning with GridSearchCV through Keras sklearn wrapper
+### 1) HP Tuning with GridSearchCV through Keras sklearn wrapper
 In order to utilize the GridSearchCV, we use sklearn wrapper for keras, `KerasClassifier`. GridSearchCV will handle the parameteric grid search and cross validation folding aspect and the KerasClassifier will train the neural network for each parameter set and run for the specified number of epochs. For each parameter set Pj and input fold of Xi, keras will train a model. The parameter set which yields the maximum average score over all the folds, Pjmax, will be selected to train the keras model with the entire input dataset of X again. Now let's create a Keras model that we can use in sklearn.GridSearchCV():
 ```
 from sklearn.model_selection import GridSearchCV
@@ -118,7 +118,8 @@ We can access the best model and the history results for the entire input X with
 best_NN = grid.best_estimator_.model
 best_NN.history.history
 ```
-### Hyperparameter tuning with the HParams dashboard in TensorBoard
+Next we'll show how to use Tensorboard to archive the data and examine the effect of hyperparameters on its metrics.
+### 2) Hyperparameter tuning with the HParams dashboard in TensorBoard
 You will notice quickly that managing the results of all the experiments you are running becomes challenging. Which set of parameters did the best? Are my results today different than my results yesterday? Although we use Ipython Notebooks to work, the format is not well suited to logging experimental results. **Experiment tracking frameworks** such as [Comet.ml](https://www.comet.ml) and [Weights and Biases](https://wandb.ai), and [TensorBoard's Hyperparameter Dashboard](https://www.tensorflow.org/tensorboard/hyperparameter_tuning_with_hparams) help tracking experiments, store the results, and the code associated with those experiments. Experimental results can also be readily visualized to see changes in performance across any metric we care about. Data is sent to the tool as each epoch is completed, so we can also see if the model is converging.
 
 HParams works with TensorBoard, which provides an *Experiment Tracking Framework* to manage the tuning work including the parameter set data, date, and metric results. As a first step we need to define hyperparameters and score metrics.
@@ -249,7 +250,7 @@ The saved file can be opened by TensorBoard: `%tensorboard  --logdir "logs/hpara
   <img src="../assets/img/post9/post9_Hparam2.png" width="350" /> 
 </p>
 
-### Hyperparameter tuning with keras-tuner
+### 3) Hyperparameter tuning with keras-tuner
 The third approach to tune hyperparameters for a neural network is by ising keras-tuner. First we use RandomSearch technique.
 
 #### RandomSearch()
