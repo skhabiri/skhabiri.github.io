@@ -44,38 +44,36 @@ model = tf.keras.Sequential([
     Dense(10, activation='softmax')
 ])
 ```
-
+Next we will apply regularization technique to avoid overfittting the model. 
 
 ### Early stopping
-`EarlyStopping` is a common technique that is used to prevent overfitting the model. It can be simply implemented in a NN model by a callback.  
-
-
-
+`EarlyStopping` is a common technique that is used to prevent overfitting the model. In a neural network it can be simply implemented by a callback.
 ```
 from tensorflow.keras.callbacks import EarlyStopping, TensorBoard
 
-
-# create subdirectory
+# create subdirectory to visualize EarlyStopping  in tensorboard
 logdir = os.path.join("logs", "EarlyStopping-Loss")
-
-# frequency (in epochs) at which to compute activation and  
-# weight histograms for the layers of the model.
 tensorboard_callback = tf.keras.callbacks.TensorBoard(logdir, histogram_freq=1)
 
-# patience refers to # of epochs with no improvement
+# Adding EarlyStopping call back
 stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0.01, patience=3)
-
-
-
-# scce expect the target classes to be integer numbers not OHE
-model.compile(loss='sparse_categorical_crossentropy', optimizer='nadam',
-              metrics=['accuracy'])
+```
+Here we monitor the validation loss and stop the training process if there is no significant improvement (min_delta=0.01) for three consecutive epochs.
+For compiling the model we use sparse_categorical_crossentropy as the target classes are integer and not one hot encoded.
+```
+model.compile(loss='sparse_categorical_crossentropy', optimizer='nadam', metrics=['accuracy'])
 
 model.fit(X_train, y_train, epochs=99, 
           validation_data=(X_test,y_test),
           callbacks=[tensorboard_callback, stop])
 ```
+1875/1875 [==============================] - 3s 2ms/step - loss: 0.2517 - accuracy: 0.9064 - val_loss: 0.3449 - val_accuracy: 0.8775
+Epoch 8/99
+1875/1875 [==============================] - 3s 2ms/step - loss: 0.2412 - accuracy: 0.9093 - val_loss: 0.3544 - val_accuracy: 0.8756
+<tensorflow.python.keras.callbacks.History at 0x7f9cf27fa240>
 
+The model stops training after 8 epochs at 0.91 accuracy.
+<img src="../assets/img/post10/post10_earlystopping.png" />
 
 
 
