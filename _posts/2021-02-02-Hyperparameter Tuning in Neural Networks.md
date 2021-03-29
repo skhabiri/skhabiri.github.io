@@ -13,10 +13,10 @@ Hyperparameter tuning is much more important with neural networks than it has be
 Some of the important hyperparameters in neural networks to tune are batch_size, training epochs, optimization algorithms, learning rate, momentum, activation functions, dropout regularization, number of neurons in the hidden layers, number of the layers and so on.
 Hyperparameter tuning comes with a challenge. How can we compare models specified with different hyperparameters if our model's final error metric can vary somewhat erratically? How do we avoid just getting unlucky and selecting the wrong hyperparameter? This is a problem that to a certain degree we just have to live with as we test and test again. However, we can minimize it somewhat by pairing our experiments with Cross Validation to reduce the variance of our final accuracy values.
 
-### Hyperparameters in Neural Networks
+### Hyperparameters in neural networks
 Here we'll discuss trade-offs for commonly used hyperparamaters in neural networks.
 
-* **Batch Size:**
+* **Batch size:**
 Batch size determines how many observations the model is shown before it calculates loss/error and updates the model weights via gradient descent. You're showing the model enough observations that you have enough information to update the weights, but not such a large batch size that you don't get a lot of weight update iterations performed in a given epoch. Feed-forward Neural Networks aren't as sensitive to batch_size as other networks. Smaller batch sizes will also take longer to train. Keras defaults to batch size of 32. Increasing the minibatch size could lower the effective learning rate that provides stable convergence.
 
 * **Learning rate:**
@@ -25,13 +25,13 @@ For a given number of epochs, a small learning rate may not reach the optimum po
 * **Momentum:**
 Momentum is a property that decides the willingness of an optimizer to overshoot beyond a local minimum. Imagine a ball rolling down one side of a bowl and then up the opposite side a little bit before settling back to the bottom. The purpose of momentum is to try and escape local minima.
 
-* **Activation Function:**
+* **Activation function:**
 This is another hyperparameter to tune. Typically you'd want to use ReLU for hidden layers and either Sigmoid, or Softmax for output layers of binary and multi-class classification implementations respectively.
 
-* **Network Weight Initialization:**
+* **Network weight initialization:**
  Your model will get further with less epochs if you initialize it with weights that are well suited to the problem you're trying to solve. ```init_mode = ['uniform', 'lecun_uniform', 'normal', 'zero', 'glorot_normal', 'glorot_uniform', 'he_normal', 'he_uniform']```
 
-* **Dropout Regularization and the Weight Constraint:**
+* **Dropout regularization and the reight constraint:**
 The Dropout Regularization value is a percentage of neurons that you want to be randomly deactivated during training. The weight constraint is a second regularization parameter that works in tandem with dropout regularization. You should tune these two values at the same time. Using dropout on visible vs hidden layers might have a different effect. 
 
 * **Number of units (neurons) per layer and number of layers:**
@@ -69,13 +69,13 @@ There are different ways to search the hyperparamter space. Here are three popul
 * **Random search:** 
  - Grid search treats every parameter as if it was equally important, but this just isn't the case. Random search allows searching to be specified along the most important parameter and experiments and less along the dimensions of less important hyperparameters. The downside of Random search is that it won't find the absolute best hyperparameters, but it is much less costly to perform than Grid Search.
 
-* **Bayesian Optimization:** 
+* **Bayesian optimization:** 
  - Bayesian Optimization is a search strategy that tries to take into account the results of past searches in order to improve future ones. That is tuning our hyperparameter tuning. `keras-tuner` offers Bayesian methods implementation.
 
-## Hyperparameter techniques in Neural Networks
+## Hyperparameter techniques in neural networks
 In this ection we'll present three different techniques to tune hyperparameters of a neural network.
 
-### 1) HP Tuning with GridSearchCV through Keras sklearn wrapper
+### 1) GridSearchCV through Keras sklearn wrapper
 In order to utilize the GridSearchCV, we use sklearn wrapper for keras, `KerasClassifier`. GridSearchCV will handle the parameteric grid search and cross validation folding aspect and the KerasClassifier will train the neural network for each parameter set and run for the specified number of epochs. For each parameter set Pj and input fold of Xi, keras will train a model. The parameter set which yields the maximum average score over all the folds, Pjmax, will be selected to train the keras model with the entire input dataset of X again. Now let's create a Keras model that we can use in sklearn.GridSearchCV():
 ```
 from sklearn.model_selection import GridSearchCV
@@ -119,7 +119,8 @@ best_NN = grid.best_estimator_.model
 best_NN.history.history
 ```
 Next we'll show how to use Tensorboard to archive the data and examine the effect of hyperparameters on its metrics.
-### 2) Hyperparameter tuning with the HParams dashboard in TensorBoard
+
+### 2) HParams dashboard in TensorBoard
 You will notice quickly that managing the results of all the experiments you are running becomes challenging. Which set of parameters did the best? Are my results today different than my results yesterday? Although we use Ipython Notebooks to work, the format is not well suited to logging experimental results. **Experiment tracking frameworks** such as [Comet.ml](https://www.comet.ml) and [Weights and Biases](https://wandb.ai), and [TensorBoard's Hyperparameter Dashboard](https://www.tensorflow.org/tensorboard/hyperparameter_tuning_with_hparams) help tracking experiments, store the results, and the code associated with those experiments. Experimental results can also be readily visualized to see changes in performance across any metric we care about. Data is sent to the tool as each epoch is completed, so we can also see if the model is converging.
 
 HParams works with TensorBoard, which provides an *Experiment Tracking Framework* to manage the tuning work including the parameter set data, date, and metric results. As a first step we need to define hyperparameters and score metrics.
@@ -250,7 +251,7 @@ The saved file can be opened by TensorBoard: `%tensorboard  --logdir "logs/hpara
   <img src="../assets/img/post9/post9_Hparam2.png" width="350" /> 
 </p>
 
-### 3) Hyperparameter tuning with keras-tuner
+### 3) keras-tuner
 The third approach to tune hyperparameters for a neural network is by ising keras-tuner. First we use RandomSearch technique.
 
 #### RandomSearch()
