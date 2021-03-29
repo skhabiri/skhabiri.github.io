@@ -247,6 +247,7 @@ for num_units in HP_NUM_UNITS.domain.values:
 The saved file can be opened by TensorBoard: `%tensorboard  --logdir "logs/hparam_tuning"`.
 
 <img src="../assets/img/post9/post9_Hparam1.png" />
+
 <img src="../assets/img/post9/post9_Hparam2.png" /> 
 
 ### 3) keras-tuner
