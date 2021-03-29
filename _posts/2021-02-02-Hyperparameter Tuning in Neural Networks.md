@@ -246,6 +246,7 @@ The saved file can be opened by TensorBoard: `%tensorboard  --logdir "logs/hpara
 
 ### Hyperparameter tuning with keras-tuner
 The third approach to tune hyperparameters for a neural network is by ising keras-tuner. First we use RandomSearch technique.
+
 #### RandomSearch()
 In RandomSearch() an instance of `HyperParameters` class is passed to the hypermodel parameter as an argument. An instance of `HyperParameters` class contains information about both the search space and the current values of each hyperparameter. Here we configure the `HyperParameters` for different activation functions, different number of units in the first and subsequent dense layers and different dropout values in building model and finally different learning rate in compile phase.
 ```
@@ -298,8 +299,50 @@ val_accuracy: 0.9708333412806193
 Best val_accuracy So Far: 0.9711333314577738
 Total elapsed time: 00h 03m 39s
 
+Best model is accessible and can be evalauated as follows:
+```
+best_model = tuner.get_best_models()[0]
+# Evaluate the best model.
+loss0, accuracy0 = best_model.evaluate(X_test, y_test)
+print(f"""best accuracy: {accuracy0}""")
+print("best parameters", tuner.get_best_hyperparameters(num_trials=1)[0].values)
+```
+313/313 [==============================] - 0s 730us/step - loss: 0.1086 - accuracy: 0.9708
+best accuracy: 0.9753000140190125
+best parameters {'dense_activation': 'sigmoid', 'units': 352, 'units_1': 24, 'units_2': 16, 'units_3': 40, 'dropout': 0.05, 'learning_rate': 0.00286700149775965}
+
+#### Hyperband
+Hyperband is an optimized version of random search which uses early-stopping to speed up the hyperparameter tuning process. The main idea is to fit a large number of models for a small number of epochs and to only continue training for the models achieving the highest accuracy on the validation set. The max_epochs variable is the max number of epochs that a model can be trained for.
+```
+tuner_hb = kt.Hyperband(build_model,
+                     objective = 'val_accuracy', 
+                     max_epochs = 8,
+                     #factor: Int. Reduction factor for the number of epochs.
+                     factor = 3,
+                     directory = './kt-hyperband',
+                     project_name = 'kt-HB')
+
+tuner_hb.search(X_train, y_train, epoch=5, validation_data=(X_test, y_test))
+```
+Trial 11 Complete [00h 00m 10s]
+val_accuracy: 0.9541000127792358
+
+Best val_accuracy So Far: 0.972599983215332
+Total elapsed time: 00h 01m 35s
+INFO:tensorflow:Oracle triggered exit
+
+And we can get the best parametersa and scores with `.get_best_models()` method.
+```
+# Evaluate the best model.
+print("best accuracy: ", tuner_hb.get_best_models()[0].evaluate(X_test, y_test)[1])
+print("best parameters", tuner_hb.get_best_hyperparameters(num_trials=1)[0].values)
+```
+313/313 [==============================] - 0s 734us/step - loss: 0.1175 - accuracy: 0.9684
+best accuracy:  0.972599983215332
+best parameters {'dense_activation': 'sigmoid', 'units': 352, 'units_1': 24, 'units_2': 64, 'units_3': 48, 'dropout': 0.01, 'learning_rate': 0.0027887024252856224, 'tuner/epochs': 5, 'tuner/initial_epoch': 2, 'tuner/bracket': 1, 'tuner/round': 1, 'tuner/trial_id': '3b6ae24399bfb6e6f7b9c46abb86ac61'}
+
 ### Conclusion
-We selected a feed forward perceptron topology to train a model to classify 10 target label classes from [Quickdraw dataset](https://github.com/googlecreativelab/quickdraw-dataset). The neural network that we used comprised of two dense layers with 32 neurons each and a 10 neuron output layer for 10 classes. The input tensor was 100K samples with 784 dimensions. To train the model we used TensorFlow and Keras API. We tried several Optimizer, batch sizes and learning rates to get a benchmark for this topology. With SGD optimizer, 0.01 learning rate and batch_size of 512 we got an accuracy of 0.84.
+We presented three different approaches for hyperparamter tuning of a neural network. Using Keras sklearn wrapper, HParams Dashboard in TensorBoard, and keras-tuner. all three methods were applied on MNIST dataset to classify the digit labels. The tuned model achieved test accuracy of about 0.97.
 
 ### links
 - [Github repo](https://github.com/skhabiri/ML-ANN/tree/main/module2-Train)
