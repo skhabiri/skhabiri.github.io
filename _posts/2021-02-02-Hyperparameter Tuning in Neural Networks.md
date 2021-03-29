@@ -91,14 +91,27 @@ def create_model(units=32):
 # Instantiate the KerasClassifier model    
 model = KerasClassifier(build_fn=create_model, verbose=1)  
 ```
-The `create_model` function used in KerasClassifier needs to be able to accept the fit method. From here everything is the same as what we do in sklearn. We define hyperparamter search space and instantiate the GridSerchCV() instance.
+The `create_model` function used in KerasClassifier needs to be able to accept the fit method. From here everything is the same as what we do in sklearn. We define hyperparamter search space, instantiate the GridSerchCV(), fit the model, .
 ```
 param_grid = {'batch_size': [32,64,512],
-              'epochs': [10, 20, 30],
+              'epochs': [10, 20],
               'units': [8, 16, 32]
               }
 
 grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, cv=5, refit=True)
+grid.fit(X_train, y_train)
+```
+The hyperparameters with the best score are:
+```
+print(grid.best_score_)
+grid.best_params_
+```
+0.9623166680335998
+{'batch_size': 64, 'epochs': 20, 'units': 32}
+We can access the best model and the history results for the entire input X with:
+```
+best_NN = grid.best_estimator_.model
+best_NN.history.history
 ```
 
 
