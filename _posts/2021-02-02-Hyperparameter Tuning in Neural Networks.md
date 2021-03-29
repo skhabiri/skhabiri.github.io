@@ -345,6 +345,6 @@ best parameters {'dense_activation': 'sigmoid', 'units': 352, 'units_1': 24, 'un
 We presented three different approaches for hyperparamter tuning of a neural network. Using Keras sklearn wrapper, HParams Dashboard in TensorBoard, and keras-tuner. all three methods were applied on MNIST dataset to classify the digit labels. The tuned model achieved test accuracy of about 0.97.
 
 ### links
-- [Github repo](https://github.com/skhabiri/ML-ANN/tree/main/module2-Train)
+- [Github repo](https://github.com/skhabiri/ML-ANN/tree/main/module3-Tune)
 - [Keras](https://keras.io)
 - [TensorFlow](https://www.tensorflow.org)
