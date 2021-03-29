@@ -347,6 +347,9 @@ print("best parameters", tuner_hb.get_best_hyperparameters(num_trials=1)[0].valu
 best accuracy:  0.972599983215332
 best parameters {'dense_activation': 'sigmoid', 'units': 352, 'units_1': 24, 'units_2': 64, 'units_3': 48, 'dropout': 0.01, 'learning_rate': 0.0027887024252856224, 'tuner/epochs': 5, 'tuner/initial_epoch': 2, 'tuner/bracket': 1, 'tuner/round': 1, 'tuner/trial_id': '3b6ae24399bfb6e6f7b9c46abb86ac61'}
 
+After tuning the model we get 0.97 accuracy. Below is prediction result for 10 random test input samples:
+<img src="../assets/img/post9/post9_digits.png" />
+
 ### Conclusion
 We presented three different approaches for hyperparamter tuning of a neural network. Using Keras sklearn wrapper, HParams Dashboard in TensorBoard, and keras-tuner. all three methods were applied on MNIST dataset to classify the digit labels. The tuned model achieved test accuracy of about 0.97.
 
