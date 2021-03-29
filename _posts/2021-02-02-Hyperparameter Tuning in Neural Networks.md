@@ -113,6 +113,175 @@ We can access the best model and the history results for the entire input X with
 best_NN = grid.best_estimator_.model
 best_NN.history.history
 ```
+### Hyperparameter tuning with the HParams dashboard in TensorBoard
+You will notice quickly that managing the results of all the experiments you are running becomes challenging. Which set of parameters did the best? Are my results today different than my results yesterday? Although we use Ipython Notebooks to work, the format is not well suited to logging experimental results. **Experiment tracking frameworks** such as [Comet.ml](https://www.comet.ml) and [Weights and Biases](https://wandb.ai), and [TensorBoard's Hyperparameter Dashboard](https://www.tensorflow.org/tensorboard/hyperparameter_tuning_with_hparams) help tracking experiments, store the results, and the code associated with those experiments. Experimental results can also be readily visualized to see changes in performance across any metric we care about. Data is sent to the tool as each epoch is completed, so we can also see if the model is converging.
+
+HParams works with TensorBoard, which provides an *Experiment Tracking Framework* to manage the tuning work including the parameter set data, date, and metric results. As a first step we need to define hyperparameters and score metrics.
+```
+from tensorboard.plugins.hparams import api as hp
+
+# Define hyper parametres and score metrics
+HP_NUM_UNITS = hp.HParam('num_units', hp.Discrete([16,32]))
+HP_LEARNING_RATE = hp.HParam('learning_rate', hp.RealInterval(0.001,.01))
+HP_OPTIMIZER = hp.HParam('optimizer', hp.Discrete(['adam', 'sgd']))
+HP_ADDLAYER = hp.HParam('hplayer', hp.Discrete([False, True]))
+HP_DROPOUT = hp.HParam('hpdropout', hp.RealInterval(0.1, 0.2))
+HP_EPOCH = hp.HParam('hpepoch', hp.Discrete([5]))
+HP_BATCH = hp.HParam('hpbatch', hp.Discrete([128]))
+
+METRIC_ACCURACY = 'hpaccuracy'
+METRIC_LOSS = 'hploss'
+METRIC_MSE = 'hpmse'
+
+with tf.summary.create_file_writer('logs/hparam_tuning').as_default():
+  hp.hparams_config(
+      hparams=[HP_NUM_UNITS, HP_LEARNING_RATE, HP_OPTIMIZER, HP_EPOCH, HP_BATCH, HP_ADDLAYER, HP_DROPOUT],
+      metrics=[hp.Metric(METRIC_ACCURACY, display_name='HPaccuracy'), 
+               hp.Metric(METRIC_LOSS, display_name='HPloss'),
+               hp.Metric(METRIC_MSE, display_name='HPmse')
+                ]
+  )
+```
+After creating experiment configuration, we need to adapt a model function with HParams.
+```
+def train_test_model(hparams):
+    """
+    hparams: a dictionary with keys being of HParams type and 
+    values being list of possible values
+    """
+  
+    model = tf.keras.Sequential([
+        tf.keras.layers.Dense(hparams[HP_NUM_UNITS], activation='relu'),
+        tf.keras.layers.Dropout(hparams[HP_DROPOUT])
+    ])
+    
+    if hparams[HP_ADDLAYER] == True:
+        model.add(tf.keras.layers.Dense(hparams[HP_NUM_UNITS], activation='relu'))
+
+    model.add(tf.keras.layers.Dense(10, activation='softmax'))      
+  
+
+    # Optimizer need the learning rate
+    opt_name = hparams[HP_OPTIMIZER]
+    lr = hparams[HP_LEARNING_RATE]
+
+    if opt_name == 'adam':
+        opt = tf.keras.optimizers.Adam(learning_rate=lr)
+    elif opt_name == 'sgd':
+        opt = tf.keras.optimizers.SGD(learning_rate=lr)
+    else:
+        raise ValueError(f'Unexpected optimizer: {opt_name}')
+
+    # Compile defines optimizer, loss function and metric
+    model.compile(
+        optimizer=opt,
+        loss='sparse_categorical_crossentropy',
+        metrics=['accuracy', 'mse']
+      )
+
+    model.fit(X_train, y_train, epochs=hparams[HP_EPOCH], batch_size=hparams[HP_BATCH])
+    
+    print("Metrics:", model.metrics_names)
+    [loss, accuracy, mse] = model.evaluate(X_test, y_test)
+
+    return loss, accuracy, mse
+```
+HParam can work with tensor.summary file which is accessible by tensorboard. We use HParam to record parameter sets in the file. Now we write a function that for each run, logs an hparams summary with the hyperparameters and measurement metrics.
+```
+def run(run_dir, hparams):
+    """trains and evaluate the NN for the hparams and store the HParams into a summary file 
+    for the given log directory as well as accuracy number in the form of tensor.
+    The summary file is accessible by tensorboard for visualization and record keeping
+    """
+    with tf.summary.create_file_writer(run_dir).as_default():
+        # .hparams() is a method of hp
+        # This seems the only part that HParam brings value compare to a primitive variable
+        hp.hparams(hparams)  # record the parameter values used in this trial
+        
+        [loss, accuracy, mse] = train_test_model(hparams)
+        # The summary tag used for TensorBoard will be METRIC_ACCURACY='accuracy' prefixed by any active name scopes.
+        tf.summary.scalar(name=METRIC_ACCURACY, data=accuracy, step=1)        
+        tf.summary.scalar(name=METRIC_LOSS, data=loss, step=1)
+        tf.summary.scalar(name=METRIC_MSE, data=mse, step=1)
+```
+Now we are going to create a series of HParam values and save the trained results in separate log file directories.
+```
+session_num = 0
+
+# Basically a grid search
+for num_units in HP_NUM_UNITS.domain.values:
+  for learning_rate in (HP_LEARNING_RATE.domain.min_value,
+                        HP_LEARNING_RATE.domain.max_value):
+    for optimizer in HP_OPTIMIZER.domain.values:
+        for batch in HP_BATCH.domain.values:
+            for epoch in HP_EPOCH.domain.values:
+                for layer in HP_ADDLAYER.domain.values:
+                    for dropout_rate in (HP_DROPOUT.domain.min_value, HP_DROPOUT.domain.max_value):
+                        # of parameter set with dict key of type hp.HParam
+                          hparams = {
+                              HP_NUM_UNITS: num_units,
+                              HP_LEARNING_RATE: learning_rate,
+                              HP_OPTIMIZER: optimizer,
+                              HP_BATCH: batch,
+                              HP_EPOCH: epoch,
+                              HP_ADDLAYER: layer,
+                              HP_DROPOUT: dropout_rate
+                          }
+
+                          run_name = f'run-{session_num}'
+                          print(f'--- Starting trial: {run_name}')
+                          # type(param): <class 'tensorboard.plugins.hparams.summary_v2.HParam'>
+                          # param: <HParam 'num_units': {16, 32}>
+                          #  param.name: num_units
+                          print({param.name: hparams[param] for param in hparams})
+                          run('logs/hparam_tuning/' + run_name, hparams)
+                          session_num += 1
+```
+\begin{table}[tbp]
+\begin{tabular}{llllll}
+num\_units & learning\_rate & optimizer & hpepoch & hpbatch & HPaccuracy \\ \hline
+$16$ & $0.01$ & sgd & $5$ & $128$ & $0.895$ \\
+$16$ & $0.001$ & sgd & $5$ & $128$ & $0.389$ \\
+$16$ & $0.01$ & adam & $5$ & $128$ & $0.92$ \\
+$32$ & $0.001$ & sgd & $5$ & $128$ & $0.749$ \\
+$32$ & $0.001$ & adam & $5$ & $128$ & $0.956$ \\
+$16$ & $0.001$ & sgd & $5$ & $128$ & $0.751$ \\
+$32$ & $0.001$ & sgd & $5$ & $128$ & $0.709$ \\
+$32$ & $0.001$ & adam & $5$ & $128$ & $0.955$ \\
+$32$ & $0.01$ & sgd & $5$ & $128$ & $0.905$ \\
+$32$ & $0.01$ & sgd & $5$ & $128$ & $0.895$ \\
+$32$ & $0.01$ & sgd & $5$ & $128$ & $0.903$ \\
+$16$ & $0.01$ & adam & $5$ & $128$ & $0.934$ \\
+$16$ & $0.001$ & adam & $5$ & $128$ & $0.939$ \\
+$32$ & $0.001$ & adam & $5$ & $128$ & $0.961$ \\
+$16$ & $0.001$ & adam & $5$ & $128$ & $0.94$ \\
+$32$ & $0.001$ & sgd & $5$ & $128$ & $0.657$ \\
+$16$ & $0.01$ & adam & $5$ & $128$ & $0.918$ \\
+$16$ & $0.001$ & adam & $5$ & $128$ & $0.927$ \\
+$32$ & $0.001$ & sgd & $5$ & $128$ & $0.697$ \\
+$16$ & $0.01$ & adam & $5$ & $128$ & $0.937$ \\
+$16$ & $0.001$ & adam & $5$ & $128$ & $0.931$ \\
+$32$ & $0.01$ & adam & $5$ & $128$ & $0.955$ \\
+$32$ & $0.001$ & adam & $5$ & $128$ & $0.953$ \\
+$16$ & $0.001$ & sgd & $5$ & $128$ & $0.69$ \\
+$16$ & $0.01$ & sgd & $5$ & $128$ & $0.881$ \\
+$32$ & $0.01$ & adam & $5$ & $128$ & $0.955$ \\
+$32$ & $0.01$ & sgd & $5$ & $128$ & $0.905$ \\
+$16$ & $0.01$ & sgd & $5$ & $128$ & $0.863$ \\
+$16$ & $0.01$ & sgd & $5$ & $128$ & $0.882$ \\
+$32$ & $0.01$ & adam & $5$ & $128$ & $0.954$ \\
+$32$ & $0.01$ & adam & $5$ & $128$ & $0.951$ \\
+$16$ & $0.001$ & sgd & $5$ & $128$ & $0.375$ \\
+\hline
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+
 
 
 
