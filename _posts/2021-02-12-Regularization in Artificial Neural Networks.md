@@ -134,7 +134,7 @@ Epoch 8/99
 
 `Weight decay + stop loss` lowers the overall accuracy compared to having only the `stop loss`, as it puts more restriction on training the model from the onset. However, the model is more generalized and validation accuracy is the same level as the training accuracy. This is achieved by lowering the sensitivity of the model to any particular weight and consequently future unseen test data.
 
-### Weight Constraint and dropout layer
+### Weight Constraint
 
 If [L2-Norm](https://iq.opengenus.org/euclidean-distance) of the weights exceeds a set value of m, the weight constraint would scale the whole weight matrix by a factor that reduces the maximum norm to m. When using a simple L2 regularization only the high weights are penalized due to the loss function. However, in Weight constraint, we regularize directly. This seems to work especially well in combination with a dropout layer.
 ```
@@ -159,9 +159,18 @@ model.fit(X_train, y_train, epochs=99,
           validation_data=(X_test,y_test),
           callbacks=[tensorboard_callback, stop])
 ```
+Epoch 5/99
+1875/1875 [==============================] - 18s 10ms/step - loss: 0.2936 - accuracy: 0.8897 - val_loss: 0.3681 - val_accuracy: 0.8633
+Epoch 6/99
+1875/1875 [==============================] - 17s 9ms/step - loss: 0.2881 - accuracy: 0.8906 - val_loss: 0.3641 - val_accuracy: 0.8730
+<tensorflow.python.keras.callbacks.History at 0x7f9cc3bd03c8>
 
+Training and validation accuracy are still close and overall less than a model without regularization.
 
+### Dropout Layer
+Dropout deactivates a percentage of neurons of each layer randomly, each epoch the neurons will be randomly selected and deactivated, therefore the Forward propagation nor Backward propagation will not use these neurons to train the model.
 
+<img src="../assets/img/post10/post10_dropout.png" >
 
 
 
