@@ -176,11 +176,114 @@ Epoch 6/99
 
 Training and validation accuracy are still close and overall they are less than the ones for a model without regularization.
 
+## Model Deployment
+You've built a image classification model, but it's just sitting in your Jupyter Notebook. What now? Well you deploy to some down stream application. TensorFlow supports three ways of deploying it's models:
+- In-Browser with TensorFlow.js
+- API with TensorFlow Serving (TFX) or another Framework
+- On-Device with TensorFlow Lite
 
+All those methods rely on the same core idea: save your weights and architecture information, load those parameters into application, and perform inference.
 
+### ModelCheckpoint callback
+ModelCheckpoint callback is used in conjunction with `.fit()` method to save a model or weights (in a checkpoint file) at some interval, so the model or weights can be loaded later to continue the training from a saved state. A few options this callback provides include:
+- Whether to only keep the model that has achieved the "best performance" so far, or whether to save the model at the end of every epoch regardless of performance.
+- Definition of 'best'; which quantity to monitor and whether it should be maximized or minimized.
+- The frequency that it should save at. It could be saving at the end of every epoch, or after a fixed number of training batches.
+- Whether only weights are saved, or the whole model is saved.
+```
+# opting out of saving NN architecture
+checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(filepath="weights_best.h5", 
+                                                         monitor='val_loss', 
+                                                         verbose=1, 
+                                                         save_best_only=False, 
+                                                         save_freq='epoch',
+                                                         save_weights_only=True)
+                                                         
+
+def create_model():
+  model = tf.keras.Sequential([
+      Flatten(input_shape=(28,28)),
+      Dense(128),
+      ReLU(negative_slope=.01),
+      Dense(128),
+      ReLU(negative_slope=.01),
+      Dense(128),
+      ReLU(negative_slope=.01),
+      Dense(10, activation='softmax')
+  ])
+
+  model.compile(loss='sparse_categorical_crossentropy', optimizer='nadam',
+                metrics=['accuracy'])
+
+  return model
+
+model = create_model()
+
+model.fit(X_train, y_train, epochs=5, validation_data=(X_test,y_test),
+          verbose=2, callbacks=[checkpoint_callback])
+```
+
+Epoch 1/5
+1875/1875 - 5s - loss: 0.4753 - accuracy: 0.8280 - val_loss: 0.4177 - val_accuracy: 0.8427
+
+Epoch 00001: saving model to weights_best.h5
+Epoch 2/5
+1875/1875 - 2s - loss: 0.3517 - accuracy: 0.8706 - val_loss: 0.3744 - val_accuracy: 0.8669
+
+Epoch 00002: saving model to weights_best.h5
+Epoch 3/5
+1875/1875 - 2s - loss: 0.3166 - accuracy: 0.8822 - val_loss: 0.3596 - val_accuracy: 0.8666
+
+Epoch 00003: saving model to weights_best.h5
+Epoch 4/5
+1875/1875 - 3s - loss: 0.2959 - accuracy: 0.8898 - val_loss: 0.3517 - val_accuracy: 0.8713
+
+Epoch 00004: saving model to weights_best.h5
+Epoch 5/5
+1875/1875 - 2s - loss: 0.2807 - accuracy: 0.8950 - val_loss: 0.3432 - val_accuracy: 0.8780
+
+Epoch 00005: saving model to weights_best.h5
+<tensorflow.python.keras.callbacks.History at 0x7f9cb378b780>
+
+The model is saved at the end of each epoch. Now if we evaluate the model:
+```
+model.evaluate(X_test, y_test)
+```
+313/313 [==============================] - 0s 866us/step - loss: 0.3432 - accuracy: 0.8780
+[0.34324756264686584, 0.878000020980835]
+
+```
+model.evaluate(X_train, y_train)
+```
+1875/1875 [==============================] - 2s 995us/step - loss: 0.2627 - accuracy: 0.9021
+[0.2627202272415161, 0.9020666480064392]
+
+Notice that the loss from `.fit()` on the last epoch for train data is different from the loss from `.evaluate()` method but those loss numbers are the same for evaluation data. To answer this, please note:
+
+* **.fit():** During the train process of even the last epoch at the end of each of its batch, we update the weights. even at the end of the last batch of the last epoch we update the weight one last time. That is for training data. The validation of the last epoch is fed in after the last epoch model weights are updated.
+
+* **.evaluate():** The model is already finalized and the validation data is fed to the same model as the one after the last batch of the last epoch. So validation results are the same. That wouldn't be the case for the training data.
+
+For training data in addition to back propagation update at the end of each batch, if we have random dropout, that would also come into effect during the fit(). However during evaluate() we do not have dropout any longer.
+
+### Load exported model
+Notice that in the previous section we only chose to save the weight and not the architecture of the model. In order to use the exported model we need to create a model template with the same architecture as before, `m = create_model()`. Now we can confidently load the weights from the last ntraining phse into the new model, `m.load_weights('./weights_best.h5') `. Now if we run the evaluate method on the loaded model we expect the same results:
+```
+m.evaluate(X_test, y_test, verbose=1)
+```
+313/313 [==============================] - 0s 857us/step - loss: 0.3432 - accuracy: 0.8780
+[0.34324756264686584, 0.878000020980835]
+```
+m.evaluate(X_train, y_train)
+```
+1875/1875 [==============================] - 2s 1ms/step - loss: 0.2627 - accuracy: 0.9021
+[0.2627202272415161, 0.9020666480064392]
+
+Please note that the computation result is related to the average metric value of all the batches in that epoch. 
+Saving the entire model could have make the model size too big and complicates the process of deployment. One way to address this issue is to trim the architecture by using smaller number of layers and neurons. Another tip would be to store the finalized model with reduced precision. In the process of training we do not want to lower the precision as it could fail to converge or affect the performance. However once the model is finalized and ready to be saved we could round the number of decimal points for the paramters and reduced the precision of the floating point numbers for the saved model.
 
 ### Conclusion
-We presented three different approaches for hyperparamter tuning of a neural network. Using Keras sklearn wrapper, HParams Dashboard in TensorBoard, and keras-tuner. all three methods were applied on MNIST dataset to classify the digit labels. The tuned model achieved test accuracy of about 0.97.
+In this article we discussed different approaches to regularize the model and prevent overfitting. In particular we showed how to use call backs to trigger early stopping, use weigh decay and constraint with different loss functions to regularize the NN parameters, and finally using dropout technique to reduce the sensivity of the model to any particular path. We also discussed the practical aspects of saving a tensorflow model for deployment in a down stream application. 
 
 ### links
 - [Github repo](https://github.com/skhabiri/ML-ANN/tree/main/module3-Tune)
