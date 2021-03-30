@@ -286,6 +286,9 @@ Saving the entire model could have make the model size too big and complicates t
 In this article we discussed different approaches to regularize the model and prevent overfitting. In particular we showed how to use call backs to trigger early stopping, use weigh decay and constraint with different loss functions to regularize the NN parameters, and finally using dropout technique to reduce the sensivity of the model to any particular path. We also discussed the practical aspects of saving a tensorflow model for deployment in a down stream application. 
 
 ### links
-- [Github repo](https://github.com/skhabiri/ML-ANN/tree/main/module3-Tune)
-- [Keras](https://keras.io)
+- [Github repo](https://github.com/skhabiri/ML-ANN/tree/main/module4-Deploy)
+- [Keras callbacks](https://keras.io/api/callbacks/)
 - [TensorFlow](https://www.tensorflow.org)
+- [TensorBoard](https://www.tensorflow.org/tensorboard)
+- [Regularizers](https://keras.io/api/layers/regularizers)
+- [TensorFlow.js](https://www.tensorflow.org/js)
