@@ -81,16 +81,19 @@ Regularizers allow you to apply penalties on layer parameters or layer activity 
 
 #### Loss function for regularization
 Ridge (l2) and Lasso (l1) are 2 out of possibily infinitly many ways to regularize a model by using a [distiance metric in Lp space](https://en.wikipedia.org/wiki/Lp_space). 
-* Ridge L2:
+* **Ridge L2:**
 Ordinary least squares (OLS) provides what is called the Best Linear Unbiased Estimator. That means that if you take any other unbiased estimator, it is bound to have a higher variance than the OLS solution. 
 In Ridge, as a loss function we have sum of the squared errors (Ordinary Least Square) plus lambda times some of squared of model paramters except the y intercept (bias). 
 
-<center><img src="../assets/img/post10/post10_ridgeexp.png" width="300" /></center>
+<p align="center">
+<img src="../assets/img/post10/post10_ridgeexp.png" width="200">
+</p>
 
-$$Loss = \sum {E}^2 +\lambda\sum {{coef}^2}$$
-The higher value of $\lambda$ lowers the slope (coefficients) which makes the fit to be more represented by y intercept. But it lowers the MSE for the unseen data as the model coefficients (slope) is less which means the model would not make a drastic change to fit the noisy data (overfitting). The MSE between the estimated model and training data represent the **bias**. The MSE between the estimated model and validation data represents the **variance**. Ridge regression adds to the model bias and in return lowers the variance.
-* Lasso L1:
-In Lasso loss is: $$Loss = \sum {E}^2 +\lambda\sum {|coef|}$$
+The higher value of ƛ lowers the slope (coefficients) which makes the fit to be more represented by y intercept. But it lowers the MSE for the unseen data as the model coefficients (slope) is less which means the model would not make a drastic change to fit the noisy data (overfitting). The MSE between the estimated model and training data represent the **bias**. The MSE between the estimated model and validation data represents the **variance**. Ridge regression adds to the model bias and in return lowers the variance.
+* **Lasso L1:**
+In Lasso loss function is: 
+<p align="center"><img src="../assets/img/post10/post10_lassoexp.png" width="200"></p>
+
 Similar to ridge regression different coefficients may reduce ununiformely. However unlike ridge where a coefficient might reduce to zero for $\lambda \to \infty$, in Lasso a coefficient can reduce to **exactly** zero for a limited value of $\lambda$. This is a useful property where our data has some irrelevant features that we want to eliminate them from the model.
 
 Both L2 and L1 are used to help prevent overfitting. The key difference between them is that L1 will calcualte zero valued feature weights (i.e. w = 0) for a subset of features with redundant information. Mathematically, this is refered to as [MultiCollinearity](https://en.wikipedia.org/wiki/Multicollinearity). While L2 will shrink the value of all feature weights but almost never down to zero.
