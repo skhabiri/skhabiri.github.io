@@ -103,7 +103,8 @@ Regularizers allow you to apply penalties on layer parameters or layer activity 
 - bias_regularizer: to apply penalty on the layer's bias
 - activity_regularizer: to apply penalty on the layer's activation output
 Again we use two callbacks here. `TensorBoard` callback writes the results into a log file at every epoch and `EarlyStopping` callback stops the training process after 3 consecutive validation loss reductions, each less than the threshold 0.01.
-```
+
+```python
 from tensorflow.keras import regularizers
 
 model = tf.keras.Sequential([
