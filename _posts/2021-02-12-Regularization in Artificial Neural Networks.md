@@ -130,9 +130,9 @@ Epoch 8/99
 1875/1875 [==============================] - 15s 8ms/step - loss: 0.5689 - accuracy: 0.8459 - val_loss: 0.6612 - val_accuracy: 0.8096
 <tensorflow.python.keras.callbacks.History at 0x7f9cfc6b03c8>
 
-`Weight decay + stop loss` lowers the validation accuracy compared to having only the `stop loss`, as it puts more restriction on training the model from the onset. However, this can generalize the model by lowering the sensitivity of the model to any particular weight and consequently future unseen test data.
-
 <img src="../assets/img/post10/post10_decay.png" >
+
+`Weight decay + stop loss` lowers the overall accuracy compared to having only the `stop loss`, as it puts more restriction on training the model from the onset. However, the model is more generalized and validation accuracy is the same level as the training accuracy. This is achieved by lowering the sensitivity of the model to any particular weight and consequently future unseen test data.
 
 
 
