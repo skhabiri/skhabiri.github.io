@@ -46,7 +46,7 @@ model = tf.keras.Sequential([
 ```
 Next we will apply regularization technique to avoid overfittting the model. 
 
-### Early stopping
+### Early Stopping
 `EarlyStopping` is a common technique that is used to prevent overfitting the model. In a neural network it can be simply implemented by a callback.
 ```
 from tensorflow.keras.callbacks import EarlyStopping, TensorBoard
@@ -134,10 +134,31 @@ Epoch 8/99
 
 `Weight decay + stop loss` lowers the overall accuracy compared to having only the `stop loss`, as it puts more restriction on training the model from the onset. However, the model is more generalized and validation accuracy is the same level as the training accuracy. This is achieved by lowering the sensitivity of the model to any particular weight and consequently future unseen test data.
 
+### Weight Constraint and dropout layer
 
+If [L2-Norm](https://iq.opengenus.org/euclidean-distance) of the weights exceeds a set value of m, the weight constraint would scale the whole weight matrix by a factor that reduces the maximum norm to m. When using a simple L2 regularization only the high weights are penalized due to the loss function. However, in Weight constraint, we regularize directly. This seems to work especially well in combination with a dropout layer.
+```
+from tensorflow.keras.constraints import MaxNorm
 
+wc = MaxNorm(max_value=2)
 
+model = tf.keras.Sequential([
+    Flatten(input_shape=(28,28)),
+    Dense(512, kernel_constraint=wc),
+    ReLU(negative_slope=.01),
+    Dense(512, kernel_constraint=wc),
+    ReLU(negative_slope=.01),
+    Dense(512, kernel_constraint=wc),
+    ReLU(negative_slope=.01),
+    Dense(10, activation='softmax')
+])
 
+model.compile(loss='sparse_categorical_crossentropy', optimizer='nadam', metrics=['accuracy'])
+
+model.fit(X_train, y_train, epochs=99, 
+          validation_data=(X_test,y_test),
+          callbacks=[tensorboard_callback, stop])
+```
 
 
 
