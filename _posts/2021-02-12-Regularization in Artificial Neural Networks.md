@@ -85,7 +85,7 @@ Ridge (l2) and Lasso (l1) are 2 out of possibily infinitly many ways to regulari
 Ordinary least squares (OLS) provides what is called the Best Linear Unbiased Estimator. That means that if you take any other unbiased estimator, it is bound to have a higher variance than the OLS solution. 
 In Ridge, as a loss function we have sum of the squared errors (Ordinary Least Square) plus lambda times some of squared of model paramters except the y intercept (bias). 
 
-<img src="../assets/img/post10/post10_samples.png" />
+<img src="../assets/img/post10/post10_ridgeexp.png" width="300" class="center" />
 
 $$Loss = \sum {E}^2 +\lambda\sum {{coef}^2}$$
 The higher value of $\lambda$ lowers the slope (coefficients) which makes the fit to be more represented by y intercept. But it lowers the MSE for the unseen data as the model coefficients (slope) is less which means the model would not make a drastic change to fit the noisy data (overfitting). The MSE between the estimated model and training data represent the **bias**. The MSE between the estimated model and validation data represents the **variance**. Ridge regression adds to the model bias and in return lowers the variance.
