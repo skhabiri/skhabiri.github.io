@@ -76,9 +76,6 @@ The model stops training after 8 epochs at 0.91 accuracy.
 <img src="../assets/img/post10/post10_earlystopping.png" />
 As we see in the above TensorBoard's Graphs dashboard, after epoch=5 validation loss stops decreasing while training loss continue to improve. We could choose to relax the EarlyStopping condition in order to train the model further.
 
-### Weight Decay
-Regularizers allow you to apply penalties on layer parameters or layer activity during optimization. These penalties are summed into the loss function that the network optimizes. We mostly use l1 and l2 as loss function for regularization.
-
 #### Loss function for regularization
 Ridge (l2) and Lasso (l1) are 2 out of possibily infinitly many ways to regularize a model by using a [distiance metric in Lp space](https://en.wikipedia.org/wiki/Lp_space). 
 * **Ridge L2:**
@@ -91,15 +88,51 @@ In Ridge, as a loss function we have sum of the squared errors (Ordinary Least S
 
 The higher value of ƛ lowers the slope (coefficients) which makes the fit to be more represented by y intercept. But it lowers the MSE for the unseen data as the model coefficients (slope) is less which means the model would not make a drastic change to fit the noisy data (overfitting). The MSE between the estimated model and training data represent the **bias**. The MSE between the estimated model and validation data represents the **variance**. Ridge regression adds to the model bias and in return lowers the variance.
 * **Lasso L1:**
-In Lasso loss function is: 
+Here the loss function is: 
 <p align="center"><img src="../assets/img/post10/post10_lassoexp.png" width="200"></p>
 
-Similar to ridge regression different coefficients may reduce ununiformely. However unlike ridge where a coefficient might reduce to zero for $\lambda \to \infty$, in Lasso a coefficient can reduce to **exactly** zero for a limited value of $\lambda$. This is a useful property where our data has some irrelevant features that we want to eliminate them from the model.
+Similar to ridge regression different coefficients may reduce ununiformely. However unlike ridge where a coefficient might reduce to zero for ƛ→∞, in Lasso a coefficient can reduce to **exactly** zero for a limited value of ƛ. This is a useful property where our data has some irrelevant features that we want to eliminate them from the model.
 
 Both L2 and L1 are used to help prevent overfitting. The key difference between them is that L1 will calcualte zero valued feature weights (i.e. w = 0) for a subset of features with redundant information. Mathematically, this is refered to as [MultiCollinearity](https://en.wikipedia.org/wiki/Multicollinearity). While L2 will shrink the value of all feature weights but almost never down to zero.
 
+<img src="../assets/img/post10/post10_lasso_vs_ridge_regression.png" >
 
+### Weight Decay
+Regularizers allow you to apply penalties on layer parameters or layer activity during optimization. These penalties are summed into the loss function that the network optimizes. We mostly use l1 and l2 as loss function for regularization. We can regularize different aspects of a layer:
+- kernel_regularizer: to apply penalty on the layer's kernel weights
+- bias_regularizer: to apply penalty on the layer's bias
+- activity_regularizer: to apply penalty on the layer's activation output
+Again we use two callbacks here. `TensorBoard` callback writes the results into a log file at every epoch and `EarlyStopping` callback stops the training process after 3 consecutive validation loss reductions, each less than the threshold 0.01.
+```
+from tensorflow.keras import regularizers
 
+model = tf.keras.Sequential([
+    Flatten(input_shape=(28,28)),
+    Dense(512, kernel_regularizer=regularizers.l2(l2=0.01)),
+    ReLU(negative_slope=.01),
+    Dense(512, kernel_regularizer=regularizers.l2(l2=0.01)),
+    ReLU(negative_slope=.01),
+    Dense(512, kernel_regularizer=regularizers.l2(l2=0.01)),
+    ReLU(negative_slope=.01),
+    Dense(10, activation='softmax')
+])
+
+model.compile(loss='sparse_categorical_crossentropy', optimizer='nadam',
+              metrics=['accuracy'])
+
+model.fit(X_train, y_train, epochs=99, 
+          validation_data=(X_test,y_test),
+          callbacks=[tensorboard_callback, stop])
+```
+Epoch 7/99
+1875/1875 [==============================] - 15s 8ms/step - loss: 0.5852 - accuracy: 0.8422 - val_loss: 0.6197 - val_accuracy: 0.8260
+Epoch 8/99
+1875/1875 [==============================] - 15s 8ms/step - loss: 0.5689 - accuracy: 0.8459 - val_loss: 0.6612 - val_accuracy: 0.8096
+<tensorflow.python.keras.callbacks.History at 0x7f9cfc6b03c8>
+
+`Weight decay + stop loss` lowers the validation accuracy compared to having only the `stop loss`, as it puts more restriction on training the model from the onset. However, this can generalize the model by lowering the sensitivity of the model to any particular weight and consequently future unseen test data.
+
+<img src="../assets/img/post10/post10_decay.png" >
 
 
 
