@@ -5,7 +5,7 @@ subtitle:
 gh-repo: skhabiri/ML-ANN/tree/main/module4-Deploy
 gh-badge: [star, fork, follow]
 tags: [Machine Learning, Neural Network, Regularization, TensorFlow, Keras]
-image: /assets/img/post10/post10_regularization.png
+image: /assets/img/post10/post10_lasso_vs_ridge_regression.png
 comments: false
 ---
 
