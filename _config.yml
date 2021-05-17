@@ -15,7 +15,7 @@ author: Sean Khabiri
 # --- List of links in the navigation bar --- #
 
 navbar-links:
-  About Me: "about me"
+  About Me: "aboutme"
   Recent ML Apps:
      - Bridges to Prosperity API: "https://b2p.skhabiri.com"
      - HypoTweet App: "https://hypotweet.herokuapp.com"
