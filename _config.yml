@@ -17,12 +17,14 @@ author: Sean Khabiri
 navbar-links:
   About Me: "aboutme"
   Machine Learning Engineer/Data scientist with graduate degrees in ECE and professional experience in Silicon Valley startups and bluechip companies, Delivered several system on chip projects from concept to commercial release. Excited about Machine Learning, Neural Networks, Deep Learning, Decentralized Finance.
-
-  Resources:
+  Recent ML Apps:
      - Bridges to Prosperity API: "https://b2p.skhabiri.com"
      - HypoTweet App: "https://hypotweet.herokuapp.com"
      - Spotify Web App: "https://fastapi-spotify.herokuapp.com"
      - ForestCover Metrics Plotly Dashboard: "https://predictivemodeling-covertype.herokuapp.com"
+  Project List:
+     - Bridges to Prosperity API: "https://b2p.skhabiri.com"    
+  Resources:
      - Learn markdown: "https://www.markdowntutorial.com/"
   Home: "https://skhabiri.com"
 
