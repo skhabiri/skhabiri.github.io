@@ -1,4 +1,3 @@
-# Recent Applied Machine Learning and Data Science Projects
 ### Natural Language Processing (NLP)
   - *Tokenization and visualization of customer reviews:*
     - Performed frequency based and w2v tokenization on review texts of “Datafiniti Amazon consumer reviews” and “Yelp coffee shop reviews” datasets separately. The tokens were statistically trimmed and visualized by Squarify library. [github](https://github.com/skhabiri/ML-NLP/tree/main/module1-text-data)
