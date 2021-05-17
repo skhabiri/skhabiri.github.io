@@ -14,32 +14,32 @@
   - *A Subreddit Recommendation Engine Using NLP techniques:*
     - Built a recommendation engine that takes a text and recommends a subreddit category based on the content. Praw, a reddit api for python was utilized to pull data from reddit into a local SQL database. Achieved 0.53 accuracy for 44 subreddit categories. [github](https://github.com/skhabiri/SubReddit-Recommender), [blog post](https://skhabiri.com/2020-10-20-Building_A_Subreddit_Recommendation_Engine_Using_Machine_Learning_Techniques/)
 
-* **Feedforward Artificial Neural Networks (Perceptron)**
+### Feedforward Artificial Neural Networks (Perceptron)
   - *Supervised learning using artificial neural networks:*
     - Performed hyper-parameter tuning on MNIST dataset. Achieved validation accuracy of 0.95. [github](https://github.com/skhabiri/ML-ANN)
     - Trained a feed forward NN on Quickdraw dataset containing 100K drawing in ten classes. Applied common techniques to avoid overfitting. Achieved accuracy score of 0.82. [github](https://github.com/skhabiri/ML-ANN/blob/main/module3-Tune/ann_tune-423a.ipynb), [blog post](https://skhabiri.com/2021-01-12-Sketch-Classification-with-Neural-Networks/)
 
-* **Recurrent Neural Network (RNN)**
+### Recurrent Neural Network (RNN)
   - *Sentiment Classification:*
     - Trained a RNN consists of Keras Embedding and LSTM layers to classify review sentiments for an IMBD Reviews dataset. Resulting in accuracy score of 0.83. [github](https://github.com/skhabiri/ML-DeepLearning/tree/main/module1-rnn-and-lstm)
   - *Text generation:*
     - Trained a RNN on a dataset containing news articles to generate text given a seed phrase. [github](https://github.com/skhabiri/ML-DeepLearning/blob/main/module1-rnn-and-lstm/ann_rnn_lstm-431.ipynb)
     - Trained a Recurrent Neural Networks to generate text in Shakespeare's writing style, given a random prompt. [github](https://github.com/skhabiri/ML-DeepLearning/blob/main/module1-rnn-and-lstm/ann_rnn_lstm-431a.ipynb)
 
-* **Convolutional Neural Network (CNN)**
+### Convolutional Neural Network (CNN)
   - *Transfer Learning and Image classification:*
     - Used pretrained ResNet50 for unsupervised image classification. [github](https://github.com/skhabiri/ML-DeepLearning/blob/main/module2-convolutional-neural-networks/cnn-432.ipynb)
     - Trained a 2D convolutional neural network for multiclass classification on cifar10 dataset. Achieved 0.91 prediction accuracy. [github](https://github.com/skhabiri/ML-DeepLearning/blob/main/module2-convolutional-neural-networks/cnn-432.ipynb)
     - Trained a neural network consists of customized top layers added to the ResNet50 image processing layers for a binary classification, which achieved a val_accuracy of 0.84. [github](https://github.com/skhabiri/ML-DeepLearning/tree/main/module2-convolutional-neural-networks)
     - Built and trained a 9 layer customized CNN on an augmented dataset of mountains and forests for binary classification  Achieved accuracy score of 0.87. [github](https://github.com/skhabiri/ML-DeepLearning/blob/main/module2-convolutional-neural-networks/cnn-432a.ipynb)
 
-* **Autoencoders**
+### Autoencoders
   - *Unsupervised dimensions reduction:*
     - Trained an autoencoder consists of fully connected layers to reconstruct an image after dimension reduction using quickdraw10 dataset. [github](https://github.com/skhabiri/ML-DeepLearning/tree/main/module3-autoencoders)
   - *Unsupervised information retrieval:*
     - Trained an Conv2D autoencoder on Quickdraw dataset to perform a reverse image search to find similar images from a database. [github](https://github.com/skhabiri/ML-DeepLearning/blob/main/module3-autoencoders/autoencoder-433.ipynb)
 
-* **Data Science Cloud Deployment**
+### Data Science Cloud Deployment
   - *Scikit-learn Helper Package:*
     - Published a scikit-learn helper package to fit and get various metrics for a multi class classifier. Dependencies were managed by pipenv. Tested the package on different OS using Docker. Created test cases for the package using unittest python module. [package](https://pypi.org/project/skestimate/), [github](https://github.com/skhabiri/EstimatorPkg)
   - *A full-stack Twitter web App backed by machine learning model:*
@@ -47,11 +47,11 @@
   - *A Data Science API for Spotify:*
     - Built a data science API using FastAPI to deploy a song recommendation engine for Spotify and provided multiple endpoints to interact with a frontend JavaScript web app. One of the data science API endpoints would connect to spotipy, a spotify python api, to pull data and run queries on Spotify database.[github](https://github.com/skhabiri/FastAPI-Spotify), [app](https://fastapi-spotify.herokuapp.com/), [blog post](https://skhabiri.com/2020-08-17-A-Data-Science-API-For-Spotify-Web-Applications/)
 
-* **Semi Supervised Learning**
+### Semi Supervised Learning
   - *Imbalanced Classification:*
     - Predicted technical review outcome for an imbalance dataset of survey data from Bridges to Prosperity initiative. Developed a data science API to deploy the machine learning model and host it on AWS Elastic Beanstalk for the final product. RandomForestClassifier was used to train the model. The project environment was containerized with Docker to ensure reproducibility. [github](https://github.com/skhabiri/Bridges2Prosperity-ML-FastAPI), [blog post](https://skhabiri.com/2020-11-18-Classification-of-Imbalanced-Dataset-provided-by-Bridges-to-Prosperity-(B2P)-and-FastAPI-Framework-deployment-to-AWS-Elastic-Beanstalk/), [app](https://b2p.skhabiri.com/)
 
-* **Regression Analysis for Supervised Machine Learning**
+### Regression Analysis for Supervised Machine Learning
   - *Linear Regression:*
     - Predicted the sale/rent price from New York home sale and home rent data. [github repo](https://github.com/skhabiri/PredictiveModeling-LinearModels-u2s1/tree/master/Regression-m1)
     - Modeled the relationship between “Growth in Personal Incomes” and “US Military Fatalities” using the Bread and Peace (Voting in Postwar US Presidential Elections) dataset [github repo](https://github.com/skhabiri/PredictiveModeling-LinearModels-u2s1/tree/master/Regression-m2)
@@ -61,7 +61,7 @@
     - Predicted passenger survival from Titanic dataset with an accuracy of 0.81. [github repo](https://github.com/skhabiri/PredictiveModeling-LinearModels-u2s1/blob/master/LogisticRegression-m4/logisticregress-214.ipynb)
     - Trained a binary classifier to predict “Great” burritos from a dataset of 400+ burrito recipes and reviews. [dataset](https://srcole.github.io/100burritos/), [github repo](https://github.com/skhabiri/PredictiveModeling-LinearModels-u2s1/blob/master/LogisticRegression-m4/logisticregress-214a.ipynb)
 
-* **Feature Selection and Model Interpretation**
+### Feature Selection and Model Interpretation
   - *Permutation Importance for Tree based classifiers:*
     - Identified the most relevant features to predict the status of a water pump using Permutation Importance from eli5 in Tanzania water pump dataset. Trained and cross validated xgboost, gradient boost and random forest, Achieved an accuracy score of 0.81. [github repo](https://github.com/skhabiri/PredictiveModeling-AppliedModeling-u2s3/tree/master/PermutationBoosting-m3)
   - *SHapley Additive exPlanations:*
@@ -69,7 +69,7 @@
   - *Classifier Dashboard with Plotly:*
     - Trained and tuned multiple classifiers to predict the forest cover type using the forest-cover dataset. Created and deployed a web app by Plotly dash on heroku.[github repo](https://github.com/skhabiri/PredictiveModeling-CoverType-u2build), [blog post](https://skhabiri.com/2020-07-28-A-Comparison-of-Supervised-Multi-class-Classification-Methods-for-the-Prediction-of-Forest-Cover-Types/), [web app](https://predictivemodeling-covertype.herokuapp.com/)
 
-* **Data Pipeline (ETL)**
+### Data Pipeline (ETL)
   - *Sqlite to PostgreSQL:*
     - Built an ETL to data pipeline a database of role play characters in sqlite into a postgreSQL database hosted on ElephantSQL. [github](https://github.com/skhabiri/SQL-Databases-u3s2/tree/master/postgresql-u3s2m2)
   - *csv to PostgreSQL:*
