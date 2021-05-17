@@ -22,7 +22,7 @@ navbar-links:
      - Spotify Web App: "https://fastapi-spotify.herokuapp.com"
      - ForestCover Metrics Plotly Dashboard: "https://predictivemodeling-covertype.herokuapp.com"
   Project List:
-     - Bridges to Prosperity API: "https://b2p.skhabiri.com"    
+     - Recent Work: "projectlist"    
   Resources:
      - Learn markdown: "https://www.markdowntutorial.com/"
   Home: "https://skhabiri.com"
