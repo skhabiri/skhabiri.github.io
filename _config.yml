@@ -16,15 +16,14 @@ author: Sean Khabiri
 
 navbar-links:
   About Me: "aboutme"
-  Recent ML Apps:
+  ML Apps:
      - Bridges to Prosperity API: "https://b2p.skhabiri.com"
      - HypoTweet App: "https://hypotweet.herokuapp.com"
      - Spotify Web App: "https://fastapi-spotify.herokuapp.com"
      - ForestCover Metrics Plotly Dashboard: "https://predictivemodeling-covertype.herokuapp.com"
-  Project List:
-     - Recent Work: "projectlist"    
+  Recent Work: "projectlist"    
   Resources:
-     - Learn markdown: "https://www.markdowntutorial.com/"
+     - Learn Markdown: "https://www.markdowntutorial.com/"
   Home: "https://skhabiri.com"
 
 # --- Logo --- #
