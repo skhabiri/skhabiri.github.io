@@ -79,3 +79,8 @@ Recent ML/DataScience Work
     - Pipelined a csv dataset of Titanic into a local sqlite database and from there into a postgreSQL hosted on the cloud. [github](https://github.com/skhabiri/SQL-Databases-u3s2/blob/master/postgresql-u3s2m2/insert_titanic.py)
   - *Sqlite to MongoDB:*
     - Role play character sqlite database was ETL’d into a no schema MongoDB using pymongo library. [github](https://github.com/skhabiri/SQL-Databases-u3s2/tree/master/mongodb-u3s2m3)
+
+### Statistical Analysis
+  - *Inferential Statistics:*
+    - Applied independent t-test to analyze house of representative votes on various bills across party lines [data](https://archive.ics.uci.edu/ml/datasets/congressional+voting+records)
+    - Applied 1-sample t-test to test null hypothesis for auto mpg [dataset](https://archive.ics.uci.edu/ml/datasets/auto+mpg)
