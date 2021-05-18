@@ -25,6 +25,7 @@ navbar-links:
   Resources:
      - Learn Markdown: "https://www.markdowntutorial.com/"
      - Visual Vocabulary: "https://ft-interactive.github.io/visual-vocabulary/"
+     - Matplotlib Style Sheets: "https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html"
   Home: "https://skhabiri.com"
 
 # --- Logo --- #
