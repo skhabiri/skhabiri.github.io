@@ -24,6 +24,7 @@ navbar-links:
   Recent Work: "projectlist"    
   Resources:
      - Learn Markdown: "https://www.markdowntutorial.com/"
+     - Visual Vocabulary: "https://ft-interactive.github.io/visual-vocabulary/"
   Home: "https://skhabiri.com"
 
 # --- Logo --- #
