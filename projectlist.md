@@ -84,3 +84,5 @@ Recent ML/DataScience Work
   - *Inferential Statistics:*
     - Applied independent t-test to analyze house of representative votes on various bills across party lines [data](https://archive.ics.uci.edu/ml/datasets/congressional+voting+records)
     - Applied 1-sample t-test to test null hypothesis for auto mpg [dataset](https://archive.ics.uci.edu/ml/datasets/auto+mpg)
+    - Used Chi^2 test of independence on [Student Performance Data Set](https://archive.ics.uci.edu/ml/datasets/Student+Performance) to examine the level of association between various variables.
+    - 
