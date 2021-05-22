@@ -86,4 +86,5 @@ Recent ML/DataScience Work
     - Applied 1-sample t-test to test null hypothesis for auto mpg [dataset](https://archive.ics.uci.edu/ml/datasets/auto+mpg)
     - Used Chi^2 test of independence on [Student Performance Data Set](https://archive.ics.uci.edu/ml/datasets/Student+Performance) to examine the level of association between various variables.
     - Determined confidence interval of respondents average age for different sample sizes of data in [census income dataset](https://archive.ics.uci.edu/ml/datasets/adult) using scipy.stats module.
+    - Used Principal Component Analysis (PCA) and KMeans to reduce the dimensions of a cancer cell dataset and cluster it into two classes.
     
