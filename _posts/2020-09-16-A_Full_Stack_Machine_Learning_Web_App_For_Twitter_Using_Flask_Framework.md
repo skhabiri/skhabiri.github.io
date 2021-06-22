@@ -306,7 +306,7 @@ It's nice to have common cases of errors to be handled gracefully by our applica
 * Requesting to add a valid twitter user that already exists in PostgreSQL database
     > The app simply updates its timeline with the latest tweets
 
-Here is an example of how the prediction works. It's worth noting that the model accuracy is not high and the this is more for proff of concept rather than production.
+Here is an example of how the prediction works. It's worth noting that the model accuracy is not high enough for a real application as we simply used a basic logistic regression. Hence it serves more as a proof of concept rather than production.
 
 <img src= "../assets/img/post6/post6_prediction.png">
 
