@@ -247,7 +247,7 @@ The endpoints provided by the data science API are listed below, with a brief de
 * _spotifysearch:_ Receives a phrase and requested number of queries. Then makes an API call to Spotify to find the matching tracks limited by the number of queries.
 <img src= "../assets/img/post4/post4_spotifysearch.png">
 
-* _cvs_dump:_ gets a keyword and find all the related tracks for a limited number of artists and saves all the provided information into spotify_query.csv.
+* _csv_dump:_ gets a keyword and find all the related tracks for a limited number of artists and saves all the provided information into spotify_query.csv.
 <img src= "../assets/img/post4/post4_csvdump.png">
 
 * _db_reload:_ initialize an elephantSQL database and load it with spotify_query.csv
