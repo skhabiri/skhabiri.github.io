@@ -9,15 +9,15 @@ image: /assets/img/post7/post7_reddit.jpg
 comments: false
 ---
 
-Whenever a user submit a post to Reddit, The poster is required to submit it to some subreddit. A subreddit is topic/interest specific link aggregation pages with posts related to that topic. Reddit provides a default list of popular subreddits for the user to submit the post to. If none of those subreddits are appropriate, the user can choose to search for a different subreddit and submit it there. In this article we discuss ML models that use NLP techniques to generate a better list of subreddit recommendations based the post information. More specifically, the input is a text as a string or multiple texts in an iterable format such as ndarray or list, and return value is a list of recommended Subreddit categories from a list of pre-selected categories that the model has been trained on.
+Whenever a user submit a post to Reddit, The poster is required to choose a subreddit category. A subreddit is topic/interest specific link aggregation pages with posts related to that topic. Reddit provides a default list of popular subreddits for the user to submit the post to. If none of those subreddits are appropriate, the user needs to search for a subreddit that is more relevant to the post. In this post we discuss how to use ML models in conjunction with NLP techniques to generate a list of subreddit recommendations based the post content. More specifically, the input is a text as a string or multiple texts in an iterable format such as ndarray or list, and return value is a list of recommended Subreddit categories from a list of pre-selected categories that the model has been trained on.
 
 ### Scraping Reddit data
-In order to train any model first we need to collect the training and validation data. As its name suggests [PRAW](https://praw.readthedocs.io) is a Python wrapper for the Reddit API, which enables to scrape data from subreddits. For package management and reproducibility we use conda environment. 
+In order to train any model first we need to collect the training and validation data. As its name suggests [PRAW](https://praw.readthedocs.io) is a Python wrapper for the Reddit API, which enables to scrape data for subreddits. For package management and reproducibility we use conda environment. 
 PRAW can be installed using conda-forge channel:
 ```
 conda install -c conda-forge praw
 ```
-A python file connects to PRAW python API for Reddit and pulls information from 1000 posts in each of the 44 selected subreddit categories. The pulled information includes: `subreddit name`, `subreddit id`, `title`, and `post body`. The pulled information are stored in a local sql database.
+Here a python file connects to PRAW API and pulls information from 1000 posts in each of 53 selected subreddit categories. The pulled information includes: `subreddit name`, `subreddit id`, `title`, and `post body`. The pulled information are stored in a local sql database.
 The created database contains 51610 rows and 4 columns. 
 ```
 import sqlite3
@@ -31,7 +31,7 @@ c.execute('''create table submission_table (
              )
              ''')
 ```
-Before `praw` can be used to scrape data we need to authenticate ourselves. For this we need to create a Reddit instance and provide it with a client_id , client_secret and a user_agent .
+Before `praw` can be used to scrape data we need to authenticate the user credentials. For this we need to create a Reddit instance and provide it with a client_id , client_secret and a user_agent.
 ```
 import praw
 import os
@@ -43,7 +43,7 @@ reddit = praw.Reddit(client_id=os.getenv('CLIENT_ID'),
                      client_secret=os.getenv('CLIENT_SECRET'),
                      user_agent='veggiecode')
 ```
-The model recommendation is limited to a selected number of subreddit categories that the model is trained on. Hence we pull data for those specific subreddits.
+Since we pull data for specific subreddit categories, the model recommendation would be limited to those selected subreddit categories that the model is trained on.
 ```
 import time
 
@@ -141,10 +141,10 @@ The above graph shows the average length of posts is not the same in different s
 After filtering the low count subreddit categories we end up with 44 categories and 4400 posts. We take a note that in a production setup we need more training data to achieve a reliable results.
 
 ### Machine Learning Model
-The model is supposed to recieve a text as a post content and classify it to one of the 44 subreddit categories. We consider a random classifier as baseline with an accuracy of 1/44, which is very low. To build our model we use a two stage pipeline. The first stage encodes the text into a numerical format and the the seconf stage classifies the text into one of the target labels.
+The model is supposed to recieve a text as a post content and classify it to one of the 44 subreddit categories. We consider a random classifier as baseline with an accuracy of 1/44, which is very low. To build our model we use a two stage pipeline. The first stage encodes the text into a numerical format and the the second stage classifies the text into one of the target labels.
 
 #### spaCy Embedding
-For the first stage of the pipeline we are going to use [spaCy](https://spacy.io) embedding. spaCy is an open-source software library for natural language processing. spaCy performs two major tasks for us, tokenizing and vectorizing. The `tokenizer` is a component that segments texts into tokens. In spaCy, it's rule-based and not trainable. It looks at whitespace and punctuation to determine which are the unique tokens in a sentence. The `tok2vec` layer is a machine learning component that learns how to produce context-based vectors for tokens. It does this by looking at lexical attributes of the token. The tok2vec component is already pretrained from external vectors data. The external vectors data already embeds some "meaning" or "similarity" of the tokens. 
+For the first stage of the pipeline we are going to use [spaCy](https://spacy.io) embedding. spaCy is an open-source software library for natural language processing. spaCy performs two major tasks for us, tokenizing and vectorizing. The `tokenizer` is a component that segments texts into tokens. In spaCy, this is rule-based and not trainable. It looks at whitespace and punctuation to determine which are the unique tokens in a sentence. The `tok2vec` layer is a machine learning component that learns how to produce context-based vectors for tokens. It does this by looking at lexical attributes of the token. The tok2vec component is already pretrained from external vectors data. The external vectors data already embeds some "meaning" or "similarity" of the tokens. 
 ```
 import spacy
 from spacy.tokenizer import Tokenizer
@@ -333,21 +333,20 @@ prediction(loaded_pickle['knc'], query, 10)
 ```
 ```
 13          Parenting
-16    TwoXChromosomes
-19              books
-36       socialskills
 28               math
 25            history
-11    MachineLearning
+36       socialskills
+19              books
+16    TwoXChromosomes
+10        LifeProTips
 43      worldpolitics
 42          worldnews
 41             travel
-dtype: object
 ```
 Results matches the previous prediction as expected.
 
 ### Conclusion
-In this work we built a machine learning model using NLP techniques and optimize that we scikit-learn RandomSearchCV() to predict a subreddit category for a given post. We used a python wrapper for Reddit API, PRAW, to create a database of subreddit posts from the categories of interest. Afte cleaning the data, we fit and tuned three different models and compared their performances. Other than the accuracy score we ran an article a sample input and used one of the models to get similar articles from the training set. We also used the sample input article to predict top subreddit categories that are related to the article. The serialized model can be deployed to a datascience API in order to build a full stack application.
+In this work we built a machine learning model using NLP techniques and optimized it with scikit-learn RandomSearchCV() to predict a subreddit category for a given post. We used a python wrapper for Reddit API, PRAW, to create a database of subreddit posts from the categories of interest. After cleaning the data, we fit and tuned three different models and compared their performances. Next We took an article as a sample input and applied KNN model to get similar articles from the training set. We also used the sample input article to predict top subreddit categories that are related to the article. The serialized model can be deployed to a datascience API in order to build a full stack application.
 
 ### links
 - [Github repo](https://github.com/skhabiri/SubReddit-Recommender)
