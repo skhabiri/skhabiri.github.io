@@ -141,7 +141,7 @@ To create the app we need to instantiate a Flask object. This object will be our
 ```
 
 #### Connect the app to the database
-In this step we the datbase server is initialized and connected to the application.
+Database server is initialized and connected to the application.
 ```
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
