@@ -47,8 +47,7 @@ X_train = X_train / xmax
 X_test = X_test / xmax
 X_train.max()
 ```
-1.0
-Whenever all data is normalized to values within 0 and 1, that ensures that the update to all the weights are updated in equal proportions which can lead to quicker convergence on the optimal weight values. If your dataset's values range across multiple orders of magnitude (i.e.  101,  102,  103,  104 ), then gradient descent will update the weights in grossly uneven proportions.
+When data is normalized to values within 0 and 1, that ensures the update to all the weights are in equal proportions which can lead to quicker convergence on the optimal weight values. If your dataset's values range across multiple orders of magnitude (i.e.  10^1,  10^2,  10^3,  10^4 ), then gradient descent will update the weights in grossly uneven proportions.
 
 * The selected classes are:
 `class_names = ['apple', 'anvil', 'airplane', 'banana', 'The Eiffel Tower', 'The Mona Lisa', 'The Great Wall of China', 'alarm clock', 'ant', 'asparagus']`
