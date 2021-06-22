@@ -180,7 +180,7 @@ df['good_site'].value_counts()
 
 Name: good_site, dtype: int64
 
-Many of the features in the dataset are not directly related to identifying the sites that would technically be a approved for construction. e could have used feature permutation or feature importances to identify the more relevant features. However, since the features are very descriptive and relatively easy to interpret we select six features, which are most relevant for our modeling purpose.
+Many of the features in the dataset are not directly related to identifying the sites that would technically be a approved for construction. We could have used feature permutation or feature importances to identify the more relevant features. However, since the features are very descriptive and relatively easy to interpret we select six features, which are most relevant for our modeling purpose.
 
 ```
 # Columns that are related to predicting whether final engineering review would pass or fail
