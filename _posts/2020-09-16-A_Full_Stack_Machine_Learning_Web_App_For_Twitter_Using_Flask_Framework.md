@@ -9,9 +9,9 @@ image: /assets/img/post6/post6_blockdiagram.png
 comments: false
 ---
 
-HypoTweet is a machine learning a web application that takes up to 4 users. It connects to Twitter API to pull the user information including user id, latest tweets, tweet id. For a hypothetical tweet the application predicts which of the users might be the author.
+HypoTweet is a machine learning web application for Twitter. It connects to Twitter API to pull user information including user id, latest tweets, tweet id. For a hypothetical tweet, using the previous tweets the application predicts which of the users could be the author.
 
-Once a tweet is entered it fits a multiclass logistic regression on the selected users' tweets which have previousely been embeded with spacy and stored in Heroku PostgreSQL. Then it uses the lightweight version of spacy to embed the hypothetical tweet into 96 vectors. Then vectorized tweet is passed as an input to the trained model to predict which user might send a similar tweet.
+Once a tweet is entered, the application fits a multiclass logistic regression on the selected users' tweets which have previousely been embeded with spacy and stored in Heroku PostgreSQL. Then it uses the lightweight version of spacy to embed the hypothetical tweet into 96 vectors. The vectorized tweet is passed as an input to the trained model to predict which user might send a similar tweet.
 
 ### File structure
 The file structure of the project is shown below.
@@ -44,7 +44,7 @@ HypoTweet
 `twitapp` is the application directory where all the app related files reside. `__init__.py` marks the app directory as a Python package. It also serves as the point of entry for the app.
 `app.py` is the main python file assigned to create the app and handle most of the routings. `db.sqlite` is a local database that stores the users information for testing the app locally. Later on when the app is deployed to the cloud we switch to a cloud base database.
 For creating the database we use SQLAlchemy an object-relational mapper (ORM) database toolkit for python. `models.py` specify the database data models. To pull twitter data we use tweepy. It's a python library to connect to Twitter API. `twitter.py` interacts with Twitter API and stores the data in database.
-The machine learning model and classification tasks are performed in `predict.py`. The templates irectory include a few html templates for different url routes.
+The machine learning model and classification tasks are performed in `predict.py`. The templates directory include a few html templates for different url routes.
 
 ### Setting up the project
 Create a repository in the github to fork the [repo](https://github.com/skhabiri/HypoTweet) or clone it to your local machine. We use en_core_web_sm,  model for spacy to speed up the prediction and minimize the file sizes before being deployed to heroku. Version 3.0.0 of the spacy model requires python version >= 3.8.
