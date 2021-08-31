@@ -30,6 +30,11 @@ Recent ML/DataScience Work
     - Trained a Recurrent Neural Networks to generate text in Shakespeare's writing style, given a random prompt. [github](https://github.com/skhabiri/ML-DeepLearning/blob/main/module1-rnn-and-lstm/ann_rnn_lstm-431a.ipynb)
 
 ### Convolutional Neural Network (CNN)
+  - *Object Detection and Tracking:*
+    - Trained Yolov5 for detection and classification of drones and birds. Applied deepsort to improve the tracking performance. 
+    - Coded a script to convert image annotation from Pascal voc to Yolo.[github](https://github.com/skhabiri/Pascal-To-Yolo)
+    - Developed a package to perform image augmentation, as a replacement for Roboflow. [github](https://github.com/skhabiri/Boundingbox-Augmentation)
+    - Developed a code to convert multi label yolo annotated images to torchvision dataset class to train a deepsort CNN. [github](https://github.com/skhabiri/Yolo_To_Torch_dataset)
   - *Transfer Learning and Image classification:*
     - Used pretrained ResNet50 for unsupervised image classification. [github](https://github.com/skhabiri/ML-DeepLearning/blob/main/module2-convolutional-neural-networks/cnn-432.ipynb)
     - Trained a 2D convolutional neural network for multiclass classification on cifar10 dataset. Achieved 0.91 prediction accuracy. [github](https://github.com/skhabiri/ML-DeepLearning/blob/main/module2-convolutional-neural-networks/cnn-432.ipynb)
