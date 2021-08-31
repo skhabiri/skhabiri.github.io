@@ -32,7 +32,7 @@ Recent ML/DataScience Work
 ### Convolutional Neural Network (CNN)
   - *Object Detection and Tracking:*
     - Trained Yolov5 for detection and classification of drones and birds. Applied deepsort to improve the tracking performance. 
-    - Coded a script to convert image annotation from Pascal voc to Yolo.[github](https://github.com/skhabiri/Pascal-To-Yolo)
+    - Coded a script to convert image annotation from Pascal voc to Yolo. [github](https://github.com/skhabiri/Pascal-To-Yolo)
     - Developed a package to perform image augmentation, as a replacement for Roboflow. [github](https://github.com/skhabiri/Boundingbox-Augmentation)
     - Developed a code to convert multi label yolo annotated images to torchvision dataset class to train a deepsort CNN. [github](https://github.com/skhabiri/Yolo_To_Torch_dataset)
   - *Transfer Learning and Image classification:*
