@@ -16,7 +16,6 @@ At the U.S. Department of Homeland Security, I architected and deployed the depa
 
 - M.S. in Electrical Engineering, Stanford University
 - M.S. in Electrical and Computer Engineering, Carleton University
-- Active Secret clearance, U.S. citizen
 
 ### Contact
 
