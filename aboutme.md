@@ -3,7 +3,7 @@ I'm an AI lead and hands-on engineer with 20+ years of experience across Silicon
 
 ### What I do now
 
-At the U.S. Department of Homeland Security, I architected and deployed the department's enterprise generative AI platform, taking it from the ground up to department-wide use. I also designed its LLM security and evaluation service.
+I work at the U.S. Department of Homeland Security, in the Office of the Chief Information Officer.
 
 ### Before that
 
