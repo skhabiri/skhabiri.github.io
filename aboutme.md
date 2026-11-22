@@ -15,7 +15,7 @@ I work at the U.S. Department of Homeland Security as a Staff Cybersecurity Spec
 ### Background
 
 - M.S. in Electrical Engineering, Stanford University
-- M.S. in Electrical and Computer Engineering, Carleton University
+- M.A.Sc. in Electrical and Computer Engineering, Carleton University
 
 ### Contact
 
