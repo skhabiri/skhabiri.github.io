@@ -3,7 +3,7 @@ I'm an AI lead and hands-on engineer with 20+ years of experience across Silicon
 
 ### What I do now
 
-I work at the U.S. Department of Homeland Security, in the Office of the Chief Information Officer.
+I currently work in the U.S. federal government as an AI lead.
 
 ### Before that
 
