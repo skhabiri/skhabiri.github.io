@@ -3,7 +3,7 @@ I'm an AI lead and hands-on engineer with 20+ years of experience across Silicon
 
 ### What I do now
 
-I currently work in the U.S. federal government as an AI lead.
+I work at the U.S. Department of Homeland Security as a Staff Cybersecurity Specialist in AI Engineering.
 
 ### Before that
 
