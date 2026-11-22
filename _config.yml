@@ -16,17 +16,7 @@ author: Shawn Khabiri
 
 navbar-links:
   About Me: "aboutme"
-  ML Apps:
-     - Bridges to Prosperity API: "https://b2p.skhabiri.com"
-     - HypoTweet App: "https://hypotweet.herokuapp.com"
-     - Spotify Web App: "https://fastapi-spotify.herokuapp.com"
-     - ForestCover Metrics Plotly Dashboard: "https://predictivemodeling-covertype.herokuapp.com"
   Recent Work: "projectlist"    
-  Resources:
-     - Learn Markdown: "https://www.markdowntutorial.com/"
-     - Visual Vocabulary: "https://ft-interactive.github.io/visual-vocabulary/"
-     - Visual Explanations: "https://setosa.io/#/"
-     - Inferential Statistics: "https://homepage.divms.uiowa.edu/~mbognar/"
   
   Home: "https://skhabiri.com"
 
@@ -52,7 +42,6 @@ round-avatar: true
 social-network-links:
   email: "veggiecode@gmail.com"
   github: skhabiri
-  twitter: seankhabiri
   linkedin: skhabiri
 #  rss: false
 #  facebook: deanattali
