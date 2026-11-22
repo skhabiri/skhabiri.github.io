@@ -19,4 +19,4 @@ At the U.S. Department of Homeland Security, I architected and deployed the depa
 
 ### Contact
 
-[LinkedIn](https://www.linkedin.com/in/skhabiri/) · [GitHub](https://github.com/skhabiri) · skhabiri@alumni.stanford.edu
+[LinkedIn](https://www.linkedin.com/in/skhabiri/) | [GitHub](https://github.com/skhabiri) | skhabiri@alumni.stanford.edu
