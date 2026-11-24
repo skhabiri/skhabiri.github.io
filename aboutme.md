@@ -1,11 +1,7 @@
 
-I'm an AI lead and hands-on engineer with 20+ years of experience across Silicon Valley startups, financial services and the federal government. The first half of my career was in silicon design. The last nine years have been in machine learning and AI.
+I'm an AI lead and hands-on engineer with 20+ years of experience across Silicon Valley startups and financial services. The first half of my career was in silicon design. The last nine years have been in machine learning and AI.
 
-### What I do now
-
-I work at the U.S. Department of Homeland Security as a Staff Cybersecurity Specialist in AI Engineering.
-
-### Before that
+### Experience
 
 - **Wells Fargo:** generative AI and deep learning for document processing and fraud detection. Two patent applications filed, on LLM fine-tuning and on classifying severely imbalanced data.
 - **PG&E and Secomind:** computer vision systems for defect classification and real-time object tracking.
