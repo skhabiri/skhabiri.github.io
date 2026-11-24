@@ -1,7 +1,11 @@
 
 I'm an AI lead and hands-on engineer with 20+ years of experience across Silicon Valley startups and financial services. The first half of my career was in silicon design. The last nine years have been in machine learning and AI.
 
-### Experience
+### What I do now
+
+Staff Specialist, AI Engineering and Cybersecurity at a public sector organization, 2024 to present.
+
+### Before that
 
 - **Wells Fargo:** generative AI and deep learning for document processing and fraud detection. Two patent applications filed, on LLM fine-tuning and on classifying severely imbalanced data.
 - **PG&E and Secomind:** computer vision systems for defect classification and real-time object tracking.
