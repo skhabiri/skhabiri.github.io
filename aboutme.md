@@ -1,5 +1,5 @@
 
-I'm an AI lead and hands-on engineer with 20+ years of experience across Silicon Valley startups and financial services. The first half of my career was in silicon design. The last nine years have been in machine learning and AI.
+I'm an applied AI principal engineer and architect, Stanford-trained, with 9+ years in AI/ML and 11+ years of hardware engineering experience. I have a track record of stepping into complex technical domains, getting up to speed quickly, and leading cross-functional teams from early concept to production.
 
 ### What I do now
 
@@ -7,15 +7,20 @@ Staff Specialist, AI Engineering and Cybersecurity at a public sector organizati
 
 ### Before that
 
-- **Wells Fargo:** generative AI and deep learning for document processing and fraud detection. Two patent applications filed, on LLM fine-tuning and on classifying severely imbalanced data.
-- **PG&E and Secomind:** computer vision systems for defect classification and real-time object tracking.
-- **onsemi:** machine learning on manufacturing data that improved yield by 20%.
-- **Intel, Texas Instruments, Akros Silicon and FINsix:** 10+ years designing power, mixed-signal and memory chips, including leading a team of 8 engineers through tape-out.
+- **Wells Fargo:** led generative AI and deep learning work on document processing and fraud detection. Two patent applications filed within a year, on LLM fine-tuning and on classifying severely imbalanced data.
+- **PG&E (contract):** a two-stage computer vision system (YOLO and ResNet18) on AWS Kubernetes for automated defect severity classification.
+- **Secomind:** as Head of AI Engineering, a real-time multi-object tracking engine (YOLO, DeepSORT, LSTM), plus automated data pipelines that saved $150K.
+- **onsemi:** machine learning on manufacturing data that improved yield by 20%. Also designed the NIS6651 E-Fuse load switch, which worked on first silicon and cut standby current by 87.5%.
+- **FINsix:** directed a team of 6 senior engineers on a 1W buck-boost converter; simulated and optimized the system-on-chip to cut die size by 30%.
+- **Akros Silicon:** principal architect for power converter chips; led a team of 8 senior engineers through tape-out.
+- **Texas Instruments:** sole IC designer for a 16V Class-D audio amplifier with a first-to-market 3rd-order PWM loop (90 dB THD); designed a 4th-order, 18-bit sigma-delta ADC.
+- **Intel:** high-voltage section lead for a NOR Flash memory in a 45nm process.
 
 ### Background
 
 - M.S. in Electrical Engineering, Stanford University
 - M.A.Sc. in Electrical Engineering, Carleton University
+- Ranked in the top 0.042% on national university entrance exams
 
 ### Contact
 
