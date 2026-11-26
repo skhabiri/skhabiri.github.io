@@ -1,5 +1,5 @@
 
-I'm an applied AI principal engineer and architect, Stanford-trained, with 9+ years in AI/ML and 11+ years of hardware engineering experience. I have a track record of stepping into complex technical domains, getting up to speed quickly, and leading cross-functional teams from early concept to production.
+I'm a principal engineer and architect with 9+ years in AI/ML and 11+ years of hardware engineering experience.
 
 ### What I do now
 
